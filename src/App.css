@@ -1,0 +1,20 @@
+.app-box {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+.reactflow-wrapper {
+  height: 100%;
+}
+
+.MuiGrid-root.sidebar {
+  display: flex;
+  flex-direction: column;
+  border-right: rgb(200, 200, 200) solid 1px
+}
+
+.sidebar-tab {
+  flex-grow: 1;
+}
