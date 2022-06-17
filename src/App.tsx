@@ -49,6 +49,9 @@ export class App extends React.Component<{}, AppState> {
 			definiton: "",
 			board: "{}"
 		};
+
+		this._onDefinitionChange = this._onDefinitionChange.bind(this);
+		this._onBoardChange = this._onBoardChange.bind(this);
 	}
 
 	/**
@@ -79,10 +82,10 @@ export class App extends React.Component<{}, AppState> {
 							</Tabs>
 						</Box>
 						{this.state.activeSidebarTab === SidebarTab.Definition && (
-							<DefinitionTab />
+							<DefinitionTab value={this.state.definiton} onChange={this._onDefinitionChange} />
 						)}
 						{this.state.activeSidebarTab === SidebarTab.Board && (
-							<BoardTab value={this.state.board} onChange={(value) => this.setState({ board: value })} />
+							<BoardTab value={this.state.board} onChange={this._onBoardChange} />
 						)}
 					</Grid>
 					<Grid item xs={8}>
@@ -91,5 +94,13 @@ export class App extends React.Component<{}, AppState> {
 				</Grid>
 			</Box>
 		);
+	}
+
+	private _onDefinitionChange(definition: string): void {
+		this.setState({ definiton: definition });
+	}
+
+	private _onBoardChange(board: string): void {
+		this.setState({ board: board });
 	}
 }
