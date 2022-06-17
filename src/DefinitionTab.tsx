@@ -2,6 +2,7 @@ import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-json";
 import "ace-builds/src-noconflict/theme-github";
+import "./mode-mdsl";
 
 export type DefinitionTabProps = {
     value: string;
@@ -19,7 +20,7 @@ export type DefinitionTabProps = {
                 onChange={onChange}
 				width="100%"
                 height="100%"
-				mode="json"
+				mode="mdsl"
                 theme="github"
                 setOptions={{ useWorker: false }}
 			/>
