@@ -1,7 +1,7 @@
 import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-json";
-import "ace-builds/src-noconflict/theme-github";
+import "ace-builds/src-noconflict/theme-sqlserver";
 import "./mode-mdsl";
 
 export type DefinitionTabProps = {
@@ -21,7 +21,7 @@ export type DefinitionTabProps = {
 				width="100%"
                 height="100%"
 				mode="mdsl"
-                theme="github"
+                theme="sqlserver"
                 setOptions={{ useWorker: false }}
 			/>
         </div>
