@@ -1,7 +1,7 @@
 import AceEditor from "react-ace";
 
 import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-github";
+import "ace-builds/src-noconflict/theme-sqlserver";
 
 export type BoardTabProps = {
     value: string;
@@ -20,7 +20,7 @@ export type BoardTabProps = {
 				width="100%"
                 height="100%"
 				mode="javascript"
-                theme="github"
+                theme="sqlserver"
                 setOptions={{ useWorker: false }}
 			/>
         </div>
