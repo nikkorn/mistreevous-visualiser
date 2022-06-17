@@ -21,23 +21,12 @@ ace.define('ace/mode/mdsl_highlight_rules', function (require, exports, module) 
     var oop = require("ace/lib/oop");
     var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
 
-    var ExampleHighlightRules = function () {
-        var keywords = (
-            "root|selector|sequence|parallel|lotto|repeat|retry|flip|succeed|fail|action|condition|wait|branch"
-        );
-    
-        var builtinConstants = (
-            "true|false"
-        );
-    
-        var builtinFunctions = (
-            "entry|exit|step|while|until"
-        );
-    
+    var ExampleHighlightRules = function () {    
         var keywordMapper = this.createKeywordMapper({
-            "support.function": builtinFunctions,
-            "keyword": keywords,
-            "constant.language": builtinConstants
+            "support.function": "entry|exit|step|while|until",
+            "keyword": "action|condition|wait|branch",
+            "variable.language": "root|selector|sequence|parallel|lotto|repeat|retry|flip|succeed|fail",
+            "constant.language": "true|false"
         }, "identifier", true);
     
         this.$rules = {
