@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { State, BehaviourTree } from "mistreevous";
 
 import './App.css';
 
@@ -16,9 +17,17 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
 
-import { MainPanel } from './MainPanel';
+import { MainPanel, ReactFlowElements } from './MainPanel';
 import { BoardTab } from './BoardTab';
 import { DefinitionTab } from './DefinitionTab';
+
+export type FlattenedNode = {
+	id: string;
+	caption: string;
+	parentId: string | null;
+	type: string;
+	state: State;
+}
 
 export enum SidebarTab { Definition = 0, Board = 1 };
 
@@ -29,8 +38,9 @@ export type AppState = {
 	activeSidebarTab: SidebarTab;
 	definiton: string;
 	board: string;
+	behaviourTree: BehaviourTree | null;
+	reactFlowElements: ReactFlowElements;
 }
-
 
 /**
  * The App component.
@@ -47,7 +57,9 @@ export class App extends React.Component<{}, AppState> {
 		this.state = {
 			activeSidebarTab: SidebarTab.Definition,
 			definiton: "",
-			board: "{}"
+			board: "{}",
+			behaviourTree: null,
+			reactFlowElements: { nodes: [], edges: [] }
 		};
 
 		this._onDefinitionChange = this._onDefinitionChange.bind(this);
@@ -66,9 +78,9 @@ export class App extends React.Component<{}, AppState> {
 							<MenuIcon />
 						</IconButton>
 						<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-							{"Title"}
+							{"Mistreevous Editor"}
 						</Typography>
-						<IconButton size="large" edge="end" color="inherit">
+						<IconButton size="large" edge="end" color="inherit" href="https://github.com/nikkorn/mistreevous">
 							<GithubIcon />
 						</IconButton>
 					</Toolbar>
@@ -89,18 +101,65 @@ export class App extends React.Component<{}, AppState> {
 						)}
 					</Grid>
 					<Grid item xs={8}>
-						<MainPanel />
+						<MainPanel elements={this.state.reactFlowElements} />
 					</Grid>
 				</Grid>
 			</Box>
 		);
 	}
 
+	/**
+	 * Handles a change of definition.
+	 * @param definition 
+	 */
 	private _onDefinitionChange(definition: string): void {
-		this.setState({ definiton: definition });
+		let behaviourTree;
+		let reactFlowElements: ReactFlowElements = { nodes: [], edges: [] };
+		
+		try {
+			// Try to create the behaviour tree.
+			behaviourTree = new BehaviourTree(definition, {} /** TODO Stick the board here (new Function vs eval) */);
+
+			reactFlowElements = this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails());
+		} catch (exception) {
+			// There was an error creating the behaviour tree!
+			behaviourTree = null;
+
+			console.log(exception);
+		}
+		
+		this.setState({ 
+			definiton: definition,
+			behaviourTree: behaviourTree,
+			reactFlowElements: reactFlowElements
+		 });
 	}
 
 	private _onBoardChange(board: string): void {
 		this.setState({ board: board });
+	}
+
+	private _parseNodesAndConnectors(flattenedNodeDetails: FlattenedNode[]): ReactFlowElements {
+		let result: ReactFlowElements = { nodes: [], edges: [] };
+
+		flattenedNodeDetails.forEach((flattenedNode) => {
+			result.nodes.push({
+				id: flattenedNode.id,
+				data: {
+					label: flattenedNode.caption
+				},
+				position: { x: 0, y: 0 }
+			});
+
+			if (flattenedNode.parentId) {
+				result.edges.push({
+					id: `${flattenedNode.parentId}_${flattenedNode.id}`,
+					source: flattenedNode.parentId,
+					target: flattenedNode.id
+				});
+			}
+		});
+
+		return result;
 	}
 }

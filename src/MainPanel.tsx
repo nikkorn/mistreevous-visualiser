@@ -1,9 +1,18 @@
-import ReactFlow, { Background, BackgroundVariant, Controls } from "react-flow-renderer";
+import ReactFlow, { Background, BackgroundVariant, Controls, Node, Edge } from "react-flow-renderer";
+
+export type ReactFlowElements = { nodes: Node[], edges: Edge[] };
+
+/**
+ * The MainPanel component props.
+ */
+export type MainPanelProps = {
+    elements: ReactFlowElements;
+}
 
 /**
  * The MainPanel component.
  */
- export const MainPanel: React.FunctionComponent = () => {
+ export const MainPanel: React.FunctionComponent<MainPanelProps> = ({ elements }) => {
     const onInit = (reactFlowInstance: any) => {
         console.log('flow loaded:', reactFlowInstance);
         reactFlowInstance.fitView();
@@ -15,7 +24,8 @@ import ReactFlow, { Background, BackgroundVariant, Controls } from "react-flow-r
                 onInit={onInit}
                 maxZoom={1.5}
 				minZoom={0.6}
-                nodes={[{ id: '1', data: { label: 'label' }, position: { x: 100, y: 100 } }]}>
+                nodes={elements.nodes}
+                edges={elements.edges}>
                 <Controls />
                 <Background variant={BackgroundVariant.Lines} gap={20} size={0.5} />
             </ReactFlow>
