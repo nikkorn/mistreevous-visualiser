@@ -1,4 +1,5 @@
-import ReactFlow, { Background, BackgroundVariant, Controls, Node, Edge, useNodesState, useEdgesState } from "react-flow-renderer";
+import { useCallback, useState } from "react";
+import ReactFlow, { Background, BackgroundVariant, Controls, Node, Edge, useNodesState, useEdgesState, applyNodeChanges, applyEdgeChanges } from "react-flow-renderer";
 
 export type ReactFlowElements = { nodes: Node[], edges: Edge[] };
   
@@ -13,15 +14,18 @@ export type MainPanelProps = {
  * The MainPanel component.
  */
  export const MainPanel: React.FunctionComponent<MainPanelProps> = ({ elements }) => {
-    const [nodes, setNodes, onNodesChange] = useNodesState([]);
-    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+    const [nodes, setNodes] = useState([]);
+    const [edges, setEdges] = useState([]);
 
-    if (nodes != elements.nodes) {
-        setNodes(elements.nodes);
+    const onNodesChange = useCallback((changes: any) => setNodes((ns) => applyNodeChanges(changes, ns) as any), []);
+    const onEdgesChange = useCallback((changes: any) => setEdges((es) => applyEdgeChanges(changes, es) as any), []);
+
+    if (nodes.length != elements.nodes.length) {
+        setNodes(elements.nodes as any);
     }
 
-    if (edges != elements.edges) {
-        setEdges(elements.edges);
+    if (edges.length != elements.edges.length) {
+        setEdges(elements.edges as any);
     }
 
     return (
