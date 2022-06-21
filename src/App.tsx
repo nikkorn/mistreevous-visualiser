@@ -101,7 +101,7 @@ export class App extends React.Component<{}, AppState> {
 						)}
 					</Grid>
 					<Grid item xs={8}>
-						<MainPanel elements={this.state.reactFlowElements} />
+						<MainPanel definition={this.state.definiton} elements={this.state.reactFlowElements} />
 					</Grid>
 				</Grid>
 			</Box>

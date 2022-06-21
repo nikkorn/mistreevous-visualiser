@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
-import ReactFlow, { Background, BackgroundVariant, Controls, Node, Edge, useNodesState, useEdgesState, applyNodeChanges, applyEdgeChanges } from "react-flow-renderer";
+import { useCallback, useEffect, useState } from "react";
+import ReactFlow, { Background, BackgroundVariant, Controls, Node, Edge, useNodesState, useEdgesState, applyNodeChanges, applyEdgeChanges, ReactFlowInstance } from "react-flow-renderer";
 
 export type ReactFlowElements = { nodes: Node[], edges: Edge[] };
   
@@ -7,31 +7,31 @@ export type ReactFlowElements = { nodes: Node[], edges: Edge[] };
  * The MainPanel component props.
  */
 export type MainPanelProps = {
+    /** The behaviour tree definition. */
+    definition: string;
+
+    /** The behaviour tree ReactFlow elements. */
     elements: ReactFlowElements;
 }
 
 /**
  * The MainPanel component.
  */
- export const MainPanel: React.FunctionComponent<MainPanelProps> = ({ elements }) => {
-    const [nodes, setNodes] = useState([]);
-    const [edges, setEdges] = useState([]);
+ export const MainPanel: React.FunctionComponent<MainPanelProps> = ({ definition, elements }) => {
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+    const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance>();
 
-    const onNodesChange = useCallback((changes: any) => setNodes((ns) => applyNodeChanges(changes, ns) as any), []);
-    const onEdgesChange = useCallback((changes: any) => setEdges((es) => applyEdgeChanges(changes, es) as any), []);
-
-    if (nodes.length != elements.nodes.length) {
-        setNodes(elements.nodes as any);
-    }
-
-    if (edges.length != elements.edges.length) {
-        setEdges(elements.edges as any);
-    }
+    useEffect(() => {
+        setNodes(elements.nodes);
+        setEdges(elements.edges);
+        reactFlowInstance?.fitView();
+    }, [definition]);
 
     return (
         <div className="main-panel reactflow-wrapper">
             <ReactFlow
-                onInit={(instance) => instance.fitView()}
+                onInit={setReactFlowInstance}
                 maxZoom={1.5}
 				minZoom={0.6}
                 nodes={nodes}
