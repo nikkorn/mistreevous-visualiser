@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import ReactFlow, { Background, BackgroundVariant, Controls, Node, Edge, useNodesState, useEdgesState, applyNodeChanges, applyEdgeChanges, ReactFlowInstance } from "react-flow-renderer";
+import ReactFlow, { Background, BackgroundVariant, Controls, Node, Edge, useNodesState, useEdgesState, applyNodeChanges, applyEdgeChanges, ReactFlowInstance, NodeChange } from "react-flow-renderer";
 
 export type ReactFlowElements = { nodes: Node[], edges: Edge[] };
   
@@ -36,7 +36,16 @@ export type MainPanelProps = {
 				minZoom={0.6}
                 nodes={nodes}
                 edges={edges}
-                onNodesChange={onNodesChange}
+                onNodesChange={(nodes: NodeChange[]) => {
+                    onNodesChange(nodes);
+                  
+                    // When this is called and the type of any nodes is "dimensions" it looks like we get the width/height.
+
+                    // The following will always get us the width/height.
+                    // reactFlowInstance?.getNodes();
+
+                    console.log(reactFlowInstance?.getNodes());
+                }}
                 onEdgesChange={onEdgesChange}>
                 <Controls />
                 <Background variant={BackgroundVariant.Lines} gap={20} size={0.5} />
