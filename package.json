@@ -15,6 +15,7 @@
     "@types/react": "^18.0.12",
     "@types/react-dom": "^18.0.5",
     "ace-builds": "^1.6.0",
+    "elkjs": "^0.7.1",
     "mdi-material-ui": "^7.4.0",
     "mistreevous": "^2.2.0",
     "react": "^18.2.0",
