@@ -1,29 +1,27 @@
 import React from 'react';
-import { DefaultNode } from './DefaultNode';
+import { Node } from './Node';
+import { ConnectorType, NodeType, PositionedNode } from './workflo';
 
 import './WorkflowCanvas.css';
 
-export type NodeType = {
-	id: string;
-	variant: string;
-}
-
-export type ConnectorType = {
-	id: string;
-	from: string;
-	to: string;
-}
-
+/**
+ * The WorkflowCanvas component props.
+ */
 export type WorkflowCanvasProps = {
 	nodes: NodeType[];
 	connectors: ConnectorType[];
-	nodeComponents: { [key: string]: React.ComponentClass }
+	nodeComponents: { [key: string]: React.ClassType<any, any, any> }
 }
 
+
+/**
+ * The WorkflowCanvas component state.
+ */
 export type WorkflowCanvasState = {
 	translateX: number;
 	translateY: number;
 	scale: number;
+	nodes: PositionedNode[];
 }
 
 /**
@@ -33,6 +31,7 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 	/** A reference to the canvas wrapper. */
 	private readonly _canvasWrapperRef: React.RefObject<HTMLDivElement>;
 
+	/** The last canvas drag position. */
 	private _lastCanvasDragPosition: { x: number, y: number } | null = null;
 
 	/**
@@ -48,7 +47,8 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
         this.state = {
 			translateX: 0,
 			translateY: 0,
-			scale: 1
+			scale: 1,
+			nodes: props.nodes.map((node) => ({ model: node, position: { x: 0, y: 0 }}))
         };
 
 		this._onCanvasWrapperWheel = this._onCanvasWrapperWheel.bind(this);
@@ -60,6 +60,8 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 	 * Renders the component.
 	 */
 	public render(): React.ReactNode {
+		const getNodeComponent = (variant: string) => this.props.nodeComponents[variant];
+
 		return (
 			<div ref={this._canvasWrapperRef} className="workflow-canvas-wrapper" 
 				onWheel={this._onCanvasWrapperWheel}
@@ -68,21 +70,20 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 				onMouseUp={() => this._lastCanvasDragPosition = null}
 				onMouseLeave={() => this._lastCanvasDragPosition = null}>
 				<div className="workflow-canvas">
-					<div className="workflow-canvas-elements-box" style={{ transform: `translate(${this.state.translateX}px, ${this.state.translateY}px) scale(${this.state.scale})` }}>
-						<div className="workflow-canvas-nodes-container">
-							<DefaultNode caption='Hello' position={{ x: 0, y: 0 }} />
-							<DefaultNode caption='World' position={{ x: 300, y: 300  }} />
-						</div>
+					<div className="workflow-canvas-elements-box" style={{ transform: `translate(${this.state.translateX}px, ${this.state.translateY}px) translateZ(1px) scale(${this.state.scale})` }}>
 						<svg className="workflow-canvas-edges-svg">
 							<line x1="0" y1="0" x2="300" y2="300" style={{ stroke: "rgb(255,0,0)", strokeWidth: 2 }}></line>
 						</svg>
+						<div className="workflow-canvas-nodes-container">
+							{this.state.nodes.map(({ model, position }) => <Node wrapped={getNodeComponent(model.variant)} model={model} position={position} />)}
+						</div>
 					</div>
 				</div>
 			</div>
 		);
 	}
 
-	private _onCanvasWrapperWheel(event: React.WheelEvent<HTMLDivElement>): void {		
+	private _onCanvasWrapperWheel(event: React.WheelEvent<HTMLDivElement>): void {
 		if (event.deltaY < 0) {
 		  this.setState({ scale: this.state.scale + 0.1 });
 		} else if (event.deltaY > 0) {
