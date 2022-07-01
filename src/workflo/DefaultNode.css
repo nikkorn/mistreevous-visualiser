@@ -1,0 +1,10 @@
+.workflow-canvas-default-node {
+    display: inline-block;
+    padding: 10px;
+    border: black 1px solid;
+    position: absolute;
+}
+
+.workflow-canvas-default-node > p{
+    margin: 0px;
+}

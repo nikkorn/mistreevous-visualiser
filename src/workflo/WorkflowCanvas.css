@@ -1,0 +1,30 @@
+.workflow-canvas-wrapper {
+    width: 800px;
+    height: 800px;
+    border: black 1px solid;
+}
+
+.workflow-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.workflow-canvas-elements-box {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.workflow-canvas-nodes-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.workflow-canvas-edges-svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow-x: visible;
+    overflow-y: visible;
+}
