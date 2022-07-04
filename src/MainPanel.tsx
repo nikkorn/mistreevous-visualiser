@@ -18,8 +18,8 @@ export type MainPanelProps = {
 }
 
 const initialNodes = [
-    { id: "1", caption: "hello", variant: "default" },
-    { id: "2", caption: "world", variant: "default" }
+    { id: "1", caption: "hello", variant: "default", position: { x: 100, y: 100 } },
+    { id: "2", caption: "world", variant: "default", position: { x: 200, y: 200 } }
 ];
 
 /**

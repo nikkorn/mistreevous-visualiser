@@ -1,6 +1,6 @@
 import React from 'react';
 import { Node } from './Node';
-import { ConnectorType, NodeType, PositionedNode } from './workflo';
+import { ConnectorType, NodeType, RenderedNode } from './workflo';
 
 import './WorkflowCanvas.css';
 
@@ -21,7 +21,7 @@ export type WorkflowCanvasState = {
 	translateX: number;
 	translateY: number;
 	scale: number;
-	nodes: PositionedNode[];
+	nodes: RenderedNode[];
 }
 
 /**
@@ -48,7 +48,7 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 			translateX: 0,
 			translateY: 0,
 			scale: 1,
-			nodes: props.nodes.map((node) => ({ model: node, position: { x: 0, y: 0 }}))
+			nodes: props.nodes.map((node) => ({ model: node, ref: React.createRef() }))
         };
 
 		this._onCanvasWrapperWheel = this._onCanvasWrapperWheel.bind(this);
@@ -75,12 +75,28 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 							<line x1="0" y1="0" x2="300" y2="300" style={{ stroke: "rgb(255,0,0)", strokeWidth: 2 }}></line>
 						</svg>
 						<div className="workflow-canvas-nodes-container">
-							{this.state.nodes.map(({ model, position }) => <Node wrapped={getNodeComponent(model.variant)} model={model} position={position} />)}
+							{this.state.nodes.map(({ model, ref }) => <Node ref={ref} wrapped={getNodeComponent(model.variant)} model={model} />)}
 						</div>
 					</div>
 				</div>
 			</div>
 		);
+	}
+
+	public componentDidMount(): void {
+		// Our component mounted, we should have nodes renderd now so we should check if we have rendered edges, if not we need to
+		// create and position them now and add them to the component state so they will be rendered amongst the nodes.
+		console.log("componentDidMount");
+	}
+
+	public componentWillUnmount(): void {
+		console.log("componentWillUnmount");
+	}
+
+	public componentDidUpdate(prevProps: WorkflowCanvasProps): void {
+		// Our component updated, we should have nodes renderd now so we should check if we have rendered edges, if not we need to
+		// create and position them now and add them to the component state so they will be rendered amongst the nodes.
+		console.log("componentDidUpdate");
 	}
 
 	private _onCanvasWrapperWheel(event: React.WheelEvent<HTMLDivElement>): void {
