@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import ReactFlow, { Background, BackgroundVariant, Controls, Node, Edge, useNodesState, useEdgesState, applyNodeChanges, applyEdgeChanges, ReactFlowInstance, NodeChange } from "react-flow-renderer";
-import ELK, { ElkNode } from "elkjs/lib/elk.bundled";
+
 import { WorkflowCanvas } from "./workflo/WorkflowCanvas";
 import { DefaultNode } from "./workflo/DefaultNode";
+import { NodeType, ConnectorType } from "./workflo/workflo";
 
-export type ReactFlowElements = { nodes: Node[], edges: Edge[] };
+export type CanvasElements = { nodes: NodeType[], edges: ConnectorType[] };
   
 /**
  * The MainPanel component props.
@@ -13,18 +13,9 @@ export type MainPanelProps = {
     /** The behaviour tree definition. */
     definition: string;
 
-    /** The behaviour tree ReactFlow elements. */
-    elements: ReactFlowElements;
+    /** The behaviour tree elements. */
+    elements: CanvasElements;
 }
-
-const initialNodes = [
-    { id: "1", caption: "hello", variant: "default", position: { x: 100, y: 100 } },
-    { id: "2", caption: "world it is so good to see you", variant: "default", position: { x: 200, y: 200 } }
-];
-
-const initialConnectors = [
-    { id: "1", from: "1", to: "2" }
-];
 
 /**
  * The MainPanel component.
@@ -32,8 +23,8 @@ const initialConnectors = [
  export const MainPanel: React.FunctionComponent<MainPanelProps> = ({ definition, elements }) => {
     return (
         <WorkflowCanvas
-            nodes={initialNodes}
-            connectors={initialConnectors}
+            nodes={elements.nodes}
+            connectors={elements.edges}
             nodeComponents={{
                 "default": DefaultNode
             }} />

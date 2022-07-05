@@ -17,7 +17,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
 
-import { MainPanel, ReactFlowElements } from './MainPanel';
+import { CanvasElements, MainPanel } from './MainPanel';
 import { BoardTab } from './BoardTab';
 import { DefinitionTab } from './DefinitionTab';
 
@@ -39,7 +39,7 @@ export type AppState = {
 	definiton: string;
 	board: string;
 	behaviourTree: BehaviourTree | null;
-	reactFlowElements: ReactFlowElements;
+	reactFlowElements: CanvasElements;
 }
 
 /**
@@ -114,13 +114,13 @@ export class App extends React.Component<{}, AppState> {
 	 */
 	private _onDefinitionChange(definition: string): void {
 		let behaviourTree;
-		let reactFlowElements: ReactFlowElements = { nodes: [], edges: [] };
+		let canvasElements: CanvasElements = { nodes: [], edges: [] };
 		
 		try {
 			// Try to create the behaviour tree.
 			behaviourTree = new BehaviourTree(definition, {} /** TODO Stick the board here (new Function vs eval) */);
 
-			reactFlowElements = this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails());
+			canvasElements = this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails());
 		} catch (exception) {
 			// There was an error creating the behaviour tree!
 			behaviourTree = null;
@@ -131,7 +131,7 @@ export class App extends React.Component<{}, AppState> {
 		this.setState({ 
 			definiton: definition,
 			behaviourTree: behaviourTree,
-			reactFlowElements: reactFlowElements
+			reactFlowElements: canvasElements
 		 });
 	}
 
@@ -139,23 +139,21 @@ export class App extends React.Component<{}, AppState> {
 		this.setState({ board: board });
 	}
 
-	private _parseNodesAndConnectors(flattenedNodeDetails: FlattenedNode[]): ReactFlowElements {
-		let result: ReactFlowElements = { nodes: [], edges: [] };
+	private _parseNodesAndConnectors(flattenedNodeDetails: FlattenedNode[]): CanvasElements {
+		let result: CanvasElements = { nodes: [], edges: [] };
 
 		flattenedNodeDetails.forEach((flattenedNode) => {
 			result.nodes.push({
 				id: flattenedNode.id,
-				data: {
-					label: flattenedNode.caption
-				},
-				position: { x: 0, y: 0 }
-			});
+				caption: flattenedNode.caption,
+				variant: "default"
+			} as any);
 
 			if (flattenedNode.parentId) {
 				result.edges.push({
 					id: `${flattenedNode.parentId}_${flattenedNode.id}`,
-					source: flattenedNode.parentId,
-					target: flattenedNode.id
+					from: flattenedNode.parentId,
+					to: flattenedNode.id
 				});
 			}
 		});

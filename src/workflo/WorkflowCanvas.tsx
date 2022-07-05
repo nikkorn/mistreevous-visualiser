@@ -110,12 +110,8 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
         nextProps: WorkflowCanvasProps,
         prevState: WorkflowCanvasState
     ) {
-    	// TODO Maybe check whether the nodes/connectors have not changed and return null.
-
-		// TODO This will have to change quite a lot to handle position changes and other stuff.
-		const haveNodesChanged = nextProps.nodes.length != prevState.nodes.length;
-
-		if (!haveNodesChanged) {
+		// TODO Make this smarter, it's not very elegant.
+		if (JSON.stringify(nextProps.nodes) === JSON.stringify(prevState.nodes) && JSON.stringify(nextProps.connectors) === JSON.stringify(prevState.connectors)) {
 			return null;
 		}
 
