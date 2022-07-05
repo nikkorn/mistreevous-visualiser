@@ -1,6 +1,6 @@
 import React from 'react';
 import { Node } from './Node';
-import { ConnectorType, NodeType, RenderedNode } from './workflo';
+import { ConnectorType, NodeType, RenderedConnector, RenderedNode } from './workflo';
 
 import './WorkflowCanvas.css';
 
@@ -22,6 +22,7 @@ export type WorkflowCanvasState = {
 	translateY: number;
 	scale: number;
 	nodes: RenderedNode[];
+	connectors?: RenderedConnector[];
 }
 
 /**
@@ -72,10 +73,14 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 				<div className="workflow-canvas">
 					<div className="workflow-canvas-elements-box" style={{ transform: `translate(${this.state.translateX}px, ${this.state.translateY}px) translateZ(1px) scale(${this.state.scale})` }}>
 						<svg className="workflow-canvas-edges-svg">
-							<line x1="0" y1="0" x2="300" y2="300" style={{ stroke: "rgb(255,0,0)", strokeWidth: 2 }}></line>
+							{this.state.connectors && this.state.connectors.map(({ model, source, target }) => {
+								return (
+									<line key={model.id} x1={source.x} y1={source.y} x2={target.x} y2={target.y} style={{ stroke: "rgb(255,0,0)", strokeWidth: 2 }}></line>
+								);
+							})}
 						</svg>
 						<div className="workflow-canvas-nodes-container">
-							{this.state.nodes.map(({ model, ref }) => <Node ref={ref} wrapped={getNodeComponent(model.variant)} model={model} />)}
+							{this.state.nodes.map(({ model, ref }) => <Node key={model.id} ref={ref} wrapped={getNodeComponent(model.variant)} model={model} />)}
 						</div>
 					</div>
 				</div>
@@ -83,20 +88,83 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 		);
 	}
 
+	/**
+     * Gets the state derived from the given props.
+     * @param nextProps The next props.
+     * @param prevState The previous state.
+     * @returns The state derived from the given props.
+     */
+	public static getDerivedStateFromProps(
+        nextProps: WorkflowCanvasProps,
+        prevState: WorkflowCanvasState
+    ) {
+    	// TODO Maybe check whether the nodes/connectors have not changed and return null.
+
+		// TODO This will have to change quite a lot to handle position changes and other stuff.
+		const haveNodesChanged = nextProps.nodes.length != prevState.nodes.length;
+
+		if (!haveNodesChanged) {
+			return null;
+		}
+
+		return {
+			translateX: prevState.translateX,
+			translateY: prevState.translateY,
+			scale: prevState.scale,
+			nodes: nextProps.nodes.map((node) => ({ model: node, ref: React.createRef() })),
+			connectors: undefined
+		};
+    }
+
 	public componentDidMount(): void {
-		// Our component mounted, we should have nodes renderd now so we should check if we have rendered edges, if not we need to
-		// create and position them now and add them to the component state so they will be rendered amongst the nodes.
-		console.log("componentDidMount");
+		this._createRenderableConnectors();
 	}
 
-	public componentWillUnmount(): void {
-		console.log("componentWillUnmount");
-	}
+	public componentWillUnmount(): void {}
 
 	public componentDidUpdate(prevProps: WorkflowCanvasProps): void {
-		// Our component updated, we should have nodes renderd now so we should check if we have rendered edges, if not we need to
-		// create and position them now and add them to the component state so they will be rendered amongst the nodes.
-		console.log("componentDidUpdate");
+		this._createRenderableConnectors();
+	}
+
+	private _createRenderableConnectors(): void {
+		// We do not need to do anything if the connectors already exist.
+		if (this.state.connectors) {
+			return;
+		}
+
+		// TODO Check that every node has been rendered with refs that can give us node width/height
+
+		const renderedConnectors: RenderedConnector[] = [];
+
+		this.props.connectors.forEach((connector) => {
+			const sourceNode = this.state.nodes.find((node) => node.model.id === connector.from);
+			const targetNode = this.state.nodes.find((node) => node.model.id === connector.to);
+
+			// We need both source and tagret nodes to create our connector.
+			if (!sourceNode || !targetNode) {
+				return;
+			}
+
+			// Get the dimensions of our source and target nodes.
+			const sourceNodeWidth = sourceNode.ref.current?.children[0]?.clientWidth || 0;
+			const sourceNodeHeight = sourceNode.ref.current?.children[0]?.clientHeight || 0;
+			const targetNodeWidth = targetNode.ref.current?.children[0]?.clientWidth || 0;
+			const targetNodeHeight = targetNode.ref.current?.children[0]?.clientHeight || 0;
+
+			renderedConnectors.push({
+				model: connector,
+				source: { 
+					x: sourceNode.model.position.x + (sourceNodeWidth / 2), 
+					y: sourceNode.model.position.y + (sourceNodeHeight / 2)
+				},
+				target: { 
+					x: targetNode.model.position.x + (targetNodeWidth / 2), 
+					y: targetNode.model.position.y + (targetNodeHeight / 2)
+				}
+			})
+		});
+
+		this.setState({ connectors: renderedConnectors });
 	}
 
 	private _onCanvasWrapperWheel(event: React.WheelEvent<HTMLDivElement>): void {

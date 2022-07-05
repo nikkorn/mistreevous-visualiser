@@ -22,6 +22,10 @@ const initialNodes = [
     { id: "2", caption: "world", variant: "default", position: { x: 200, y: 200 } }
 ];
 
+const initialConnectors = [
+    { id: "1", from: "1", to: "2" }
+];
+
 /**
  * The MainPanel component.
  */
@@ -29,7 +33,7 @@ const initialNodes = [
     return (
         <WorkflowCanvas
             nodes={initialNodes}
-            connectors={[]}
+            connectors={initialConnectors}
             nodeComponents={{
                 "default": DefaultNode
             }} />
