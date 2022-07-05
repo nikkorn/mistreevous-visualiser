@@ -1,6 +1,6 @@
 import React from "react";
 
-import { NodeType } from "./workflo";
+import { NodeType, Position } from "./workflo";
 
 /**
  * The Node component props.
@@ -8,14 +8,15 @@ import { NodeType } from "./workflo";
 export type NodeProps = {
   wrapped: React.ClassType<any, any, any>;
   model: NodeType;
+  position: Position;
 };
 
 /**
  * The Node component.
  */
-export const Node = React.forwardRef<HTMLDivElement, NodeProps>(({ wrapped: Wrapped, model }, ref) => {
+export const Node = React.forwardRef<HTMLDivElement, NodeProps>(({ wrapped: Wrapped, model, position }, ref) => {
   return (
-      <div ref={ref} className="workflow-canvas-node" style={{ transform: `translate(${model.position.x}px, ${model.position.y}px)` }}>
+      <div ref={ref} className="workflow-canvas-node" style={{ transform: `translate(${position.x}px, ${position.y}px)` }}>
         <Wrapped {...model} />
       </div>
   );

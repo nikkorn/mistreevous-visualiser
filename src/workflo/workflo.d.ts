@@ -6,15 +6,6 @@ export type Position = { x: number; y: number; }
 export type NodeType = {
     id: string;
     variant: string;
-	position: Position;
-}
-
-/**
- * The rendered node type.
- */
-export type RenderedNode = { 
-	model: NodeType;
-	ref: React.RefObject<HTMLDivElement>;
 }
 
 /**
@@ -24,6 +15,15 @@ export type ConnectorType = {
 	id: string;
 	from: string;
 	to: string;
+}
+
+/**
+ * The rendered node type.
+ */
+ export type RenderedNode = { 
+	model: NodeType;
+	ref: React.RefObject<HTMLDivElement>;
+	position: Position;
 }
 
 /**
