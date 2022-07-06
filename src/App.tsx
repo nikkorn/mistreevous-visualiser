@@ -153,7 +153,8 @@ export class App extends React.Component<{}, AppState> {
 				result.edges.push({
 					id: `${flattenedNode.parentId}_${flattenedNode.id}`,
 					from: flattenedNode.parentId,
-					to: flattenedNode.id
+					to: flattenedNode.id,
+					variant: "default"
 				});
 			}
 		});

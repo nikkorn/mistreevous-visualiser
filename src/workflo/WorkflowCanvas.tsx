@@ -5,9 +5,14 @@ import { ConnectorType, NodeType } from './workflo';
 
 import './WorkflowCanvas.css';
 
+export type ChildNode = {
+	connector: ConnectorType, 
+	child: NodeWithChildren
+}
+
 export type NodeWithChildren = {
 	node: NodeType;
-	children: NodeWithChildren[];
+	children: ChildNode[];
 }
 
 /**
@@ -66,6 +71,12 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 	public render(): React.ReactNode {
 		const getNodeComponent = (variant: string) => this.props.nodeComponents[variant];
 
+		const nestedNodes = WorkflowCanvas._getNestedRootNodes(this.props.nodes, this.props.connectors);
+
+		console.log("nested", nestedNodes);
+
+		// {this.state.nodes.map((node) => <Node key={node.id} wrapped={getNodeComponent(node.variant)} model={node} />)}
+
 		return (
 			<div ref={this._canvasWrapperRef} className="workflow-canvas-wrapper" 
 				onWheel={this._onCanvasWrapperWheel}
@@ -76,7 +87,7 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 				<div className="workflow-canvas">
 					<div className="workflow-canvas-elements-box" style={{ transform: `translate(${this.state.translateX}px, ${this.state.translateY}px) translateZ(1px) scale(${this.state.scale})` }}>
 						<div className="workflow-canvas-nodes-container">
-							{this.state.nodes.map((node) => <Node key={node.id} wrapped={getNodeComponent(node.variant)} model={node} />)}
+		
 						</div>
 					</div>
 				</div>
@@ -116,22 +127,25 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 	}
 
 	private static _getNestedRootNodes(nodes: NodeType[], connectors: ConnectorType[]): NodeWithChildren[] {
-		const getNode = (id: string) => nodes.find((node) => node.id === id);
-
 		const addChildNodes = (parent: NodeWithChildren) => {
 			// Get all outgoing connectors for the parent node.
 			const outgoingConnectors = connectors.filter((connector) => connector.from === parent.node.id);
 
-			parent.children = outgoingConnectors
-				.map((connector) => {
-					// Get the child node that is linked to the parent node.
-					const childNode = getNode(connector.to);
+			parent.children = outgoingConnectors.map((connector) => {
+				// Get the child node that is linked to the parent node.
+				const childNode = nodes.find((node) => node.id === connector.to);;
 
-					return childNode ? { node: childNode, children: [] } : null;
-				})
-				.filter((childNode) => !!childNode) as NodeWithChildren[];
+				if (!childNode) {
+					throw new Error("missing target node");
+				}
 
-			parent.children.forEach((child) => addChildNodes(child));
+				return { 
+					connector, 
+					child: { node: childNode, children: [] } 
+				};
+			});
+
+			parent.children.forEach(({ child }) => addChildNodes(child));
 		};
 
 		// Get all of the nodes without incoming connectors, these will be our root nodes.
