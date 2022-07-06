@@ -2,6 +2,8 @@ import React from "react";
 
 import { NodeType } from "./workflo";
 
+import './Node.css';
+
 /**
  * The Node component props.
  */

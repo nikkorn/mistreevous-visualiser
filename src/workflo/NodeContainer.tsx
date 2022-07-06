@@ -22,16 +22,16 @@ export type NodeContainerProps = {
         <div className="workflow-canvas-node-container">
             <div className="workflow-canvas-node-parent-container">
                 <Node key={parentNode.id} wrapped={nodeComponents[parentNode.variant]} model={parentNode} />
-                {/** Do we stick the SVG here? ... */}
             </div>
-            {/** ... or here? */}
-            {childNodes.length > 0 && (
-                <div className="workflow-canvas-node-children-container">
-                    {childNodes.map((childNode) =>
-                        <NodeContainer parentNode={childNode.child.node} childNodes={childNode.child.children} nodeComponents={nodeComponents} />
-                    )}
-                </div>
-            )}
+            <div className="workflow-canvas-node-connector-svg-wrapper">
+                <svg className="workflow-canvas-node-connector-svg">
+                </svg>
+            </div>
+            <div className="workflow-canvas-node-children-container">
+                {childNodes.map((childNode) =>
+                    <NodeContainer parentNode={childNode.child.node} childNodes={childNode.child.children} nodeComponents={nodeComponents} />
+                )}
+            </div>
         </div>
     );
   };
