@@ -15,22 +15,5 @@ export type ConnectorType = {
 	id: string;
 	from: string;
 	to: string;
-}
-
-/**
- * The rendered node type.
- */
- export type RenderedNode = { 
-	model: NodeType;
-	ref: React.RefObject<HTMLDivElement>;
-	position: Position;
-}
-
-/**
- * The rendered Connector type.
- */
-export type RenderedConnector = { 
-	model: ConnectorType;
-	source: Position;
-	target: Position;
+	variant: string;
 }

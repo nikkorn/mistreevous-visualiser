@@ -1,10 +1,14 @@
 import React from 'react';
-import ELK, { ElkNode } from "elkjs/lib/elk.bundled";
 
 import { Node } from './Node';
-import { ConnectorType, NodeType, RenderedConnector, RenderedNode } from './workflo';
+import { ConnectorType, NodeType } from './workflo';
 
 import './WorkflowCanvas.css';
+
+export type NodeWithChildren = {
+	node: NodeType;
+	children: NodeWithChildren[];
+}
 
 /**
  * The WorkflowCanvas component props.
@@ -23,11 +27,6 @@ export type WorkflowCanvasState = {
 	translateX: number;
 	translateY: number;
 	scale: number;
-	nodes: NodeType[];
-	connectors: ConnectorType[];
-	renderedNodes: RenderedNode[];
-	renderedConnectors?: RenderedConnector[];
-	isLayoutRequired: boolean;
 }
 
 /**
@@ -53,15 +52,7 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
         this.state = {
 			translateX: 0,
 			translateY: 0,
-			scale: 1,
-			nodes: props.nodes,
-			connectors: props.connectors,
-			renderedNodes: props.nodes.map((node) => ({ 
-				model: node, 
-				ref: React.createRef(),
-				position: { x: 0, y: 0 }
-			})),
-			isLayoutRequired: true
+			scale: 1
         };
 
 		this._onCanvasWrapperWheel = this._onCanvasWrapperWheel.bind(this);
@@ -84,15 +75,8 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 				onMouseLeave={() => this._lastCanvasDragPosition = null}>
 				<div className="workflow-canvas">
 					<div className="workflow-canvas-elements-box" style={{ transform: `translate(${this.state.translateX}px, ${this.state.translateY}px) translateZ(1px) scale(${this.state.scale})` }}>
-						<svg className="workflow-canvas-edges-svg">
-							{this.state.renderedConnectors && this.state.renderedConnectors.map(({ model, source, target }) => {
-								return (
-									<line key={model.id} x1={source.x} y1={source.y} x2={target.x} y2={target.y} style={{ stroke: "rgb(255,0,0)", strokeWidth: 2 }}></line>
-								);
-							})}
-						</svg>
 						<div className="workflow-canvas-nodes-container">
-							{this.state.renderedNodes.map(({ model, ref, position }) => <Node key={model.id} ref={ref} wrapped={getNodeComponent(model.variant)} model={model} position={position} />)}
+							{this.state.nodes.map((node) => <Node key={node.id} wrapped={getNodeComponent(node.variant)} model={node} />)}
 						</div>
 					</div>
 				</div>
@@ -100,130 +84,11 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 		);
 	}
 
-	/**
-     * Gets the state derived from the given props.
-     * @param nextProps The next props.
-     * @param prevState The previous state.
-     * @returns The state derived from the given props.
-     */
-	public static getDerivedStateFromProps(
-        nextProps: WorkflowCanvasProps,
-        prevState: WorkflowCanvasState
-    ) {
-		// TODO Make this smarter, it's not very elegant.
-		if (JSON.stringify(nextProps.nodes) === JSON.stringify(prevState.nodes) && JSON.stringify(nextProps.connectors) === JSON.stringify(prevState.connectors)) {
-			return null;
-		}
-
-		return {
-			translateX: prevState.translateX,
-			translateY: prevState.translateY,
-			scale: prevState.scale,
-			nodes: nextProps.nodes,
-			connectors: nextProps.connectors,
-			renderedNodes: nextProps.nodes.map((node) => ({ model: node, ref: React.createRef(), position: { x: 0, y: 0 } })),
-			renderedConnectors: undefined,
-			isLayoutRequired: true
-		};
-    }
-
-	public componentDidMount(): void {	
-		this._onCanvasUpdate();
-	}
+	public componentDidMount(): void {}
 
 	public componentWillUnmount(): void {}
 
-	public componentDidUpdate(prevProps: WorkflowCanvasProps): void {
-		this._onCanvasUpdate();
-	}
-
-	private async _onCanvasUpdate(): Promise<void> {
-		if (this.state.isLayoutRequired) {
-			this.setState({ 
-				renderedNodes: await this._layoutRenderableNodes(),
-				renderedConnectors: this._createRenderableConnectors(),
-				isLayoutRequired: false 
-			});
-		}
-	}
-
-	private async _layoutRenderableNodes(): Promise<RenderedNode[]> {
-		const renderedNodes: RenderedNode[] = [];
-
-		const getNodeDimensions = (id: string) => {
-			const node = this.state.renderedNodes.find((node) => node.model.id === id);
-
-			return {
-				width: node?.ref.current?.children[0]?.clientWidth || 0,
-				height: node?.ref.current?.children[0]?.clientWidth || 0
-			}
-		};
-
-		// Create the graph that ELK will use in order to generate a layout.
-		const graph = {
-			id: "root",
-			layoutOptions: {
-				"elk.algorithm": "layered",
-				"elk.direction": "down"
-			},
-			children: this.state.nodes.map(({ id }) => ({ id, ...getNodeDimensions(id) })),
-			edges: this.state.connectors.map(({ id, from, to }) => ({ id, sources: [from], targets: [to] }))
-		};
-
-		const elk = new ELK();
-
-        const layoutResult = await elk.layout(graph as any);
-
-		this.state.renderedNodes.forEach((node) => {
-			const layoutedNode = layoutResult.children?.find((child) => child.id === node.model.id);
-
-            if (!layoutedNode) {
-                return;
-            }
-
-			renderedNodes.push({
-				model: node.model,
-				ref: node.ref,
-				position: { x: layoutedNode.x!, y: layoutedNode.y! }
-			});
-		});
-		
-		return renderedNodes;
-	}
-
-	private _createRenderableConnectors(): RenderedConnector[] {
-		const renderedConnectors: RenderedConnector[] = [];
-
-		this.props.connectors.forEach((connector) => {
-			const sourceNode = this.state.renderedNodes.find((node) => node.model.id === connector.from);
-			const targetNode = this.state.renderedNodes.find((node) => node.model.id === connector.to);
-
-			// We need both source and tagret nodes to create our connector.
-			if (!sourceNode || !targetNode) {
-				return;
-			}
-
-			// Get the dimensions of our source and target nodes.
-			const sourceNodeWidth = sourceNode.ref.current?.children[0]?.clientWidth || 0;
-			const sourceNodeHeight = sourceNode.ref.current?.children[0]?.clientHeight || 0;
-			const targetNodeWidth = targetNode.ref.current?.children[0]?.clientWidth || 0;
-			const targetNodeHeight = targetNode.ref.current?.children[0]?.clientHeight || 0;
-
-			renderedConnectors.push({
-				model: connector,
-				source: { 
-					x: sourceNode.position.x + (sourceNodeWidth / 2), 
-					y: sourceNode.position.y + (sourceNodeHeight / 2)
-				},
-				target: { 
-					x: targetNode.position.x + (targetNodeWidth / 2), 
-					y: targetNode.position.y + (targetNodeHeight / 2)
-				}
-			})
-		});
-
-		return renderedConnectors;
-	}
+	public componentDidUpdate(prevProps: WorkflowCanvasProps): void {}
 
 	private _onCanvasWrapperWheel(event: React.WheelEvent<HTMLDivElement>): void {
 		if (event.deltaY < 0) {
@@ -248,5 +113,35 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 		});
 
 		this._lastCanvasDragPosition = { x: event.clientX, y: event.clientY };
+	}
+
+	private static _getNestedRootNodes(nodes: NodeType[], connectors: ConnectorType[]): NodeWithChildren[] {
+		const getNode = (id: string) => nodes.find((node) => node.id === id);
+
+		const addChildNodes = (parent: NodeWithChildren) => {
+			// Get all outgoing connectors for the parent node.
+			const outgoingConnectors = connectors.filter((connector) => connector.from === parent.node.id);
+
+			parent.children = outgoingConnectors
+				.map((connector) => {
+					// Get the child node that is linked to the parent node.
+					const childNode = getNode(connector.to);
+
+					return childNode ? { node: childNode, children: [] } : null;
+				})
+				.filter((childNode) => !!childNode) as NodeWithChildren[];
+
+			parent.children.forEach((child) => addChildNodes(child));
+		};
+
+		// Get all of the nodes without incoming connectors, these will be our root nodes.
+		const rootNodes: NodeWithChildren[] = nodes
+			.filter((node) => !connectors.find((connector) => connector.to === node.id))
+			.map((node) => ({ node, children: [] }));
+
+		// Recursively populate our tree from the root nodes. 
+		rootNodes.forEach((rootNode) => addChildNodes(rootNode));
+
+		return rootNodes;
 	}
 }
