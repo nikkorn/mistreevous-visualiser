@@ -17,3 +17,13 @@ export type ConnectorType = {
 	to: string;
 	variant: string;
 }
+
+export type ChildNode = {
+	connector: ConnectorType, 
+	child: NodeWithChildren
+}
+
+export type NodeWithChildren = {
+	node: NodeType;
+	children: ChildNode[];
+}

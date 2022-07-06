@@ -1,19 +1,10 @@
 import React from 'react';
 
 import { Node } from './Node';
-import { ConnectorType, NodeType } from './workflo';
+import { NodeContainer } from './NodeContainer';
+import { ConnectorType, NodeType, NodeWithChildren } from './workflo';
 
 import './WorkflowCanvas.css';
-
-export type ChildNode = {
-	connector: ConnectorType, 
-	child: NodeWithChildren
-}
-
-export type NodeWithChildren = {
-	node: NodeType;
-	children: ChildNode[];
-}
 
 /**
  * The WorkflowCanvas component props.
@@ -69,13 +60,7 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 	 * Renders the component.
 	 */
 	public render(): React.ReactNode {
-		const getNodeComponent = (variant: string) => this.props.nodeComponents[variant];
-
-		const nestedNodes = WorkflowCanvas._getNestedRootNodes(this.props.nodes, this.props.connectors);
-
-		console.log("nested", nestedNodes);
-
-		// {this.state.nodes.map((node) => <Node key={node.id} wrapped={getNodeComponent(node.variant)} model={node} />)}
+		const nestedRootNodes = WorkflowCanvas._getNestedRootNodes(this.props.nodes, this.props.connectors);
 
 		return (
 			<div ref={this._canvasWrapperRef} className="workflow-canvas-wrapper" 
@@ -86,8 +71,10 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 				onMouseLeave={() => this._lastCanvasDragPosition = null}>
 				<div className="workflow-canvas">
 					<div className="workflow-canvas-elements-box" style={{ transform: `translate(${this.state.translateX}px, ${this.state.translateY}px) translateZ(1px) scale(${this.state.scale})` }}>
-						<div className="workflow-canvas-nodes-container">
-		
+						<div className="workflow-canvas-root-nodes-container">
+							{nestedRootNodes.map((rootNode) =>
+								<NodeContainer parentNode={rootNode.node} childNodes={rootNode.children} nodeComponents={this.props.nodeComponents} />
+							)}
 						</div>
 					</div>
 				</div>

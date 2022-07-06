@@ -17,16 +17,27 @@
     height: 100%;
 }
 
-.workflow-canvas-nodes-container {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+.workflow-canvas-root-nodes-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
-.workflow-canvas-edges-svg {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    overflow-x: visible;
-    overflow-y: visible;
+.workflow-canvas-node-container {
+    display: flex;
+    align-items: stretch;
+    flex-direction: row;
+}
+
+.workflow-canvas-node-parent-container {
+    display: flex;
+    align-content: stretch;
+    align-items: center;
+    flex-direction: row;
+}
+
+.workflow-canvas-node-children-container {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
 }
