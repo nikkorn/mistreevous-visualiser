@@ -21,7 +21,7 @@ export type NodeContainerProps = {
 /**
  * The NodeContainer component.
  */
- export const NodeContainer: React.FunctionComponent<NodeContainerProps> = ({ parentNode, childNodes, nodeComponents }) => {
+export const NodeContainer: React.FunctionComponent<NodeContainerProps> = ({ parentNode, childNodes, nodeComponents }) => {
     // The ref to the node children container.
     const nodeChildrenContainerRef = useRef<HTMLDivElement>(null);
 
@@ -66,7 +66,7 @@ export type NodeContainerProps = {
             <div className="workflow-canvas-node-connector-svg-wrapper">
                 <svg className="workflow-canvas-node-connector-svg">
                     {connectorTargetOffsets && connectorTargetOffsets.map((offset, index) =>
-                        <line x1="0" y1="50%" x2="100%" y2={`${offset}`} stroke="#ff0000" stroke-width="1" stroke-linecap="round"></line>
+                        <path d={`M0 ${nodeChildrenContainerHeight / 2} C60 ${nodeChildrenContainerHeight / 2} 0 ${offset} 60 ${offset}`} stroke="gray" fill="transparent" />
                     )}
                 </svg>
             </div>
@@ -77,4 +77,4 @@ export type NodeContainerProps = {
             </div>
         </div>
     );
-  };
+};
