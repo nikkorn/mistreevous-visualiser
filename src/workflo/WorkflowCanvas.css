@@ -1,7 +1,6 @@
 .workflow-canvas-wrapper {
-    width: 800px;
-    height: 800px;
-    border: black 1px solid;
+    width: 100%;
+    height: 100%;
 }
 
 .workflow-canvas {
