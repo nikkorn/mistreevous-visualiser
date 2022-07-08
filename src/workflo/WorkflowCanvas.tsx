@@ -70,6 +70,12 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 				onMouseUp={() => this._lastCanvasDragPosition = null}
 				onMouseLeave={() => this._lastCanvasDragPosition = null}>
 				<div className="workflow-canvas">
+					<svg className="workflow-canvas-background-svg">
+						<pattern id="canvas-pattern-background" x={this.state.translateX} y={this.state.translateY} width={20 * this.state.scale} height={20 * this.state.scale} patternUnits="userSpaceOnUse">
+							<circle cx="0.5" cy="0.5" r="0.5" fill="#949494"></circle>
+						</pattern>
+						<rect x="0" y="0" width="100%" height="100%" fill="url(#canvas-pattern-background)"></rect>
+					</svg>
 					<div className="workflow-canvas-elements-box" style={{ transform: `translate(${this.state.translateX}px, ${this.state.translateY}px) translateZ(1px) scale(${this.state.scale})` }}>
 						<div className="workflow-canvas-root-nodes-container">
 							{nestedRootNodes.map((rootNode) =>
@@ -77,12 +83,6 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 							)}
 						</div>
 					</div>
-					<svg className="workflow-canvas-background-svg">
-						<pattern id="canvas-pattern-background" x={this.state.translateX} y={this.state.translateY} width={20 * this.state.scale} height={20 * this.state.scale} patternUnits="userSpaceOnUse">
-							<circle cx="0.5" cy="0.5" r="0.5" fill="#949494"></circle>
-						</pattern>
-						<rect x="0" y="0" width="100%" height="100%" fill="url(#canvas-pattern-background)"></rect>
-					</svg>
 				</div>
 			</div>
 		);
