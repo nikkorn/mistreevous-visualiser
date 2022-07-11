@@ -96,9 +96,9 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 
 	private _onCanvasWrapperWheel(event: React.WheelEvent<HTMLDivElement>): void {
 		if (event.deltaY < 0) {
-		  this.setState({ scale: this.state.scale + 0.1 });
+		  this.setState({ scale: Math.min(this.state.scale + 0.1, 2) });
 		} else if (event.deltaY > 0) {
-		  this.setState({ scale: this.state.scale - 0.1 });
+		  this.setState({ scale: Math.max(this.state.scale - 0.1, 0.5) });
 		}
 	}
 
