@@ -65,18 +65,22 @@ export const NodeContainer: React.FunctionComponent<NodeContainerProps> = ({ par
             <div className="workflow-canvas-node-parent-container">
                 <Node key={parentNode.id} wrapped={nodeComponents[parentNode.variant]} model={parentNode} />
             </div>
-            <div className="workflow-canvas-node-connector-svg-wrapper">
-                <svg className="workflow-canvas-node-connector-svg">
-                    {connectorTargetOffsets && connectorTargetOffsets.map((offset, index) =>
-                        <path className="connector-path" d={`M0 ${nodeChildrenContainerHeight / 2} C30 ${nodeChildrenContainerHeight / 2} 30 ${offset} 60 ${offset}`} stroke="#909090" strokeWidth={2} strokeLinejoin={"round"} strokeDasharray={"8, 4"} fill="transparent" />
-                    )}
-                </svg>
-            </div>
-            <div ref={nodeChildrenContainerRef} className="workflow-canvas-node-children-container">
-                {childNodes.map((childNode) =>
-                    <NodeContainer parentNode={childNode.child.node} childNodes={childNode.child.children} nodeComponents={nodeComponents} />
-                )}
-            </div>
+            {childNodes.length > 0 && (
+                <>
+                    <div className="workflow-canvas-node-connector-svg-wrapper">
+                        <svg className="workflow-canvas-node-connector-svg">
+                            {connectorTargetOffsets && connectorTargetOffsets.map((offset, index) =>
+                                <path className="connector-path" d={`M0 ${nodeChildrenContainerHeight / 2} C30 ${nodeChildrenContainerHeight / 2} 30 ${offset} 60 ${offset}`} stroke="#909090" strokeWidth={2} strokeLinejoin={"round"} strokeDasharray={"8, 4"} fill="transparent" />
+                            )}
+                        </svg>
+                    </div>
+                    <div ref={nodeChildrenContainerRef} className="workflow-canvas-node-children-container">
+                        {childNodes.map((childNode) =>
+                            <NodeContainer parentNode={childNode.child.node} childNodes={childNode.child.children} nodeComponents={nodeComponents} />
+                        )}
+                    </div>
+                </>
+            )}
         </div>
     );
 };

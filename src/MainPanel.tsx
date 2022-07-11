@@ -23,6 +23,9 @@ export type MainPanelProps = {
  export const MainPanel: React.FunctionComponent<MainPanelProps> = ({ definition, elements }) => {
     return (
         <WorkflowCanvas
+            onInitalise={(instance) => {
+                (window as any)["fit"] = instance.fit
+            }}
             nodes={elements.nodes}
             connectors={elements.edges}
             nodeComponents={{

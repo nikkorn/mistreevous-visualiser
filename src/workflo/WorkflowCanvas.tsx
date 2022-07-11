@@ -6,15 +6,20 @@ import { ConnectorType, NodeType, NodeWithChildren } from './workflo';
 
 import './WorkflowCanvas.css';
 
+export type WorkflowCanvasInstance = {
+	fit(): void;
+}
+
 /**
  * The WorkflowCanvas component props.
  */
 export type WorkflowCanvasProps = {
 	nodes: NodeType[];
 	connectors: ConnectorType[];
-	nodeComponents: { [key: string]: React.ClassType<any, any, any> }
+	nodeComponents: { [key: string]: React.ClassType<any, any, any> };
+	onInitalise?(instance: WorkflowCanvasInstance): void;
+	onUpdate?(): void;
 }
-
 
 /**
  * The WorkflowCanvas component state.
@@ -32,6 +37,9 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 	/** A reference to the canvas wrapper. */
 	private readonly _canvasWrapperRef: React.RefObject<HTMLDivElement>;
 
+	/** A reference to root nodes container. */
+	private readonly _rootNodesContainerRef: React.RefObject<HTMLDivElement>;
+
 	/** The last canvas drag position. */
 	private _lastCanvasDragPosition: { x: number, y: number } | null = null;
 
@@ -43,6 +51,7 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
         super(props);
 
 		this._canvasWrapperRef = React.createRef();
+		this._rootNodesContainerRef = React.createRef();
 
         // Set the initial state for the component.
         this.state = {
@@ -54,6 +63,8 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 		this._onCanvasWrapperWheel = this._onCanvasWrapperWheel.bind(this);
 		this._onCanvasMouseDown = this._onCanvasMouseDown.bind(this);
 		this._onCanvasMouseMove = this._onCanvasMouseMove.bind(this);
+
+		props.onInitalise?.(this._getInstanceObject());
     }
 
 	/**
@@ -77,7 +88,7 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 						<rect x="0" y="0" width="100%" height="100%" fill="url(#canvas-pattern-background)"></rect>
 					</svg>
 					<div className="workflow-canvas-elements-box" style={{ transform: `translate(${this.state.translateX}px, ${this.state.translateY}px) translateZ(1px) scale(${this.state.scale})` }}>
-						<div className="workflow-canvas-root-nodes-container">
+						<div ref={this._rootNodesContainerRef} className="workflow-canvas-root-nodes-container">
 							{nestedRootNodes.map((rootNode) =>
 								<NodeContainer parentNode={rootNode.node} childNodes={rootNode.children} nodeComponents={this.props.nodeComponents} />
 							)}
@@ -88,11 +99,15 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 		);
 	}
 
-	public componentDidMount(): void {}
+	public componentDidMount(): void {
+		this.props.onUpdate?.();
+	}
 
 	public componentWillUnmount(): void {}
 
-	public componentDidUpdate(prevProps: WorkflowCanvasProps): void {}
+	public componentDidUpdate(prevProps: WorkflowCanvasProps): void {
+		this.props.onUpdate?.();
+	}
 
 	private _onCanvasWrapperWheel(event: React.WheelEvent<HTMLDivElement>): void {
 		if (event.deltaY < 0) {
@@ -118,6 +133,32 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 
 		this._lastCanvasDragPosition = { x: event.clientX, y: event.clientY };
 	}
+
+	private _fit(): void {
+		const rootNodeBoundingClientRect = this._rootNodesContainerRef.current?.getBoundingClientRect();
+		console.log("rootNodeBoundingClientRect", rootNodeBoundingClientRect);
+
+		// The bounding client rect dimensions take scale into account but offsetWidth and offsetHeight don't.
+
+		const canvasWrapperOffsetHeight = this._canvasWrapperRef.current?.offsetHeight || 0;
+		const canvasWrapperOffsetWidth = this._canvasWrapperRef.current?.offsetWidth || 0;
+		const rootNodesContainerOffsetHeight = this._rootNodesContainerRef.current?.offsetHeight || 0;
+		const rootNodesContainerOffsetWidth = this._rootNodesContainerRef.current?.offsetWidth || 0;
+
+		// TODO Work out scale, we should compare the canvas wrapper width/height and root nodes container width/height and only if the
+		// root nodes container is larger then we should scale down only.
+
+		this.setState({ 
+			translateY: (canvasWrapperOffsetHeight / 2) - (rootNodesContainerOffsetHeight / 2),
+			translateX: (canvasWrapperOffsetWidth / 2) - (rootNodesContainerOffsetWidth / 2)
+		})
+	} 
+
+	private _getInstanceObject(): WorkflowCanvasInstance {
+		return {
+			fit: () => this._fit()
+		}
+	} 
 
 	private static _getNestedRootNodes(nodes: NodeType[], connectors: ConnectorType[]): NodeWithChildren[] {
 		const addChildNodes = (parent: NodeWithChildren) => {
