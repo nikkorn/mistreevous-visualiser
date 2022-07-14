@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { WorkflowCanvas } from "./workflo/WorkflowCanvas";
+import { WorkflowCanvas, WorkflowCanvasInstance } from "./workflo/WorkflowCanvas";
 import { DefaultNode } from "./workflo/DefaultNode";
 import { NodeType, ConnectorType } from "./workflo/workflo";
 
@@ -21,16 +21,21 @@ export type MainPanelProps = {
  * The MainPanel component.
  */
  export const MainPanel: React.FunctionComponent<MainPanelProps> = ({ definition, elements }) => {
+    const [canvasInstance, setCanvasInstance] = useState<WorkflowCanvasInstance | null>(null);
+
+    useEffect(() => {
+        canvasInstance?.fit();
+    });
+
     return (
         <WorkflowCanvas
-            onInitalise={(instance) => {
-                (window as any)["fit"] = instance.fit
-            }}
+            onInitalise={(instance) => setCanvasInstance(instance)}
             nodes={elements.nodes}
             connectors={elements.edges}
             nodeComponents={{
                 "default": DefaultNode
-            }} />
+            }}
+        />
     );
   }
   

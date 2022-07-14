@@ -134,32 +134,38 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 		this._lastCanvasDragPosition = { x: event.clientX, y: event.clientY };
 	}
 
+	/**
+	 * Fit the contents into the centre of the canvas.
+	 */
 	private _fit(): void {
-		const rootNodeBoundingClientRect = this._rootNodesContainerRef.current?.getBoundingClientRect();
-		console.log("rootNodeBoundingClientRect", rootNodeBoundingClientRect);
-
-		// The bounding client rect dimensions take scale into account but offsetWidth and offsetHeight don't.
-
 		const canvasWrapperOffsetHeight = this._canvasWrapperRef.current?.offsetHeight || 0;
 		const canvasWrapperOffsetWidth = this._canvasWrapperRef.current?.offsetWidth || 0;
 		const rootNodesContainerOffsetHeight = this._rootNodesContainerRef.current?.offsetHeight || 0;
 		const rootNodesContainerOffsetWidth = this._rootNodesContainerRef.current?.offsetWidth || 0;
 
-		// TODO Work out scale, we should compare the canvas wrapper width/height and root nodes container width/height and only if the
-		// root nodes container is larger then we should scale down only.
-
 		this.setState({ 
 			translateY: (canvasWrapperOffsetHeight / 2) - (rootNodesContainerOffsetHeight / 2),
-			translateX: (canvasWrapperOffsetWidth / 2) - (rootNodesContainerOffsetWidth / 2)
+			translateX: (canvasWrapperOffsetWidth / 2) - (rootNodesContainerOffsetWidth / 2),
+			scale: 1
 		})
 	} 
 
+	/**
+	 * Gets the instance object for use by parent components.
+	 * @returns The instance object for use by parent components.
+	 */
 	private _getInstanceObject(): WorkflowCanvasInstance {
 		return {
 			fit: () => this._fit()
 		}
 	} 
 
+	/**
+	 * Gets the nested root nodes.
+	 * @param nodes 
+	 * @param connectors 
+	 * @returns The nested root nodes.
+	 */
 	private static _getNestedRootNodes(nodes: NodeType[], connectors: ConnectorType[]): NodeWithChildren[] {
 		const addChildNodes = (parent: NodeWithChildren) => {
 			// Get all outgoing connectors for the parent node.
