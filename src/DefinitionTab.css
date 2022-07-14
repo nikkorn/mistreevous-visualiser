@@ -1,0 +1,8 @@
+.definition-tab {
+    display: flex;
+    flex-direction: column;
+}
+
+.definition-tab-ace-editor {
+    flex-grow: 1;
+}

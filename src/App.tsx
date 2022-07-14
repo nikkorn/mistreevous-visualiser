@@ -39,7 +39,8 @@ export type AppState = {
 	definiton: string;
 	board: string;
 	behaviourTree: BehaviourTree | null;
-	reactFlowElements: CanvasElements;
+	behaviourTreeExceptionMessage: string;
+	canvasElements: CanvasElements;
 }
 
 /**
@@ -59,7 +60,8 @@ export class App extends React.Component<{}, AppState> {
 			definiton: "",
 			board: "{}",
 			behaviourTree: null,
-			reactFlowElements: { nodes: [], edges: [] }
+			behaviourTreeExceptionMessage: "",
+			canvasElements: { nodes: [], edges: [] }
 		};
 
 		this._onDefinitionChange = this._onDefinitionChange.bind(this);
@@ -94,14 +96,14 @@ export class App extends React.Component<{}, AppState> {
 							</Tabs>
 						</Box>
 						{this.state.activeSidebarTab === SidebarTab.Definition && (
-							<DefinitionTab value={this.state.definiton} onChange={this._onDefinitionChange} />
+							<DefinitionTab value={this.state.definiton} onChange={this._onDefinitionChange} errorMessage={this.state.behaviourTreeExceptionMessage} />
 						)}
 						{this.state.activeSidebarTab === SidebarTab.Board && (
 							<BoardTab value={this.state.board} onChange={this._onBoardChange} />
 						)}
 					</Grid>
 					<Grid item xs={8}>
-						<MainPanel definition={this.state.definiton} elements={this.state.reactFlowElements} />
+						<MainPanel definition={this.state.definiton} elements={this.state.canvasElements} />
 					</Grid>
 				</Grid>
 			</Box>
@@ -114,6 +116,7 @@ export class App extends React.Component<{}, AppState> {
 	 */
 	private _onDefinitionChange(definition: string): void {
 		let behaviourTree;
+		let behaviourTreeExceptionMessage = "";
 		let canvasElements: CanvasElements = { nodes: [], edges: [] };
 		
 		try {
@@ -121,17 +124,18 @@ export class App extends React.Component<{}, AppState> {
 			behaviourTree = new BehaviourTree(definition, {} /** TODO Stick the board here (new Function vs eval) */);
 
 			canvasElements = this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails());
-		} catch (exception) {
+		} catch (error) {
 			// There was an error creating the behaviour tree!
 			behaviourTree = null;
 
-			console.log(exception);
+			behaviourTreeExceptionMessage = `${(error as any).message}`;
 		}
 		
 		this.setState({ 
 			definiton: definition,
 			behaviourTree: behaviourTree,
-			reactFlowElements: canvasElements
+			behaviourTreeExceptionMessage: behaviourTreeExceptionMessage,
+			canvasElements: canvasElements
 		 });
 	}
 
