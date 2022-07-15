@@ -17,6 +17,7 @@ export type WorkflowCanvasProps = {
 	nodes: NodeType[];
 	connectors: ConnectorType[];
 	nodeComponents: { [key: string]: React.ClassType<any, any, any> };
+	connectorComponents: { [key: string]: React.ClassType<any, any, any> };
 	onInitalise?(instance: WorkflowCanvasInstance): void;
 	onUpdate?(): void;
 }
@@ -90,7 +91,12 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 					<div className="workflow-canvas-elements-box" style={{ transform: `translate(${this.state.translateX}px, ${this.state.translateY}px) translateZ(1px) scale(${this.state.scale})` }}>
 						<div ref={this._rootNodesContainerRef} className="workflow-canvas-root-nodes-container">
 							{nestedRootNodes.map((rootNode) =>
-								<NodeContainer parentNode={rootNode.node} childNodes={rootNode.children} nodeComponents={this.props.nodeComponents} />
+								<NodeContainer 
+									parentNode={rootNode.node}
+									childNodes={rootNode.children}
+									nodeComponents={this.props.nodeComponents}
+									connectorComponents={this.props.connectorComponents}
+								/>
 							)}
 						</div>
 					</div>

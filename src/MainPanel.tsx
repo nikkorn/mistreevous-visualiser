@@ -6,6 +6,7 @@ import Fab from "@mui/material/Fab/Fab";
 
 import { WorkflowCanvas, WorkflowCanvasInstance } from "./workflo/WorkflowCanvas";
 import { DefaultNode } from "./workflo/DefaultNode";
+import { DefaultConnector } from "./workflo/DefaultConnector";
 import { NodeType, ConnectorType } from "./workflo/workflo";
 
 import './MainPanel.css';
@@ -46,6 +47,9 @@ export type MainPanelProps = {
                 connectors={elements.edges}
                 nodeComponents={{
                     "default": DefaultNode
+                }}
+                connectorComponents={{
+                    "default": DefaultConnector
                 }}
             />
             <div className="main-panel-fab-container">

@@ -18,12 +18,13 @@ export type NodeContainerProps = {
     parentNode: NodeType;
 	childNodes: ChildNode[];
     nodeComponents: { [key: string]: React.ClassType<any, any, any> };
+    connectorComponents: { [key: string]: React.ClassType<any, any, any> };
 };
 
 /**
  * The NodeContainer component.
  */
-export const NodeContainer: React.FunctionComponent<NodeContainerProps> = ({ parentNode, childNodes, nodeComponents }) => {
+export const NodeContainer: React.FunctionComponent<NodeContainerProps> = ({ parentNode, childNodes, nodeComponents, connectorComponents }) => {
     // The ref to the node children container.
     const nodeChildrenContainerRef = useRef<HTMLDivElement>(null);
 
@@ -76,7 +77,12 @@ export const NodeContainer: React.FunctionComponent<NodeContainerProps> = ({ par
                     </div>
                     <div ref={nodeChildrenContainerRef} className="workflow-canvas-node-children-container">
                         {childNodes.map((childNode) =>
-                            <NodeContainer parentNode={childNode.child.node} childNodes={childNode.child.children} nodeComponents={nodeComponents} />
+                            <NodeContainer 
+                                parentNode={childNode.child.node} 
+                                childNodes={childNode.child.children} 
+                                nodeComponents={nodeComponents}
+                                connectorComponents={connectorComponents}
+                            />
                         )}
                     </div>
                 </>
