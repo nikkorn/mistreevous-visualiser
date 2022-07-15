@@ -196,7 +196,7 @@ export class App extends React.Component<{}, AppState> {
 					id: `${flattenedNode.parentId}_${flattenedNode.id}`,
 					from: flattenedNode.parentId,
 					to: flattenedNode.id,
-					variant: "default"
+					variant: "active"
 				});
 			}
 		});
