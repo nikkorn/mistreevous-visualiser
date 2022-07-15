@@ -3,9 +3,9 @@ import { Position } from './workflo';
 import './ActiveConnector.css';
 
 /**
- * The ActiveConnector component props.
+ * The SucceededConnector component props.
  */
-export type ActiveConnectorProps = {
+export type SucceededConnectorProps = {
   source: Position;
   target: Position;
   containerWidth: number;
@@ -13,17 +13,14 @@ export type ActiveConnectorProps = {
 };
 
 /**
- * The ActiveConnector component.
+ * The SucceededConnector component.
  */
-export const ActiveConnector: React.FunctionComponent<ActiveConnectorProps> = ({ source, target, containerWidth, containerHeight }) => {
+export const SucceededConnector: React.FunctionComponent<SucceededConnectorProps> = ({ source, target, containerWidth, containerHeight }) => {
   return (
     <path 
-        className="active-connector-path" 
         d={`M${source.x} ${source.y} C${containerWidth / 2} ${source.y} ${containerWidth / 2} ${target.y} ${target.x} ${target.y}`}
-        stroke="#0388fc"
+        stroke="#02c93e"
         strokeWidth={2}
-        strokeLinejoin={"round"}
-        strokeDasharray={"8, 4"} 
         fill="transparent"
     />
   );

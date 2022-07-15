@@ -5,6 +5,7 @@ import Stop from "@mui/icons-material/Stop";
 import Fab from "@mui/material/Fab/Fab";
 
 import { ActiveConnector } from "./workflo/ActiveConnector";
+import { SucceededConnector } from "./workflo/SucceededConnector";
 import { WorkflowCanvas, WorkflowCanvasInstance } from "./workflo/WorkflowCanvas";
 import { DefaultNode } from "./workflo/DefaultNode";
 import { DefaultConnector } from "./workflo/DefaultConnector";
@@ -51,7 +52,8 @@ export type MainPanelProps = {
                 }}
                 connectorComponents={{
                     "default": DefaultConnector,
-                    "active": ActiveConnector
+                    "active": ActiveConnector,
+                    "succeeded": SucceededConnector
                 }}
             />
             <div className="main-panel-fab-container">

@@ -193,12 +193,29 @@ export class App extends React.Component<{}, AppState> {
 				variant: "default"
 			} as any);
 
+			let variant;
+
 			if (flattenedNode.parentId) {
+				let variant;
+				
+				switch (flattenedNode.state) {
+					case State.RUNNING:
+						variant = "active";
+						break;
+	
+					case State.SUCCEEDED:
+						variant = "succeeded";
+						break;
+	
+					default:
+						variant = "default";
+				}
+
 				result.edges.push({
 					id: `${flattenedNode.parentId}_${flattenedNode.id}`,
 					from: flattenedNode.parentId,
 					to: flattenedNode.id,
-					variant: flattenedNode.state === State.RUNNING ? "active" : "default"
+					variant
 				});
 			}
 		});
