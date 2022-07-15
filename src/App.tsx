@@ -41,6 +41,7 @@ export type AppState = {
 	boardExceptionMessage: string;
 	behaviourTree: BehaviourTree | null;
 	behaviourTreeExceptionMessage: string;
+	behaviourTreePlayInterval: NodeJS.Timer | null;
 	canvasElements: CanvasElements;
 }
 
@@ -63,6 +64,7 @@ export class App extends React.Component<{}, AppState> {
 			boardExceptionMessage: "",
 			behaviourTree: null,
 			behaviourTreeExceptionMessage: "",
+			behaviourTreePlayInterval: null,
 			canvasElements: { nodes: [], edges: [] }
 		};
 
@@ -109,8 +111,8 @@ export class App extends React.Component<{}, AppState> {
 							elements={this.state.canvasElements}
 							showPlayButton={!!this.state.behaviourTree}
 							showStopButton={!!this.state.behaviourTree}
-							onPlayButtonClick={() => console.log("PLAY!")}
-							onStopButtonClick={() => console.log("STOP!")}
+							onPlayButtonClick={() => this._onPlayButtonPressed()}
+							onStopButtonClick={() => this._onStopButtonPressed()}
 						/>
 					</Grid>
 				</Grid>
@@ -165,7 +167,7 @@ export class App extends React.Component<{}, AppState> {
 			board: board,
 			boardExceptionMessage: boardExceptionMessage,
 			behaviourTree: behaviourTree
-		 });
+		});
 	}
 
 	private _createTreeInstance(definition: string, board: string): BehaviourTree | null {
@@ -196,11 +198,64 @@ export class App extends React.Component<{}, AppState> {
 					id: `${flattenedNode.parentId}_${flattenedNode.id}`,
 					from: flattenedNode.parentId,
 					to: flattenedNode.id,
-					variant: "active"
+					variant: flattenedNode.state === State.RUNNING ? "active" : "default"
 				});
 			}
 		});
 
 		return result;
+	}
+
+	private _onPlayButtonPressed(): void {
+		const { behaviourTree } = this.state;
+
+		// There is nothing to de if we have no behaviour tree instance.
+		if (!behaviourTree) {
+			return;
+		}
+
+		// Reset the tree.
+		behaviourTree.reset();
+
+		// Create an interval to step the tree until it is finished.
+		const playInterval = setInterval(() => {
+			// Step the behaviour tree, if anything goes wrong we will stop the tree playback.
+			try {
+				behaviourTree.step();
+			} catch (exception) {
+				// Clear the interval.
+				clearInterval(playInterval);
+				this.setState({ behaviourTreePlayInterval: null });
+
+				// Notify the user of the exception.
+				alert(exception);
+			}
+
+			// If the tree root is in a finished state then stop the interval.
+			if (!behaviourTree.isRunning()) {
+				// Clear the interval.
+				clearInterval(playInterval);
+				this.setState({ behaviourTreePlayInterval: null });
+			}
+
+			this.setState({ canvasElements: this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails()) });
+		}, 100);
+
+		this.setState({ behaviourTreePlayInterval: playInterval });
+	}
+
+	private _onStopButtonPressed(): void {
+		const { behaviourTree, behaviourTreePlayInterval } = this.state;
+
+		behaviourTree?.reset();
+
+		if (behaviourTreePlayInterval) {
+			clearInterval(behaviourTreePlayInterval);
+		}
+
+		this.setState({ 
+			behaviourTreePlayInterval: null,
+			canvasElements: behaviourTree ? this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails()) : { nodes: [], edges: [] }
+		});
 	}
 }
