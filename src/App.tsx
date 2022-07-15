@@ -38,6 +38,7 @@ export type AppState = {
 	activeSidebarTab: SidebarTab;
 	definiton: string;
 	board: string;
+	boardExceptionMessage: string;
 	behaviourTree: BehaviourTree | null;
 	behaviourTreeExceptionMessage: string;
 	canvasElements: CanvasElements;
@@ -59,6 +60,7 @@ export class App extends React.Component<{}, AppState> {
 			activeSidebarTab: SidebarTab.Definition,
 			definiton: "",
 			board: "{}",
+			boardExceptionMessage: "",
 			behaviourTree: null,
 			behaviourTreeExceptionMessage: "",
 			canvasElements: { nodes: [], edges: [] }
@@ -99,11 +101,17 @@ export class App extends React.Component<{}, AppState> {
 							<DefinitionTab value={this.state.definiton} onChange={this._onDefinitionChange} errorMessage={this.state.behaviourTreeExceptionMessage} />
 						)}
 						{this.state.activeSidebarTab === SidebarTab.Board && (
-							<BoardTab value={this.state.board} onChange={this._onBoardChange} />
+							<BoardTab value={this.state.board} onChange={this._onBoardChange} errorMessage={this.state.boardExceptionMessage} />
 						)}
 					</Grid>
 					<Grid item xs={8}>
-						<MainPanel definition={this.state.definiton} elements={this.state.canvasElements} />
+						<MainPanel 
+							elements={this.state.canvasElements}
+							showPlayButton={!!this.state.behaviourTree}
+							showStopButton={!!this.state.behaviourTree}
+							onPlayButtonClick={() => console.log("PLAY!")}
+							onStopButtonClick={() => console.log("STOP!")}
+						/>
 					</Grid>
 				</Grid>
 			</Box>
@@ -115,32 +123,62 @@ export class App extends React.Component<{}, AppState> {
 	 * @param definition 
 	 */
 	private _onDefinitionChange(definition: string): void {
-		let behaviourTree;
 		let behaviourTreeExceptionMessage = "";
 		let canvasElements: CanvasElements = { nodes: [], edges: [] };
 		
 		try {
 			// Try to create the behaviour tree.
-			behaviourTree = new BehaviourTree(definition, {} /** TODO Stick the board here (new Function vs eval) */);
+			const behaviourTreeVal = new BehaviourTree(definition, {} /** We don't need aboard here as we are only validating the definition. */);
 
-			canvasElements = this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails());
+			canvasElements = this._parseNodesAndConnectors((behaviourTreeVal as any).getFlattenedNodeDetails());
 		} catch (error) {
-			// There was an error creating the behaviour tree!
-			behaviourTree = null;
-
 			behaviourTreeExceptionMessage = `${(error as any).message}`;
 		}
 		
+		const behaviourTree = this._createTreeInstance(definition, this.state.board);
+
 		this.setState({ 
 			definiton: definition,
-			behaviourTree: behaviourTree,
 			behaviourTreeExceptionMessage: behaviourTreeExceptionMessage,
-			canvasElements: canvasElements
+			canvasElements: canvasElements,
+			behaviourTree: behaviourTree
 		 });
 	}
 
+	/**
+	 * Handles a change of board.
+	 * @param board 
+	 */
 	private _onBoardChange(board: string): void {
-		this.setState({ board: board });
+		let boardExceptionMessage = "";
+
+		try {
+			// Try to create the blackboard.
+			(new Function(`return (${board});`))();
+		} catch (error) {
+			boardExceptionMessage = `${(error as any).message}`;
+		}
+
+		const behaviourTree = this._createTreeInstance(this.state.definiton, board);
+
+		this.setState({ 
+			board: board,
+			boardExceptionMessage: boardExceptionMessage,
+			behaviourTree: behaviourTree
+		 });
+	}
+
+	private _createTreeInstance(definition: string, board: string): BehaviourTree | null {
+		try {
+			// Create the board object.
+			const boardObject = (new Function(`return (${board});`))();
+
+			const behaviourTree = new BehaviourTree(definition, boardObject);
+
+			return behaviourTree;
+		} catch (error) {
+			return null;
+		}
 	}
 
 	private _parseNodesAndConnectors(flattenedNodeDetails: FlattenedNode[]): CanvasElements {

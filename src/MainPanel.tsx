@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 
+import PlayArrow from '@mui/icons-material/PlayArrow';
+import Stop from "@mui/icons-material/Stop";
+import Fab from "@mui/material/Fab/Fab";
+
 import { WorkflowCanvas, WorkflowCanvasInstance } from "./workflo/WorkflowCanvas";
 import { DefaultNode } from "./workflo/DefaultNode";
 import { NodeType, ConnectorType } from "./workflo/workflo";
-import Fab from "@mui/material/Fab/Fab";
 
 import './MainPanel.css';
 
@@ -13,17 +16,22 @@ export type CanvasElements = { nodes: NodeType[], edges: ConnectorType[] };
  * The MainPanel component props.
  */
 export type MainPanelProps = {
-    /** The behaviour tree definition. */
-    definition: string;
-
     /** The behaviour tree elements. */
     elements: CanvasElements;
+
+    showPlayButton: boolean;
+
+    onPlayButtonClick(): void;
+
+    showStopButton: boolean;
+
+    onStopButtonClick(): void;
 }
 
 /**
  * The MainPanel component.
  */
- export const MainPanel: React.FunctionComponent<MainPanelProps> = ({ definition, elements }) => {
+ export const MainPanel: React.FunctionComponent<MainPanelProps> = ({ elements, showPlayButton, showStopButton, onPlayButtonClick, onStopButtonClick }) => {
     const [canvasInstance, setCanvasInstance] = useState<WorkflowCanvasInstance | null>(null);
 
     useEffect(() => {
@@ -41,10 +49,16 @@ export type MainPanelProps = {
                 }}
             />
             <div className="main-panel-fab-container">
-                <Fab className="run-tree-fab main-panel-fab" size="medium" color="primary">
-                </Fab>
-                <Fab className="run-tree-fab main-panel-fab" size="medium" color="primary">
-                </Fab>
+                {showPlayButton && (
+                    <Fab onClick={onPlayButtonClick} className="run-tree-fab main-panel-fab" size="medium" color="primary">
+                        <PlayArrow/>
+                    </Fab>
+                )}
+                {showStopButton && (
+                    <Fab onClick={onStopButtonClick} className="run-tree-fab main-panel-fab" size="medium" color="primary">
+                        <Stop/>
+                    </Fab>
+                )}
             </div>
         </div>
     );
