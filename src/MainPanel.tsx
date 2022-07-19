@@ -42,9 +42,18 @@ export type MainPanelProps = {
  */
  export const MainPanel: React.FunctionComponent<MainPanelProps> = ({ elements, showPlayButton, showReplayButton, showStopButton, onPlayButtonClick, onReplayButtonClick, onStopButtonClick }) => {
     const [canvasInstance, setCanvasInstance] = useState<WorkflowCanvasInstance | null>(null);
+    const [isFitNeeded, setIsFitNeeded] = useState<boolean>(true);
 
+    // An effect to call 'fit' on our canvas if we ever go from having no layout to some layout.
     useEffect(() => {
-        // canvasInstance?.fit();
+        const doNodesExist = elements.nodes.length > 0;
+
+        if (doNodesExist && isFitNeeded) {
+            canvasInstance?.fit();
+            setIsFitNeeded(false);
+        } else if (!doNodesExist && !isFitNeeded) {
+            setIsFitNeeded(true);
+        }
     });
 
     return (
