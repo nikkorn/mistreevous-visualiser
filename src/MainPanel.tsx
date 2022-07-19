@@ -14,6 +14,7 @@ import { DefaultConnector } from "./workflo/DefaultConnector";
 import { NodeType, ConnectorType } from "./workflo/workflo";
 
 import './MainPanel.css';
+import { FailedConnector } from "./workflo/FailedConnector";
 
 export type CanvasElements = { nodes: NodeType[], edges: ConnectorType[] };
   
@@ -68,7 +69,8 @@ export type MainPanelProps = {
                 connectorComponents={{
                     "default": DefaultConnector,
                     "active": ActiveConnector,
-                    "succeeded": SucceededConnector
+                    "succeeded": SucceededConnector,
+                    "failed": FailedConnector
                 }}
             />
             <div className="main-panel-fab-container">

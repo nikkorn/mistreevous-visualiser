@@ -219,6 +219,10 @@ export class App extends React.Component<{}, AppState> {
 					case State.SUCCEEDED:
 						variant = "succeeded";
 						break;
+					
+					case State.FAILED:
+						variant = "failed";
+						break;
 	
 					default:
 						variant = "default";
