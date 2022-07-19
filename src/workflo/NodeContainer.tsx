@@ -76,7 +76,8 @@ export const NodeContainer: React.FunctionComponent<NodeContainerProps> = ({ par
                                 const Connector = connectorComponents[connector.variant];
 
                                 return (
-                                    <Connector 
+                                    <Connector
+                                        key={index}
                                         source={{ x: 0, y: nodeChildrenContainerHeight / 2 }} 
                                         target={{ x: 60, y: offset }}
                                         containerWidth={60}
@@ -87,8 +88,9 @@ export const NodeContainer: React.FunctionComponent<NodeContainerProps> = ({ par
                         </svg>
                     </div>
                     <div ref={nodeChildrenContainerRef} className="workflow-canvas-node-children-container">
-                        {childNodes.map((childNode) =>
-                            <NodeContainer 
+                        {childNodes.map((childNode, index) =>
+                            <NodeContainer
+                                key={index}
                                 parentNode={childNode.child.node} 
                                 childNodes={childNode.child.children} 
                                 nodeComponents={nodeComponents}

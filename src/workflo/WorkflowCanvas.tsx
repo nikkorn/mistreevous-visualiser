@@ -90,8 +90,9 @@ export class WorkflowCanvas extends React.Component<WorkflowCanvasProps, Workflo
 					</svg>
 					<div className="workflow-canvas-elements-box" style={{ transform: `translate(${this.state.translateX}px, ${this.state.translateY}px) translateZ(1px) scale(${this.state.scale})` }}>
 						<div ref={this._rootNodesContainerRef} className="workflow-canvas-root-nodes-container">
-							{nestedRootNodes.map((rootNode) =>
-								<NodeContainer 
+							{nestedRootNodes.map((rootNode, index) =>
+								<NodeContainer
+									key={index}
 									parentNode={rootNode.node}
 									childNodes={rootNode.children}
 									nodeComponents={this.props.nodeComponents}
