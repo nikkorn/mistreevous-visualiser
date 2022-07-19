@@ -70,7 +70,7 @@ export const NodeContainer: React.FunctionComponent<NodeContainerProps> = ({ par
                 <>
                     <div className="workflow-canvas-node-connector-svg-wrapper">
                         <svg className="workflow-canvas-node-connector-svg">
-                            {connectorTargetOffsets && connectorTargetOffsets.map((offset, index) => {
+                            {connectorTargetOffsets && connectorTargetOffsets.length === childNodes.length && connectorTargetOffsets.map((offset, index) => {
                                 const { connector } = childNodes[index];       
                                 
                                 const Connector = connectorComponents[connector.variant];
