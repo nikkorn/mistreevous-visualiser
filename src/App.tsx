@@ -237,7 +237,7 @@ export class App extends React.Component<{}, AppState> {
 	}
 
 	private _onPlayButtonPressed(): void {
-		const { behaviourTree } = this.state;
+		const { behaviourTree, behaviourTreePlayInterval } = this.state;
 
 		// There is nothing to de if we have no behaviour tree instance.
 		if (!behaviourTree) {
@@ -248,8 +248,8 @@ export class App extends React.Component<{}, AppState> {
 		behaviourTree.reset();
 
 		// Clear any existing interval.
-		if (this.state.behaviourTreePlayInterval) {
-			clearInterval(this.state.behaviourTreePlayInterval);
+		if (behaviourTreePlayInterval) {
+			clearInterval(behaviourTreePlayInterval);
 		}
 
 		// Create an interval to step the tree until it is finished.
@@ -261,6 +261,9 @@ export class App extends React.Component<{}, AppState> {
 				// Clear the interval.
 				clearInterval(playInterval);
 				this.setState({ behaviourTreePlayInterval: null });
+
+				// Reset the tree.
+				behaviourTree.reset();
 
 				// Notify the user of the exception.
 				alert(exception);

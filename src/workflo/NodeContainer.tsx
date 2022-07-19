@@ -35,7 +35,7 @@ export const NodeContainer: React.FunctionComponent<NodeContainerProps> = ({ par
         const currentNodeChildrenContainerHeight = nodeChildrenContainerRef.current?.clientHeight || 0;
 
         // Work out the connector target offsets based on the heights and positions of each child node.
-        if (!connectorTargetOffsets || currentNodeChildrenContainerHeight != nodeChildrenContainerHeight) {
+        if (!connectorTargetOffsets || currentNodeChildrenContainerHeight != nodeChildrenContainerHeight || connectorTargetOffsets.length != childNodes.length) {
             const offsets = [];
 
             let childPositionOffset = 0;

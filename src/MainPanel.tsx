@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import PlayArrow from '@mui/icons-material/PlayArrow';
 import Repeat from '@mui/icons-material/Repeat';
 import Stop from "@mui/icons-material/Stop";
+import FitScreen from "@mui/icons-material/FitScreen";
 import Fab from "@mui/material/Fab/Fab";
 
 import { ActiveConnector } from "./workflo/ActiveConnector";
@@ -25,13 +26,13 @@ export type MainPanelProps = {
 
     showPlayButton: boolean;
 
-    onPlayButtonClick(): void;
-
     showReplayButton: boolean;
 
-    onReplayButtonClick(): void;
-
     showStopButton: boolean;
+
+    onPlayButtonClick(): void;
+
+    onReplayButtonClick(): void;
 
     onStopButtonClick(): void;
 }
@@ -43,7 +44,7 @@ export type MainPanelProps = {
     const [canvasInstance, setCanvasInstance] = useState<WorkflowCanvasInstance | null>(null);
 
     useEffect(() => {
-        canvasInstance?.fit();
+        // canvasInstance?.fit();
     });
 
     return (
@@ -75,6 +76,11 @@ export type MainPanelProps = {
                 {showStopButton && (
                     <Fab onClick={onStopButtonClick} className="run-tree-fab main-panel-fab" size="medium" color="primary">
                         <Stop/>
+                    </Fab>
+                )}
+                {elements.edges.length && elements.nodes.length && (
+                    <Fab onClick={() => canvasInstance?.fit()} className="run-tree-fab main-panel-fab" size="medium" color="primary">
+                        <FitScreen/>
                     </Fab>
                 )}
             </div>
