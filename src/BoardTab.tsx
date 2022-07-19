@@ -15,18 +15,21 @@ export type BoardTabProps = {
 
     /** The definition error message. */
     errorMessage?: string;
+
+    readOnly: boolean;
 }
 
 /**
  * The BoardTab component.
  */
- export const BoardTab: React.FunctionComponent<BoardTabProps> = ({ value, onChange, errorMessage }) => {
+ export const BoardTab: React.FunctionComponent<BoardTabProps> = ({ value, onChange, errorMessage, readOnly }) => {
     return (
         <div className="sidebar-tab board-tab">
             <AceEditor
                 className="board-tab-ace-editor"
                 value={value}
                 onChange={onChange}
+                readOnly={readOnly}
 				width="100%"
 				mode="javascript"
                 theme="sqlserver"

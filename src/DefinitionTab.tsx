@@ -17,18 +17,21 @@ export type DefinitionTabProps = {
 
     /** The definition error message. */
     errorMessage?: string;
+
+    readOnly: boolean;
 }
 
 /**
  * The DefinitionTab component.
  */
- export const DefinitionTab: React.FunctionComponent<DefinitionTabProps> = ({ value, onChange, errorMessage }) => {
+ export const DefinitionTab: React.FunctionComponent<DefinitionTabProps> = ({ value, onChange, errorMessage, readOnly }) => {
     return (
         <div className="sidebar-tab definition-tab">
             <AceEditor
                 className="definition-tab-ace-editor"
                 value={value}
                 onChange={onChange}
+                readOnly={readOnly}
 				width="100%"
 				mode="mdsl"
                 theme="sqlserver"

@@ -1,8 +1,17 @@
 .workflow-canvas-default-node {
     display: inline-block;
     padding: 10px;
-    border: black 1px solid;
+    border: #909090 2px solid;
     background-color: white;
+    white-space: nowrap;
+}
+
+.workflow-canvas-default-node.running {
+    border: #0388fc 2px solid;
+}
+
+.workflow-canvas-default-node.succeeded {
+    border: #02c93e 2px solid;
 }
 
 .workflow-canvas-default-node > p {

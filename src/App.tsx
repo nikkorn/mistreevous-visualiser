@@ -100,18 +100,30 @@ export class App extends React.Component<{}, AppState> {
 							</Tabs>
 						</Box>
 						{this.state.activeSidebarTab === SidebarTab.Definition && (
-							<DefinitionTab value={this.state.definiton} onChange={this._onDefinitionChange} errorMessage={this.state.behaviourTreeExceptionMessage} />
+							<DefinitionTab 
+								value={this.state.definiton} 
+								onChange={this._onDefinitionChange} 
+								errorMessage={this.state.behaviourTreeExceptionMessage}
+								readOnly={!!this.state.behaviourTreePlayInterval}
+							/>
 						)}
 						{this.state.activeSidebarTab === SidebarTab.Board && (
-							<BoardTab value={this.state.board} onChange={this._onBoardChange} errorMessage={this.state.boardExceptionMessage} />
+							<BoardTab 
+								value={this.state.board} 
+								onChange={this._onBoardChange}
+								errorMessage={this.state.boardExceptionMessage}
+								readOnly={!!this.state.behaviourTreePlayInterval}
+							/>
 						)}
 					</Grid>
 					<Grid item xs={8}>
 						<MainPanel 
 							elements={this.state.canvasElements}
-							showPlayButton={!!this.state.behaviourTree}
-							showStopButton={!!this.state.behaviourTree}
+							showPlayButton={!!this.state.behaviourTree && !this.state.behaviourTreePlayInterval}
+							showReplayButton={!!this.state.behaviourTreePlayInterval}
+							showStopButton={!!this.state.behaviourTreePlayInterval}
 							onPlayButtonClick={() => this._onPlayButtonPressed()}
+							onReplayButtonClick={() => this._onPlayButtonPressed()}
 							onStopButtonClick={() => this._onStopButtonPressed()}
 						/>
 					</Grid>
@@ -190,6 +202,7 @@ export class App extends React.Component<{}, AppState> {
 			result.nodes.push({
 				id: flattenedNode.id,
 				caption: flattenedNode.caption,
+				state: flattenedNode.state,
 				variant: "default"
 			} as any);
 
@@ -233,6 +246,11 @@ export class App extends React.Component<{}, AppState> {
 
 		// Reset the tree.
 		behaviourTree.reset();
+
+		// Clear any existing interval.
+		if (this.state.behaviourTreePlayInterval) {
+			clearInterval(this.state.behaviourTreePlayInterval);
+		}
 
 		// Create an interval to step the tree until it is finished.
 		const playInterval = setInterval(() => {

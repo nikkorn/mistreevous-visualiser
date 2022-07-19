@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import PlayArrow from '@mui/icons-material/PlayArrow';
+import Repeat from '@mui/icons-material/Repeat';
 import Stop from "@mui/icons-material/Stop";
 import Fab from "@mui/material/Fab/Fab";
 
@@ -26,6 +27,10 @@ export type MainPanelProps = {
 
     onPlayButtonClick(): void;
 
+    showReplayButton: boolean;
+
+    onReplayButtonClick(): void;
+
     showStopButton: boolean;
 
     onStopButtonClick(): void;
@@ -34,7 +39,7 @@ export type MainPanelProps = {
 /**
  * The MainPanel component.
  */
- export const MainPanel: React.FunctionComponent<MainPanelProps> = ({ elements, showPlayButton, showStopButton, onPlayButtonClick, onStopButtonClick }) => {
+ export const MainPanel: React.FunctionComponent<MainPanelProps> = ({ elements, showPlayButton, showReplayButton, showStopButton, onPlayButtonClick, onReplayButtonClick, onStopButtonClick }) => {
     const [canvasInstance, setCanvasInstance] = useState<WorkflowCanvasInstance | null>(null);
 
     useEffect(() => {
@@ -60,6 +65,11 @@ export type MainPanelProps = {
                 {showPlayButton && (
                     <Fab onClick={onPlayButtonClick} className="run-tree-fab main-panel-fab" size="medium" color="primary">
                         <PlayArrow/>
+                    </Fab>
+                )}
+                 {showReplayButton && (
+                    <Fab onClick={onReplayButtonClick} className="run-tree-fab main-panel-fab" size="medium" color="primary">
+                        <Repeat/>
                     </Fab>
                 )}
                 {showStopButton && (
