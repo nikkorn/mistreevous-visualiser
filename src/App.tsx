@@ -191,6 +191,7 @@ export class App extends React.Component<{}, AppState> {
 				id: flattenedNode.id,
 				caption: flattenedNode.caption,
 				state: flattenedNode.state,
+				type: flattenedNode.type,
 				variant: "default"
 			} as any);
 

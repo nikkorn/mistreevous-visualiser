@@ -1,6 +1,6 @@
 .workflow-canvas-default-node {
     display: inline-block;
-    padding: 6px 10px;
+    padding: 4px;
     border: #909090 2px solid;
     border-radius: 5px;
     background-color: white;
@@ -21,4 +21,26 @@
 
 .workflow-canvas-default-node > p {
     margin: 0px;
+}
+
+.default-node-main-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.default-node-caption {
+    margin: 0px 8px;
+    line-height: 26px;
+}
+
+.default-node-icon {
+    display: block;
+}
+
+.default-node-icon {
+    background-color: #606060;
+    width: 20px;
+    height: 20px;
+    padding: 3px;
+    border-radius: 5px;
 }
