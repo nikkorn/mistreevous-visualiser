@@ -28,7 +28,7 @@ export type DefinitionTabProps = {
     return (
         <div className="sidebar-tab definition-tab">
             <AceEditor
-                className="definition-tab-ace-editor"
+                className={`definition-tab-ace-editor ${readOnly ? "read-only" : ""}`}
                 value={value}
                 onChange={onChange}
                 readOnly={readOnly}

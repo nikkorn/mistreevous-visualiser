@@ -26,7 +26,7 @@ export type BoardTabProps = {
     return (
         <div className="sidebar-tab board-tab">
             <AceEditor
-                className="board-tab-ace-editor"
+                className={`board-tab-ace-editor ${readOnly ? "read-only" : ""}`}
                 value={value}
                 onChange={onChange}
                 readOnly={readOnly}
