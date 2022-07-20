@@ -4,6 +4,7 @@ import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/theme-sqlserver";
 
 import Alert from "@mui/material/Alert/Alert";
+import Typography from "@mui/material/Typography/Typography";
 
 import './BoardTab.css';
 
@@ -25,12 +26,14 @@ export type BoardTabProps = {
  export const BoardTab: React.FunctionComponent<BoardTabProps> = ({ value, onChange, errorMessage, readOnly }) => {
     return (
         <div className="sidebar-tab board-tab">
+            <Typography className="sidebar-tab-title" variant="overline">Board</Typography>
             <AceEditor
-                className={`board-tab-ace-editor ${readOnly ? "read-only" : ""}`}
+                className="board-tab-ace-editor"
                 value={value}
                 onChange={onChange}
                 readOnly={readOnly}
 				width="100%"
+                height="inherit"
 				mode="javascript"
                 theme="sqlserver"
                 setOptions={{ useWorker: false }}

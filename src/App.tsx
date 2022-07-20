@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useState } from 'react';
 import { State, BehaviourTree } from "mistreevous";
 
 import './App.css';
@@ -9,11 +8,8 @@ import MenuIcon from "mdi-material-ui/Menu";
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
 
@@ -76,6 +72,8 @@ export class App extends React.Component<{}, AppState> {
 	 * Renders the component.
 	 */
 	public render(): React.ReactNode {
+		const isSidebarReadOnly = !!this.state.behaviourTreePlayInterval;
+
 		return (
 			<Box className="app-box">
 				<AppBar position="static">
@@ -92,29 +90,19 @@ export class App extends React.Component<{}, AppState> {
 					</Toolbar>
 				</AppBar>
 				<Grid container sx={{ flexGrow: 1 }}>
-					<Grid item className="sidebar" xs={4}>
-						<Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-							<Tabs variant="fullWidth" value={this.state.activeSidebarTab} onChange={(event, value: SidebarTab) => this.setState({ activeSidebarTab: value })}>
-								<Tab label="Definition" />
-								<Tab label="Board" />
-							</Tabs>
-						</Box>
-						{this.state.activeSidebarTab === SidebarTab.Definition && (
-							<DefinitionTab 
-								value={this.state.definiton} 
-								onChange={this._onDefinitionChange} 
-								errorMessage={this.state.behaviourTreeExceptionMessage}
-								readOnly={!!this.state.behaviourTreePlayInterval}
-							/>
-						)}
-						{this.state.activeSidebarTab === SidebarTab.Board && (
-							<BoardTab 
-								value={this.state.board} 
-								onChange={this._onBoardChange}
-								errorMessage={this.state.boardExceptionMessage}
-								readOnly={!!this.state.behaviourTreePlayInterval}
-							/>
-						)}
+					<Grid container item className={`sidebar ${isSidebarReadOnly ? "read-only" : ""}`} xs={4} direction="column">
+						<DefinitionTab 
+							value={this.state.definiton} 
+							onChange={this._onDefinitionChange} 
+							errorMessage={this.state.behaviourTreeExceptionMessage}
+							readOnly={!!this.state.behaviourTreePlayInterval}
+						/>
+						<BoardTab 
+							value={this.state.board} 
+							onChange={this._onBoardChange}
+							errorMessage={this.state.boardExceptionMessage}
+							readOnly={!!this.state.behaviourTreePlayInterval}
+						/>
 					</Grid>
 					<Grid item xs={8}>
 						<MainPanel 

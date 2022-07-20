@@ -6,7 +6,3 @@
 .definition-tab-ace-editor {
     flex-grow: 1;
 }
-
-.definition-tab-ace-editor.read-only {
-    opacity: 0.5;
-}

@@ -5,6 +5,7 @@ import "ace-builds/src-noconflict/theme-sqlserver";
 import "./mode-mdsl";
 
 import Alert from "@mui/material/Alert/Alert";
+import Typography from "@mui/material/Typography/Typography";
 
 import './DefinitionTab.css';
 
@@ -27,12 +28,14 @@ export type DefinitionTabProps = {
  export const DefinitionTab: React.FunctionComponent<DefinitionTabProps> = ({ value, onChange, errorMessage, readOnly }) => {
     return (
         <div className="sidebar-tab definition-tab">
+            <Typography className="sidebar-tab-title" variant="overline">Definition</Typography>
             <AceEditor
-                className={`definition-tab-ace-editor ${readOnly ? "read-only" : ""}`}
+                className="definition-tab-ace-editor"
                 value={value}
                 onChange={onChange}
                 readOnly={readOnly}
 				width="100%"
+                height="inherit"
 				mode="mdsl"
                 theme="sqlserver"
                 setOptions={{ useWorker: false }}

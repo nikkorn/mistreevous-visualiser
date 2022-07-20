@@ -6,7 +6,3 @@
 .board-tab-ace-editor {
     flex-grow: 1;
 }
-
-.board-tab-ace-editor.read-only {
-    opacity: 0.5;
-}
