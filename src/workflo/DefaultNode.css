@@ -35,10 +35,7 @@
 
 .default-node-icon {
     display: block;
-}
-
-.default-node-icon {
-    background-color: #606060;
+    background-color: #909090;
     width: 20px;
     height: 20px;
     padding: 3px;
