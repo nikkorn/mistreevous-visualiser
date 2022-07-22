@@ -73,6 +73,9 @@ export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, cap
       case "repeat":
         return repeatIcon;
 
+      case "retry":
+        return retryIcon;
+
       case "root":
         return rootIcon;
 
@@ -97,7 +100,7 @@ export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, cap
       <div className={className}>
         <div className="default-node-main-container">
           <div className="default-node-icon-container">
-            <img className="default-node-icon" src={getIcon()} />
+            <img className={`default-node-icon ${type}`} src={getIcon()} />
           </div>
           <p className="default-node-caption">{caption}</p>
         </div>

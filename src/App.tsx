@@ -6,6 +6,8 @@ import './App.css';
 import GithubIcon from "mdi-material-ui/Github";
 import MenuIcon from "mdi-material-ui/Menu";
 
+import mistreevousIcon from './icons/mistreevous_icon_white.png'; 
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -77,13 +79,12 @@ export class App extends React.Component<{}, AppState> {
 		return (
 			<Box className="app-box">
 				<AppBar position="static">
-					<Toolbar>
-						<IconButton size="large" edge="start" color="inherit" sx={{ mr: 2 }}>
+					<Toolbar variant="dense">
+						<img className="mistreevous-icon" src={mistreevousIcon} />
+						<IconButton size="large" edge="start" color="inherit">
 							<MenuIcon />
 						</IconButton>
-						<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-							{"Mistreevous Editor"}
-						</Typography>
+						<Typography variant="h6" component="div" sx={{ flexGrow: 1 }} />
 						<IconButton size="large" edge="end" color="inherit" href="https://github.com/nikkorn/mistreevous">
 							<GithubIcon />
 						</IconButton>
@@ -194,8 +195,6 @@ export class App extends React.Component<{}, AppState> {
 				type: flattenedNode.type,
 				variant: "default"
 			} as any);
-
-			let variant;
 
 			if (flattenedNode.parentId) {
 				let variant;

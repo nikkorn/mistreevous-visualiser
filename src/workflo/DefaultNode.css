@@ -1,7 +1,7 @@
 .workflow-canvas-default-node {
     display: inline-block;
     padding: 4px;
-    border: #909090 2px solid;
+    border: #646464 2px solid;
     border-radius: 5px;
     background-color: white;
     white-space: nowrap;
@@ -28,6 +28,62 @@
     flex-direction: row;
 }
 
+.default-node-icon.action {
+    background-color: rgb(42, 89, 218);
+}
+
+.default-node-icon.condition {
+    background-color: rgb(196, 199, 7);
+}
+
+.default-node-icon.selector {
+    background-color: rgb(143, 62, 209);
+}
+
+.default-node-icon.sequence {
+    background-color: rgb(158, 36, 107);
+}
+
+.default-node-icon.parallel {
+    background-color: rgb(66, 165, 211);
+}
+
+.default-node-icon.repeat {
+    background-color: rgb(80, 209, 181);
+}
+
+.default-node-icon.retry {
+    background-color: rgb(224, 85, 159);
+}
+
+.default-node-icon.while {
+    background-color: rgb(224, 85, 115);
+}
+
+.default-node-icon.root {
+    background-color: rgb(99, 98, 104);
+}
+
+.default-node-icon.flip {
+    background-color: rgb(207, 144, 7);
+}
+
+.default-node-icon.succeed {
+    background-color: rgb(0, 190, 32);
+}
+
+.default-node-icon.fail {
+    background-color: rgb(226, 64, 36);
+}
+
+.default-node-icon.lotto {
+    background-color: rgb(9, 156, 112);
+}
+
+.default-node-icon.wait {
+    background-color: rgb(224, 125, 248);
+}
+
 .default-node-caption {
     margin: 0px 8px;
     line-height: 26px;
@@ -35,7 +91,7 @@
 
 .default-node-icon {
     display: block;
-    background-color: #909090;
+    background-color: #646464;
     width: 20px;
     height: 20px;
     padding: 3px;

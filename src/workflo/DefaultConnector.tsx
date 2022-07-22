@@ -17,7 +17,7 @@ export const DefaultConnector: React.FunctionComponent<DefaultConnectorProps> = 
   return (
     <path 
         d={`M${source.x} ${source.y} C${containerWidth / 2} ${source.y} ${containerWidth / 2} ${target.y} ${target.x} ${target.y}`}
-        stroke="#909090"
+        stroke="#646464"
         strokeWidth={2}
         fill="transparent"
     />

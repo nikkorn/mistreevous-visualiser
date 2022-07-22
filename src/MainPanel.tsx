@@ -89,7 +89,7 @@ export type MainPanelProps = {
                         <Stop/>
                     </Fab>
                 )}
-                {elements.edges.length && elements.nodes.length && (
+                {!!elements.edges.length && !!elements.nodes.length && (
                     <Fab onClick={() => canvasInstance?.fit()} className="run-tree-fab main-panel-fab" size="medium" color="primary">
                         <FitScreen/>
                     </Fab>
