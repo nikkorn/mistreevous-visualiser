@@ -102,6 +102,25 @@ export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, cap
     }
   };
 
+  const getArgument = (arg: DefaultNodeArgument) => {
+    switch (arg.type) {
+      case "string":
+        return <p className="default-node-argument string">{`"${arg.value}"`}</p>;
+
+      case "number":
+        return <p className="default-node-argument number">{arg.value}</p>;
+        
+      case "boolean":
+        return <p className="default-node-argument boolean">{arg.value ? "true" : "false"}</p>;
+
+      case "null":
+        return <p className="default-node-argument null">{"null"}</p>;
+
+      default:
+        throw new Error(`unknown argument type: ${arg.type}`);
+    }
+  };
+
   return (
       <div className={className}>
         <div className="default-node-main-container">
@@ -109,9 +128,7 @@ export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, cap
             <img className={`default-node-icon ${type}`} src={getIcon()} />
           </div>
           <p className="default-node-caption">{caption}</p>
-          {args.map((arg) => 
-            <p className={`default-node-argument ${arg.type}`}>{arg.type === "string" ? `"${arg.value}"` : arg.value}</p>
-          )}
+          {args.map((arg) => getArgument(arg))}
         </div>
       </div>
   );

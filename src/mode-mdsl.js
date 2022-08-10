@@ -23,7 +23,7 @@ ace.define('ace/mode/mdsl_highlight_rules', function (require, exports, module) 
 
     var ExampleHighlightRules = function () {    
         var keywordMapper = this.createKeywordMapper({
-            "support.function": "entry|exit|step|while|until",
+            "support.function": "entry|exit|step|while|until|null",
             "keyword": "action|condition|wait|branch",
             "variable.language": "root|selector|sequence|parallel|lotto|repeat|retry|flip|succeed|fail",
             "constant.language": "true|false"
