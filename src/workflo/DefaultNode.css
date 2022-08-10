@@ -85,7 +85,7 @@
 }
 
 .default-node-caption {
-    margin: 0px 8px;
+    margin: 0px 5px 0px 8px;
     line-height: 26px;
 }
 
@@ -96,4 +96,28 @@
     height: 20px;
     padding: 3px;
     border-radius: 5px;
+}
+
+.default-node-argument {
+    margin: 0px 2px 0px 2px;
+    padding: 0px 6px;
+    line-height: 26px;
+    background-color: #646464;
+    border-radius: 5px;
+}
+
+.default-node-argument.string {
+    color: #f8eb79;
+}
+
+.default-node-argument.number {
+    color: #7affa2;
+}
+
+.default-node-argument.boolean {
+    color: #6294ff;
+}
+
+.default-node-argument.null {
+    color: #f68fff;
 }

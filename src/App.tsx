@@ -25,6 +25,7 @@ export type FlattenedNode = {
 	parentId: string | null;
 	type: string;
 	state: State;
+	arguments: any;
 }
 
 export enum SidebarTab { Definition = 0, Board = 1 };
@@ -193,6 +194,7 @@ export class App extends React.Component<{}, AppState> {
 				caption: flattenedNode.caption,
 				state: flattenedNode.state,
 				type: flattenedNode.type,
+				args: flattenedNode.arguments,
 				variant: "default"
 			} as any);
 

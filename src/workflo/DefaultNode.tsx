@@ -16,6 +16,11 @@ import waitIcon from './icons/wait.png';
 
 import './DefaultNode.css';
 
+export type DefaultNodeArgument = {
+  value: string;
+  type: "string" | "number" | "boolean" | "null";
+};
+
 /**
  * The DefaultNode component props.
  */
@@ -24,12 +29,13 @@ export type DefaultNodeProps = {
   caption: string;
   type: string;
   state: State;
+  args: DefaultNodeArgument[];
 };
 
 /**
  * The DefaultNode component.
  */
-export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, caption, type, state }) => {
+export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, caption, type, state, args }) => {
   let className = "workflow-canvas-default-node";
 
   switch (state) {
@@ -103,6 +109,9 @@ export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, cap
             <img className={`default-node-icon ${type}`} src={getIcon()} />
           </div>
           <p className="default-node-caption">{caption}</p>
+          {args.map((arg) => 
+            <p className={`default-node-argument ${arg.type}`}>{arg.type === "string" ? `"${arg.value}"` : arg.value}</p>
+          )}
         </div>
       </div>
   );
