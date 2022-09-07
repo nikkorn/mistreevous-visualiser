@@ -25,7 +25,27 @@ export type FlattenedNode = {
 	parentId: string | null;
 	type: string;
 	state: State;
-	arguments: any;
+	arguments: FlattenedNodeFunctionArgument[];
+	decorators: (FlattenedNodeGuard | FlattenedNodeCallback)[];
+}
+
+export type FlattenedNodeGuard = {
+	isGuard: true;
+	condition: { value: string };
+	arguments: FlattenedNodeFunctionArgument[];
+	type: "while" | "until";
+}
+
+export type FlattenedNodeCallback = {
+	isGuard: false;
+	functionName: { value: string };
+	arguments: FlattenedNodeFunctionArgument[];
+	type: "entry" | "exit" | "step";
+}
+
+export type FlattenedNodeFunctionArgument = {
+	value: string;
+	type: "string" | "number" | "boolean" | "null";
 }
 
 export enum SidebarTab { Definition = 0, Board = 1 };
@@ -185,6 +205,11 @@ export class App extends React.Component<{}, AppState> {
 		}
 	}
 
+	/**
+	 * Parse the nodes and connectors.
+	 * @param flattenedNodeDetails 
+	 * @returns The parsed nodes and connectors.
+	 */
 	private _parseNodesAndConnectors(flattenedNodeDetails: FlattenedNode[]): CanvasElements {
 		let result: CanvasElements = { nodes: [], edges: [] };
 
@@ -195,6 +220,20 @@ export class App extends React.Component<{}, AppState> {
 				state: flattenedNode.state,
 				type: flattenedNode.type,
 				args: flattenedNode.arguments,
+				callbacks: (flattenedNode.decorators || []).filter((decorator) => !decorator.isGuard).map((decorator) => {
+					return {
+						type: decorator.type,
+						functionName: (decorator as FlattenedNodeCallback).functionName.value,
+						args: decorator.arguments
+					}
+				}),
+				guards: (flattenedNode.decorators || []).filter((decorator) => decorator.isGuard).map((decorator) => {
+					return {
+						type: decorator.type,
+						functionName: (decorator as FlattenedNodeGuard).condition.value,
+						args: decorator.arguments
+					}
+				}),
 				variant: "default"
 			} as any);
 

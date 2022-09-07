@@ -28,6 +28,16 @@
     flex-direction: row;
 }
 
+.default-node-info-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.default-node-signature-container {
+    display: flex;
+    flex-direction: row;
+}
+
 .default-node-icon.action {
     background-color: rgb(42, 89, 218);
 }
@@ -103,7 +113,8 @@
     padding: 0px 6px;
     line-height: 26px;
     background-color: #646464;
-    border-radius: 5px;
+    border-radius: 4px;
+    font-size: 0.8rem;
 }
 
 .default-node-argument.string {

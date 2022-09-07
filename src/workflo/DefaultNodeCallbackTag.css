@@ -1,0 +1,33 @@
+.callback-tag {
+    display: flex;
+    flex-direction: row;
+    margin: 2px;
+    font-size: 0.8rem;
+    border: #45476f 2px solid;
+    border-radius: 5px;
+}
+
+.callback-tag-type {
+    padding: 3px;
+    padding-right: 5px;
+    margin: -1px;
+    color: white;
+    background-color: #45476f;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.callback-tag-signature {
+    display: flex;
+    flex-direction: row;
+    padding: 3px 5px;
+}
+
+.callback-tag .default-node-argument {
+    margin: 0px 6px;
+    padding: 3px;
+}
+
+.callback-tag p {
+    margin: 0px
+}

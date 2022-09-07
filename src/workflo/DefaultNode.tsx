@@ -14,11 +14,26 @@ import sequenceIcon from './icons/sequence.png';
 import succeedIcon from './icons/succeed.png'; 
 import waitIcon from './icons/wait.png'; 
 
+import { DefaultNodeGuardTag } from './DefaultNodeGuardTag';
+import { DefaultNodeCallbackTag } from './DefaultNodeCallbackTag';
+
 import './DefaultNode.css';
 
 export type DefaultNodeArgument = {
   value: string;
   type: "string" | "number" | "boolean" | "null";
+};
+
+export type Guard = {
+  functionName: string;
+	args: DefaultNodeArgument[];
+	type: "while" | "until";
+};
+
+export type Callback = {
+  functionName: string;
+	args: DefaultNodeArgument[];
+	type: "entry" | "exit" | "step";
 };
 
 /**
@@ -30,12 +45,14 @@ export type DefaultNodeProps = {
   type: string;
   state: State;
   args: DefaultNodeArgument[];
+  callbacks: Callback[];
+  guards: Guard[];
 };
 
 /**
  * The DefaultNode component.
  */
-export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, caption, type, state, args }) => {
+export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, caption, type, state, args, callbacks, guards }) => {
   let className = "workflow-canvas-default-node";
 
   switch (state) {
@@ -127,8 +144,16 @@ export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, cap
           <div className="default-node-icon-container">
             <img className={`default-node-icon ${type}`} src={getIcon()} />
           </div>
-          <p className="default-node-caption">{caption}</p>
-          {args.map((arg) => getArgument(arg))}
+          <div className="default-node-info-container">
+            <div className="default-node-signature-container">
+              <p className="default-node-caption">{caption}</p>
+              {args.map((arg) => getArgument(arg))}
+            </div>
+            <div className="default-node-guard-callback-container">
+              {guards.map((guard) => <DefaultNodeGuardTag type={guard.type} functionName={guard.functionName} args={guard.args} />)}
+              {callbacks.map((callback) => <DefaultNodeCallbackTag type={callback.type} functionName={callback.functionName} args={callback.args} />)}
+            </div>
+          </div>
         </div>
       </div>
   );

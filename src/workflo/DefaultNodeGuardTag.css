@@ -1,0 +1,28 @@
+.guard-tag {
+    display: flex;
+    flex-direction: row;
+    margin: 2px;
+    font-size: 0.8rem;
+    border: #8a4c61 2px solid;
+    border-radius: 5px;
+}
+
+.guard-tag-type {
+    padding: 3px;
+    padding-right: 5px;
+    margin: -1px;
+    color: white;
+    background-color: #8a4c61;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.guard-tag-signature {
+    display: flex;
+    flex-direction: row;
+    padding: 3px 5px;
+}
+
+.guard-tag p {
+    margin: 0px
+}
