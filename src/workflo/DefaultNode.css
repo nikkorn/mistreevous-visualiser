@@ -13,10 +13,12 @@
 
 .workflow-canvas-default-node.succeeded {
     border: #02c93e 2px solid;
+    background-color: #d1ffde;
 }
 
 .workflow-canvas-default-node.failed {
     border: #e63b02 2px solid;
+    background-color: #fddfd4;
 }
 
 .workflow-canvas-default-node > p {
