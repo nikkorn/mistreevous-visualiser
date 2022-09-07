@@ -1,7 +1,7 @@
 .workflow-canvas-default-node {
     display: inline-block;
     padding: 4px;
-    border: #646464 2px solid;
+    border: #4a4a4a 2px solid;
     border-radius: 5px;
     background-color: white;
     white-space: nowrap;
@@ -103,7 +103,7 @@
 
 .default-node-icon {
     display: block;
-    background-color: #646464;
+    background-color: #4a4a4a;
     width: 20px;
     height: 20px;
     padding: 3px;
@@ -114,7 +114,7 @@
     margin: 0px 2px 0px 2px;
     padding: 0px 6px;
     line-height: 26px;
-    background-color: #646464;
+    background-color: #4a4a4a;
     border-radius: 4px;
     font-size: 0.8rem;
 }
