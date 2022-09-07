@@ -8,8 +8,7 @@
 }
 
 .guard-tag-type {
-    padding: 3px;
-    padding-right: 5px;
+    padding: 3px 5px;
     margin: -1px;
     color: white;
     background-color: #8a4c61;

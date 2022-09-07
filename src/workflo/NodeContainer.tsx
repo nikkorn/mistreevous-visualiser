@@ -79,8 +79,8 @@ export const NodeContainer: React.FunctionComponent<NodeContainerProps> = ({ par
                                     <Connector
                                         key={index}
                                         source={{ x: 0, y: nodeChildrenContainerHeight / 2 }} 
-                                        target={{ x: 60, y: offset }}
-                                        containerWidth={60}
+                                        target={{ x: 40, y: offset }}
+                                        containerWidth={40}
                                         containerHeight={nodeChildrenContainerHeight}
                                     />
                                 );
