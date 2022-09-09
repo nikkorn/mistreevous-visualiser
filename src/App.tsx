@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { State, BehaviourTree } from "mistreevous";
+import { toast, ToastContainer } from 'react-toastify';
 
 import './App.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import GithubIcon from "mdi-material-ui/Github";
 import MenuIcon from "mdi-material-ui/Menu";
@@ -136,6 +138,7 @@ export class App extends React.Component<{}, AppState> {
 							onReplayButtonClick={() => this._onPlayButtonPressed()}
 							onStopButtonClick={() => this._onStopButtonPressed()}
 						/>
+						<ToastContainer />
 					</Grid>
 				</Grid>
 			</Box>
@@ -290,7 +293,7 @@ export class App extends React.Component<{}, AppState> {
 			// Step the behaviour tree, if anything goes wrong we will stop the tree playback.
 			try {
 				behaviourTree.step();
-			} catch (exception) {
+			} catch (exception: any) {
 				// Clear the interval.
 				clearInterval(playInterval);
 				this.setState({ behaviourTreePlayInterval: null });
@@ -298,8 +301,8 @@ export class App extends React.Component<{}, AppState> {
 				// Reset the tree.
 				behaviourTree.reset();
 
-				// Notify the user of the exception.
-				alert(exception);
+				// Notify the user of the exception via a toast.
+				toast.error(exception.toString());
 			}
 
 			// If the tree root is in a finished state then stop the interval.
