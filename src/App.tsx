@@ -81,7 +81,7 @@ export class App extends React.Component<{}, AppState> {
 		this.state = {
 			activeSidebarTab: SidebarTab.Definition,
 			definiton: "",
-			board: "{}",
+			board: "class Board {}",
 			boardExceptionMessage: "",
 			behaviourTree: null,
 			behaviourTreeExceptionMessage: "",
@@ -173,39 +173,66 @@ export class App extends React.Component<{}, AppState> {
 	}
 
 	/**
-	 * Handles a change of board.
+	 * Handles a change of board class definition.
 	 * @param board 
 	 */
-	private _onBoardChange(board: string): void {
+	private _onBoardChange(boardClassDefinition: string): void {
 		let boardExceptionMessage = "";
 
 		try {
-			// Try to create the blackboard.
-			(new Function(`return (${board});`))();
+			// Attempt to create a board instance, we just want to know if we can.
+			this._createBoardInstance(boardClassDefinition);
 		} catch (error) {
 			boardExceptionMessage = `${(error as any).message}`;
 		}
 
-		const behaviourTree = this._createTreeInstance(this.state.definiton, board);
+		const behaviourTree = this._createTreeInstance(this.state.definiton, boardClassDefinition);
 
 		this.setState({ 
-			board: board,
+			board: boardClassDefinition,
 			boardExceptionMessage: boardExceptionMessage,
 			behaviourTree: behaviourTree
 		});
 	}
 
-	private _createTreeInstance(definition: string, board: string): BehaviourTree | null {
+	/**
+	 * Creates the behaviour tree instance.
+	 * @param definition 
+	 * @param board 
+	 * @returns The behaviour tree instance.
+	 */
+	private _createTreeInstance(definition: string, boardClassDefinition: string): BehaviourTree | null {
 		try {
 			// Create the board object.
-			const boardObject = (new Function(`return (${board});`))();
+			const board = this._createBoardInstance(boardClassDefinition);
 
-			const behaviourTree = new BehaviourTree(definition, boardObject);
+			const behaviourTree = new BehaviourTree(definition, board);
 
 			return behaviourTree;
 		} catch (error) {
 			return null;
 		}
+	}
+
+	/**
+	 * Creates an instance of a board based on the class definition provided.
+	 * @param boardClassDefinition The board class definition.
+	 * @returns An instance of a board based on the class definition provided.
+	 */
+	private _createBoardInstance(boardClassDefinition: string): any {
+		const boardClassCreator = new Function("State", "getStringValue", "getNumberValue", "getBooleanValue", "showErrorToast", "showInfoToast", `return ${boardClassDefinition};`);
+
+		const getStringValue = (message: string) => window.prompt(message);
+		const getNumberValue = (message: string) => parseFloat(window.prompt(message) as string);
+		const getBooleanValue = (message: string) => window.confirm(`${message}. (Ok=true Cancel=false)`);
+		const showErrorToast = (message: string) => toast.error(message);
+		const showInfoToast = (message: string) => toast.info(message);
+
+		const boardClass = boardClassCreator(State ,getStringValue, getNumberValue, getBooleanValue, showErrorToast, showInfoToast);
+
+		const boardInstance = new boardClass();
+
+		return boardInstance;
 	}
 
 	/**
