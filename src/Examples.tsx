@@ -7,7 +7,6 @@
  * An example definition and board commbination.
  */
 export type Example = {
-    name: string;
     caption: string;
     category: ExampleCategory;
     definition: string;
@@ -19,7 +18,15 @@ export type Example = {
  */
 export const Examples: Example[] = [
     {
-        name: "sorting-lunch",
+        caption: "Empty",
+        category: "misc",
+        definition: `root {
+}`,
+        board: `class Board {
+}`
+    },
+    
+    {
         caption: "Sorting Lunch",
         category: "misc",
         definition: `root {
@@ -71,5 +78,19 @@ export const Examples: Example[] = [
         return State.SUCCEEDED;
     }
 }`
+    },
+
+    {
+        caption: "Action",
+        category: "leaf",
+        definition: `root {
+    action [SomeAction]
+}`,
+        board: `class Board {
+    SomeAction() {
+        showInfoToast("Action Completed!");
+        return State.SUCCEEDED;
     }
+}`
+    },
 ];
