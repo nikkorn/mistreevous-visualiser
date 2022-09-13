@@ -20,6 +20,8 @@ import Grid from '@mui/material/Grid';
 import { CanvasElements, MainPanel } from './MainPanel';
 import { BoardTab } from './BoardTab';
 import { DefinitionTab } from './DefinitionTab';
+import { ExamplesMenu } from './ExamplesMenu';
+import { Example } from './Examples';
 
 export type FlattenedNode = {
 	id: string;
@@ -91,6 +93,7 @@ export class App extends React.Component<{}, AppState> {
 
 		this._onDefinitionChange = this._onDefinitionChange.bind(this);
 		this._onBoardChange = this._onBoardChange.bind(this);
+		this._onExampleSelected = this._onExampleSelected.bind(this);
 	}
 
 	/**
@@ -104,9 +107,7 @@ export class App extends React.Component<{}, AppState> {
 				<AppBar position="static">
 					<Toolbar variant="dense">
 						<img className="mistreevous-icon" src={mistreevousIcon} />
-						<IconButton size="large" edge="start" color="inherit">
-							<MenuIcon />
-						</IconButton>
+						<ExamplesMenu onExampleSelected={this._onExampleSelected} />
 						<Typography variant="h6" component="div" sx={{ flexGrow: 1 }} />
 						<IconButton size="large" edge="end" color="inherit" href="https://github.com/nikkorn/mistreevous">
 							<GithubIcon />
@@ -192,6 +193,22 @@ export class App extends React.Component<{}, AppState> {
 			board: boardClassDefinition,
 			boardExceptionMessage: boardExceptionMessage,
 			behaviourTree: behaviourTree
+		});
+	}
+
+	/**
+	 * Handles an example being selected.
+	 * @param example The selected example.
+	 */
+	private _onExampleSelected(example: Example): void {
+		const behaviourTree = this._createTreeInstance(example.definition, example.board);
+		const canvasElements = this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails());
+
+		this.setState({
+			definiton: example.definition,
+			board: example.board,
+			behaviourTree,
+			canvasElements
 		});
 	}
 
