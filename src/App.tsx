@@ -58,6 +58,7 @@ export enum SidebarTab { Definition = 0, Board = 1 };
  * The App component state.
  */
 export type AppState = {
+	layoutId: string | null;
 	activeSidebarTab: SidebarTab;
 	definiton: string;
 	board: string;
@@ -81,6 +82,7 @@ export class App extends React.Component<{}, AppState> {
 
 		// Set the initial state for the component.
 		this.state = {
+			layoutId: null,
 			activeSidebarTab: SidebarTab.Definition,
 			definiton: "",
 			board: "class Board {}",
@@ -130,7 +132,8 @@ export class App extends React.Component<{}, AppState> {
 						/>
 					</Grid>
 					<Grid item xs={8}>
-						<MainPanel 
+						<MainPanel
+							layoutId={this.state.layoutId}
 							elements={this.state.canvasElements}
 							showPlayButton={!!this.state.behaviourTree && !this.state.behaviourTreePlayInterval}
 							showReplayButton={!!this.state.behaviourTreePlayInterval}
@@ -205,6 +208,7 @@ export class App extends React.Component<{}, AppState> {
 		const canvasElements = this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails());
 
 		this.setState({
+			layoutId: example.caption,
 			definiton: example.definition,
 			board: example.board,
 			behaviourTree,

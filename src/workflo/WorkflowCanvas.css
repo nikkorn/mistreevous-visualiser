@@ -48,6 +48,7 @@
 .workflow-canvas-node-connector-svg-wrapper {
     position: relative;
     width: 40px;
+    margin: 3px 0px;
 }
 
 .workflow-canvas-node-connector-svg {

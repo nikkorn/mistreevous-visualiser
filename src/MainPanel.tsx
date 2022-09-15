@@ -22,6 +22,9 @@ export type CanvasElements = { nodes: NodeType[], edges: ConnectorType[] };
  * The MainPanel component props.
  */
 export type MainPanelProps = {
+    /** The layout identifier. */
+    layoutId: string | null;
+
     /** The behaviour tree elements. */
     elements: CanvasElements;
 
@@ -41,19 +44,27 @@ export type MainPanelProps = {
 /**
  * The MainPanel component.
  */
- export const MainPanel: React.FunctionComponent<MainPanelProps> = ({ elements, showPlayButton, showReplayButton, showStopButton, onPlayButtonClick, onReplayButtonClick, onStopButtonClick }) => {
+ export const MainPanel: React.FunctionComponent<MainPanelProps> = ({ layoutId, elements, showPlayButton, showReplayButton, showStopButton, onPlayButtonClick, onReplayButtonClick, onStopButtonClick }) => {
     const [canvasInstance, setCanvasInstance] = useState<WorkflowCanvasInstance | null>(null);
     const [isFitNeeded, setIsFitNeeded] = useState<boolean>(true);
+    const [lastLayoutId, setLastLayoutId] = useState<string | null>(null);
 
-    // An effect to call 'fit' on our canvas if we ever go from having no layout to some layout.
+    // An effect to call 'fit' on our canvas under certain conditions.
     useEffect(() => {
         const doNodesExist = elements.nodes.length > 0;
 
+        // If we ever go from having no layout to some layout we should call 'fit'.
         if (doNodesExist && isFitNeeded) {
             canvasInstance?.fit();
             setIsFitNeeded(false);
         } else if (!doNodesExist && !isFitNeeded) {
             setIsFitNeeded(true);
+        }
+
+        // If we swap layouts we should call 'fit'.
+        if (lastLayoutId != layoutId) {
+            canvasInstance?.fit();
+            setLastLayoutId(layoutId);
         }
     });
 
