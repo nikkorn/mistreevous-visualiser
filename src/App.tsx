@@ -21,7 +21,7 @@ import { CanvasElements, MainPanel } from './MainPanel';
 import { BoardTab } from './BoardTab';
 import { DefinitionTab } from './DefinitionTab';
 import { ExamplesMenu } from './ExamplesMenu';
-import { Example } from './Examples';
+import { Example, Examples } from './Examples';
 
 export type FlattenedNode = {
 	id: string;
@@ -147,6 +147,21 @@ export class App extends React.Component<{}, AppState> {
 				</Grid>
 			</Box>
 		);
+	}
+
+	/**
+	 * Runs after the first render() lifecycle.
+	 */
+	public componentDidMount() {
+		const currentUrl = new URL(window.location.href);
+		const exampleParamValue = currentUrl.searchParams.get("example");
+
+		if (exampleParamValue) {
+			const example = Examples.find((item) => item.name === exampleParamValue);
+			if (example) {
+				setTimeout(() => this._onExampleSelected(example), 10);
+			}
+		}
 	}
 
 	/**

@@ -7,6 +7,7 @@
  * An example definition and board commbination.
  */
 export type Example = {
+    name: string;
     caption: string;
     category: ExampleCategory;
     definition: string;
@@ -18,6 +19,7 @@ export type Example = {
  */
 export const Examples: Example[] = [    
     {
+        name: "sorting-lunch",
         caption: "Sorting Lunch",
         category: "misc",
         definition: `root {
@@ -72,6 +74,7 @@ export const Examples: Example[] = [
     },
 
     {
+        name: "action",
         caption: "Action",
         category: "leaf",
         definition: `root {
@@ -86,6 +89,7 @@ export const Examples: Example[] = [
     },
 
     {
+        name: "action-with-args",
         caption: "Action with arguments",
         category: "leaf",
         definition: `root {
@@ -102,6 +106,7 @@ export const Examples: Example[] = [
     },
 
     {
+        name: "async-action",
         caption: "Asynchronous Action",
         category: "leaf",
         definition: `root {
@@ -119,6 +124,7 @@ export const Examples: Example[] = [
     },
 
     {
+        name: "condition",
         caption: "Condition",
         category: "leaf",
         definition: `root {
@@ -132,6 +138,7 @@ export const Examples: Example[] = [
     },
 
     {
+        name: "condition-with-args",
         caption: "Condition with arguments",
         category: "leaf",
         definition: `root {
@@ -145,6 +152,7 @@ export const Examples: Example[] = [
     },
 
     {
+        name: "wait",
         caption: "Wait",
         category: "leaf",
         definition: `root {
@@ -154,6 +162,7 @@ export const Examples: Example[] = [
     },
 
     {
+        name: "wait-one-to-five-seconds",
         caption: "Wait for one-five seconds",
         category: "leaf",
         definition: `root {
@@ -163,6 +172,7 @@ export const Examples: Example[] = [
     },
 
     {
+        name: "sequence",
         caption: "Sequence",
         category: "composite",
         definition: `root {
@@ -191,6 +201,7 @@ export const Examples: Example[] = [
     },
 
     {
+        name: "selector",
         caption: "Selector",
         category: "composite",
         definition: `root {
@@ -222,6 +233,7 @@ export const Examples: Example[] = [
     },
 
     {
+        name: "lotto",
         caption: "Lotto",
         category: "composite",
         definition: `root {
@@ -239,6 +251,7 @@ export const Examples: Example[] = [
     },
 
     {
+        name: "weighted-lotto",
         caption: "Weighted Lotto",
         category: "composite",
         definition: `root {
@@ -270,6 +283,7 @@ export const Examples: Example[] = [
     },
 
     {
+        name: "parallel",
         caption: "Parallel",
         category: "composite",
         definition: `root {
