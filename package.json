@@ -18,7 +18,7 @@
     "ace-builds": "^1.6.0",
     "elkjs": "^0.7.1",
     "mdi-material-ui": "^7.4.0",
-    "mistreevous": "^2.2.0",
+    "mistreevous": "file:../mistreevous",
     "react": "^18.2.0",
     "react-ace": "^10.1.0",
     "react-dom": "^18.2.0",
