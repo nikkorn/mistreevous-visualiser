@@ -1,0 +1,142 @@
+.workflow-canvas-default-node {
+    display: inline-block;
+    padding: 4px;
+    border: #4a4a4a 2px solid;
+    border-radius: 5px;
+    background-color: white;
+    white-space: nowrap;
+}
+
+.workflow-canvas-default-node.running {
+    border: #0388fc 2px solid;
+}
+
+.workflow-canvas-default-node.succeeded {
+    border: #02c93e 2px solid;
+    background-color: #d1ffde;
+}
+
+.workflow-canvas-default-node.failed {
+    border: #e63b02 2px solid;
+    background-color: #fddfd4;
+}
+
+.workflow-canvas-default-node > p {
+    margin: 0px;
+}
+
+.default-node-main-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.default-node-info-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.default-node-signature-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.default-node-icon.action {
+    background-color: rgb(42, 89, 218);
+}
+
+.default-node-icon.condition {
+    background-color: rgb(196, 199, 7);
+}
+
+.default-node-icon.selector {
+    background-color: rgb(143, 62, 209);
+}
+
+.default-node-icon.sequence {
+    background-color: rgb(158, 36, 107);
+}
+
+.default-node-icon.parallel {
+    background-color: rgb(66, 165, 211);
+}
+
+.default-node-icon.repeat {
+    background-color: rgb(80, 209, 181);
+}
+
+.default-node-icon.retry {
+    background-color: rgb(224, 85, 159);
+}
+
+.default-node-icon.while {
+    background-color: rgb(224, 85, 115);
+}
+
+.default-node-icon.root {
+    background-color: rgb(99, 98, 104);
+}
+
+.default-node-icon.flip {
+    background-color: rgb(207, 144, 7);
+}
+
+.default-node-icon.succeed {
+    background-color: rgb(0, 190, 32);
+}
+
+.default-node-icon.fail {
+    background-color: rgb(226, 64, 36);
+}
+
+.default-node-icon.lotto {
+    background-color: rgb(9, 156, 112);
+}
+
+.default-node-icon.wait {
+    background-color: rgb(224, 125, 248);
+}
+
+.default-node-caption {
+    margin: 0px 5px 0px 8px;
+    line-height: 26px;
+}
+
+.default-node-icon {
+    display: block;
+    background-color: #4a4a4a;
+    width: 20px;
+    height: 20px;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+.default-node-argument {
+    margin: 0px 2px 0px 2px;
+    padding: 0px 6px;
+    line-height: 26px;
+    background-color: #4a4a4a;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.default-node-argument.string {
+    color: #f8eb79;
+}
+
+.default-node-argument.number {
+    color: #7affa2;
+}
+
+.default-node-argument.boolean {
+    color: #b8cfff;
+}
+
+.default-node-argument.null {
+    color: #f68fff;
+}
+
+.default-node-guard-callback-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}

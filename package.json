@@ -6,6 +6,7 @@
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
+    "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.4",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
@@ -17,12 +18,13 @@
     "ace-builds": "^1.6.0",
     "elkjs": "^0.7.1",
     "mdi-material-ui": "^7.4.0",
-    "mistreevous": "^2.2.0",
+    "mistreevous": "file:../mistreevous",
     "react": "^18.2.0",
     "react-ace": "^10.1.0",
     "react-dom": "^18.2.0",
     "react-flow-renderer": "^10.3.7",
     "react-scripts": "5.0.1",
+    "react-toastify": "^9.0.8",
     "typescript": "^4.7.3",
     "web-vitals": "^2.1.4"
   },

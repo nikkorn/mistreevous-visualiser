@@ -1,0 +1,65 @@
+.workflow-canvas-wrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.workflow-canvas {
+    width: 100%;
+    height: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.workflow-canvas-background-svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.workflow-canvas-elements-box {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.workflow-canvas-root-nodes-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.workflow-canvas-node-container {
+    display: flex;
+    align-items: stretch;
+    flex-direction: row;
+}
+
+.workflow-canvas-node-parent-container {
+    display: flex;
+    align-content: stretch;
+    align-items: center;
+    flex-direction: row;
+    margin: 5px 0px;
+}
+
+.workflow-canvas-node-connector-svg-wrapper {
+    position: relative;
+    width: 40px;
+    margin: 3px 0px;
+}
+
+.workflow-canvas-node-connector-svg {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.workflow-canvas-node-children-container {
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+    margin: 3px 0px;
+}

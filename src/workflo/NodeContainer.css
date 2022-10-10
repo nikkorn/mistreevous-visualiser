@@ -1,0 +1,9 @@
+.connector-path {
+    animation: dash 50s linear infinite;
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: -1000;
+    }
+}
