@@ -134,3 +134,9 @@
 .default-node-argument.null {
     color: #f68fff;
 }
+
+.default-node-guard-callback-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}

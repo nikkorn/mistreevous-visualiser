@@ -8,6 +8,9 @@
 }
 
 .callback-tag-type {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: 3px 5px;
     margin: -1px;
     color: white;
@@ -19,14 +22,17 @@
 .callback-tag-signature {
     display: flex;
     flex-direction: row;
+    align-items: baseline;
     padding: 3px 5px;
 }
 
-.callback-tag .default-node-argument {
-    margin: 0px 6px;
-    padding: 3px;
+.callback-tag p {
+    margin: 0px;
 }
 
-.callback-tag p {
-    margin: 0px
+.callback-tag .default-node-argument {
+    padding: 3px;
+    margin: 0px;
+    margin-left: 4px;
+    line-height: 1rem;
 }
