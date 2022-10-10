@@ -48,7 +48,7 @@ export const Examples: Example[] = [
         action [Starve]
     }
 }`,
-        board: `class Board {
+        board: `class Agent {
     IsHungry() {
         return true;
     }
@@ -80,7 +80,7 @@ export const Examples: Example[] = [
         definition: `root {
     action [SomeAction]
 }`,
-        board: `class Board {
+        board: `class Agent {
     SomeAction() {
         showInfoToast("Action Completed!");
         return State.SUCCEEDED;
@@ -95,7 +95,7 @@ export const Examples: Example[] = [
         definition: `root {
     action [Say, "hello world", 5, true]
 }`,
-        board: `class Board {
+        board: `class Agent {
     Say(dialog, times = 1, shout = false) {
         for (var index = 0; index < times; index++) {
             showInfoToast(shout ? dialog.toUpperCase() + "!!!" : dialog);
@@ -112,7 +112,7 @@ export const Examples: Example[] = [
         definition: `root {
     action [SomeAsyncAction]
 }`,
-        board: `class Board {
+        board: `class Agent {
     SomeAsyncAction() {
         return new Promise(function(resolve, reject) {
             setTimeout(function() {
@@ -130,7 +130,7 @@ export const Examples: Example[] = [
         definition: `root {
     condition [SomeCondition]
 }`,
-        board: `class Board {
+        board: `class Agent {
     SomeCondition() {
         return true;
     }
@@ -144,7 +144,7 @@ export const Examples: Example[] = [
         definition: `root {
     condition [HasItem, "gold", 500]
 }`,
-        board: `class Board {
+        board: `class Agent {
     HasItem(item, quantity = 1) {
         return getBooleanValue(\`Do we have \${quantity} \${item}?\`);
     }
@@ -158,7 +158,7 @@ export const Examples: Example[] = [
         definition: `root {
     wait [2000]
 }`,
-        board: `class Board {}`
+        board: `class Agent {}`
     },
 
     {
@@ -168,7 +168,7 @@ export const Examples: Example[] = [
         definition: `root {
     wait [1000, 5000]
 }`,
-        board: `class Board {}`
+        board: `class Agent {}`
     },
 
     {
@@ -184,7 +184,7 @@ export const Examples: Example[] = [
         action [Laugh]
     }
 }`,
-        board: `class Board {
+        board: `class Agent {
     Walk() {
         showInfoToast("Walking!");
         return State.SUCCEEDED;
@@ -212,7 +212,7 @@ export const Examples: Example[] = [
         action [WalkHome]
     }
 }`,
-        board: `class Board {
+        board: `class Agent {
     TeleportHome() {
         showErrorToast("We cannot teleport home, the technology simply doesn't exist!");
         return State.FAILED;
@@ -242,7 +242,7 @@ export const Examples: Example[] = [
         action [PickPath, "right"]
     }
 }`,
-        board: `class Board {
+        board: `class Agent {
     PickPath(direction) {
         showInfoToast(\`We picked the \${direction} path!\`);
         return State.SUCCEEDED;
@@ -262,7 +262,7 @@ export const Examples: Example[] = [
         action [VeryRareAction]
     }
 }`,
-        board: `class Board {
+        board: `class Agent {
     CommonAction() {
         showInfoToast("We very often do this action!");
         return State.SUCCEEDED;
@@ -302,7 +302,7 @@ export const Examples: Example[] = [
         }
     }
 }`,
-        board: `class Board {
+        board: `class Agent {
     Succeed() {
         return State.SUCCEEDED;
     }

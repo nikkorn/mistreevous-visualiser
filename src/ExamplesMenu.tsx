@@ -28,7 +28,7 @@ export const ExamplesMenu: React.FunctionComponent<ExamplesMenuProps> = ({ onExa
 
     const getExampleListItemsForCategory = (category: ExampleCategory) => Examples
         .filter((example) => example.category === category)
-        .map((example) => <MenuItem dense onClick={() => onExampleClick(example)}>{example.caption}</MenuItem>)
+        .map((example, index) => <MenuItem key={index} dense onClick={() => onExampleClick(example)}>{example.caption}</MenuItem>)
 
     return (
         <div>

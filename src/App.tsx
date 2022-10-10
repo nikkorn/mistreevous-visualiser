@@ -85,7 +85,7 @@ export class App extends React.Component<{}, AppState> {
 			layoutId: null,
 			activeSidebarTab: SidebarTab.Definition,
 			definiton: "",
-			board: "class Board {}",
+			board: "class Agent {}",
 			boardExceptionMessage: "",
 			behaviourTree: null,
 			behaviourTreeExceptionMessage: "",

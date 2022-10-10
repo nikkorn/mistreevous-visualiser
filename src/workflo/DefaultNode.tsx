@@ -119,19 +119,19 @@ export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, cap
     }
   };
 
-  const getArgument = (arg: DefaultNodeArgument) => {
+  const getArgument = (arg: DefaultNodeArgument, index: number) => {
     switch (arg.type) {
       case "string":
-        return <p className="default-node-argument string">{`"${arg.value}"`}</p>;
+        return <p key={index} className="default-node-argument string">{`"${arg.value}"`}</p>;
 
       case "number":
-        return <p className="default-node-argument number">{arg.value}</p>;
+        return <p key={index} className="default-node-argument number">{arg.value}</p>;
         
       case "boolean":
-        return <p className="default-node-argument boolean">{arg.value ? "true" : "false"}</p>;
+        return <p key={index} className="default-node-argument boolean">{arg.value ? "true" : "false"}</p>;
 
       case "null":
-        return <p className="default-node-argument null">{"null"}</p>;
+        return <p key={index} className="default-node-argument null">{"null"}</p>;
 
       default:
         throw new Error(`unknown argument type: ${arg.type}`);
@@ -147,11 +147,11 @@ export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, cap
           <div className="default-node-info-container">
             <div className="default-node-signature-container">
               <p className="default-node-caption">{caption}</p>
-              {args.map((arg) => getArgument(arg))}
+              {args.map((arg, index) => getArgument(arg, index))}
             </div>
             <div className="default-node-guard-callback-container">
-              {guards.map((guard) => <DefaultNodeGuardTag type={guard.type} functionName={guard.functionName} args={guard.args} />)}
-              {callbacks.map((callback) => <DefaultNodeCallbackTag type={callback.type} functionName={callback.functionName} args={callback.args} />)}
+              {guards.map((guard, index) => <DefaultNodeGuardTag key={index} type={guard.type} functionName={guard.functionName} args={guard.args} />)}
+              {callbacks.map((callback, index) => <DefaultNodeCallbackTag key={index} type={callback.type} functionName={callback.functionName} args={callback.args} />)}
             </div>
           </div>
         </div>

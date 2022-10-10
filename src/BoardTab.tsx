@@ -26,7 +26,7 @@ export type BoardTabProps = {
  export const BoardTab: React.FunctionComponent<BoardTabProps> = ({ value, onChange, errorMessage, readOnly }) => {
     return (
         <div className="sidebar-tab board-tab">
-            <Typography className="sidebar-tab-title" variant="overline">Board</Typography>
+            <Typography className="sidebar-tab-title" variant="overline">Agent</Typography>
             <AceEditor
                 className="board-tab-ace-editor"
                 value={value}
