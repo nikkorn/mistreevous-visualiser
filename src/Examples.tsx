@@ -311,4 +311,154 @@ export const Examples: Example[] = [
     }
 }`
     },
+
+    {
+        name: "repeat",
+        caption: "Repeat",
+        category: "decorator",
+        definition: `root {
+    repeat {
+        sequence {
+            wait [1000]
+            wait [1000]
+            wait [1000]
+        }
+    }
+}`,
+        board: `class Agent {}`
+    },
+
+    {
+        name: "flip",
+        caption: "Flip",
+        category: "decorator",
+        definition: `root {
+    sequence {
+        flip {
+            action [Fail]
+        }
+        flip {
+            action [Succeed]
+        }
+    }
+}`,
+        board: `class Agent {
+    Succeed() {
+        return State.SUCCEEDED;
+    }
+    Fail() {
+        return State.FAILED;
+    }
+}`
+    },
+
+    {
+        name: "succeed",
+        caption: "Succeed",
+        category: "decorator",
+        definition: `root {
+    sequence {
+        succeed {
+            action [Fail]
+        }
+        succeed {
+            action [Succeed]
+        }
+    }
+}`,
+        board: `class Agent {
+    Succeed() {
+        return State.SUCCEEDED;
+    }
+    Fail() {
+        return State.FAILED;
+    }
+}`
+    },
+
+    {
+        name: "fail",
+        caption: "Fail",
+        category: "decorator",
+        definition: `root {
+    selector {
+        fail {
+            action [Fail]
+        }
+        fail {
+            action [Succeed]
+        }
+    }
+}`,
+        board: `class Agent {
+    Succeed() {
+        return State.SUCCEEDED;
+    }
+    Fail() {
+        return State.FAILED;
+    }
+}`
+    },
+
+    {
+        name: "guards",
+        caption: "Guards",
+        category: "guard-callback",
+        definition: `root {
+    selector {
+        repeat until(IsSpaceKeyPressed) {
+            action [Succeed]
+        }
+        repeat while(IsSpaceKeyPressed) {
+            action [Succeed]
+        }
+        repeat until(IsSpaceKeyPressed) {
+            action [Succeed]
+        }
+        repeat while(IsSpaceKeyPressed) {
+            action [Succeed]
+        }
+    }
+}`,
+        board: `class Agent {
+    
+}`
+    },
+
+    {
+        name: "callbacks",
+        caption: "Callbacks",
+        category: "guard-callback",
+        definition: `root entry(OnRootStart) exit(OnRootFinish) {
+    sequence entry(OnSequenceStart) exit(OnSequenceFinish) {
+        action [Succeed] entry(OnActionStart) exit(OnActionFinish) step(OnActionStep)
+    }
+}`,
+        board: `class Agent {
+    Succeed() {
+        return State.SUCCEEDED;
+    }
+    OnRootStart() {
+        showInfoToast("On Root Start!");
+    }
+    OnRootFinish() {
+        showInfoToast("On Root Finish!");
+    }
+    OnSequenceStart() {
+        showInfoToast("On Sequence Start!");
+    }
+    OnSequenceFinish() {
+        showInfoToast("On Sequence Finish!");
+    }
+    OnActionStart() {
+        showInfoToast("On Action Start!");
+    }
+    OnActionStep() {
+        showInfoToast("On Action Step!");
+    }
+    OnActionFinish() {
+        showInfoToast("On Action Finish!");
+    }
+}`
+    },
 ];
