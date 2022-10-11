@@ -406,22 +406,24 @@ export const Examples: Example[] = [
         category: "guard-callback",
         definition: `root {
     selector {
-        repeat until(IsSpaceKeyPressed) {
+        repeat until(IsKeyPressed, "Enter") {
             action [Succeed]
         }
-        repeat while(IsSpaceKeyPressed) {
+        repeat while(IsKeyPressed, "Enter") {
             action [Succeed]
         }
-        repeat until(IsSpaceKeyPressed) {
+        repeat until(IsKeyPressed, "Enter") {
             action [Succeed]
         }
-        repeat while(IsSpaceKeyPressed) {
+        repeat while(IsKeyPressed, "Enter") {
             action [Succeed]
         }
     }
 }`,
         board: `class Agent {
-    
+    Succeed() {
+        return State.SUCCEEDED;
+    }
 }`
     },
 
