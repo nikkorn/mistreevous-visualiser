@@ -102,7 +102,7 @@ export class App extends React.Component<{}, AppState> {
 			pressedKeyCodes[event.key] = true;
 		}
 
-		BehaviourTree.register("IsKeyPressed", (agent: any, key: string) => !!pressedKeyCodes[key]);
+		BehaviourTree.register("IsKeyDown", (agent: any, key: string) => !!pressedKeyCodes[key]);
 
 		this._onDefinitionChange = this._onDefinitionChange.bind(this);
 		this._onBoardChange = this._onBoardChange.bind(this);

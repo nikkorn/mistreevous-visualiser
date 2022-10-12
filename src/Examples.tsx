@@ -406,24 +406,14 @@ export const Examples: Example[] = [
         category: "guard-callback",
         definition: `root {
     selector {
-        repeat until(IsKeyPressed, "Enter") {
-            action [Succeed]
-        }
-        repeat while(IsKeyPressed, "Enter") {
-            action [Succeed]
-        }
-        repeat until(IsKeyPressed, "Enter") {
-            action [Succeed]
-        }
-        repeat while(IsKeyPressed, "Enter") {
-            action [Succeed]
-        }
+        action [IndefiniteAction] until(IsKeyDown, "Enter")
+        action [IndefiniteAction] while(IsKeyDown, "Enter")
+        action [IndefiniteAction] until(IsKeyDown, "Backspace")
+        action [IndefiniteAction] while(IsKeyDown, "Backspace")
     }
 }`,
         board: `class Agent {
-    Succeed() {
-        return State.SUCCEEDED;
-    }
+    IndefiniteAction() { /** Do something indefinitely */ }
 }`
     },
 
@@ -495,6 +485,56 @@ export const Examples: Example[] = [
     Say(text) {
         showInfoToast(text);
         return State.SUCCEEDED;
+    }
+}`
+    },
+
+
+    {
+        name: "global-functions",
+        caption: "Global Functions",
+        category: "global",
+        definition: `root {
+    repeat {
+        selector {
+            sequence {
+                condition [IsSimulationRunning]
+                action [Say, "I have work to do!"]
+            }
+            action [Relax]
+        }
+    }
+}`,
+        board: `class Agent {
+    constructor() {
+        // We should keep tabs on whether any key is currently down.
+        // It's rather hacky to be doing this in the agent constructor
+        // but it's being done here just for the sake of this example.
+        let isKeyDown = false;
+        window.onkeyup = (event) => { isKeyDown = false; }
+        window.onkeydown = (event) => { isKeyDown = true; }
+        
+        // Register the global "Say" function. It's rather hacky 
+        // to be doing this in the agent constructor but it's being
+        // done here just for the sake of this example.
+        BehaviourTree.register("Say", (agent, text) => {
+            showInfoToast(\`\${agent.GetName()}: \${text}\`);
+            return State.SUCCEEDED;
+        });
+        
+        // Register the global "IsSimulationRunning" function. It's
+        // rather hacky to be doing this in the agent constructor but
+        // it's being done here just for the sake of this example.
+        BehaviourTree.register("IsSimulationRunning", (agent) => {
+            // The simulation is running if we have a key down.
+            return isKeyDown;
+        });
+    }
+    Relax() {
+        return State.SUCCEEDED;
+    }
+    GetName() {
+        return "Barry";
     }
 }`
     }

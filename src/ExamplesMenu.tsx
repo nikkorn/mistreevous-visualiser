@@ -66,6 +66,7 @@ export const ExamplesMenu: React.FunctionComponent<ExamplesMenuProps> = ({ onExa
                 <MenuList dense style={{ padding: "0px"}}>
                     {getExampleListItemsForCategory("guard-callback")}
                 </MenuList>
+                <Divider/>
                 <Typography style={{ marginLeft: "5px"}} variant="caption">{"Globals"}</Typography>
                 <MenuList dense style={{ padding: "0px"}}>
                     {getExampleListItemsForCategory("global")}
