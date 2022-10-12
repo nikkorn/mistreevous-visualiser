@@ -28,7 +28,7 @@ export const ExamplesMenu: React.FunctionComponent<ExamplesMenuProps> = ({ onExa
 
     const getExampleListItemsForCategory = (category: ExampleCategory) => Examples
         .filter((example) => example.category === category)
-        .map((example, index) => <MenuItem key={index} dense onClick={() => onExampleClick(example)}>{example.caption}</MenuItem>)
+        .map((example, index) => <MenuItem key={index} dense style={{ padding: "0px 16px"}} onClick={() => onExampleClick(example)}>{example.caption}</MenuItem>)
 
     return (
         <div>
@@ -43,28 +43,32 @@ export const ExamplesMenu: React.FunctionComponent<ExamplesMenuProps> = ({ onExa
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}>
-                <MenuList dense>
+                <MenuList dense style={{ padding: "0px"}}>
                     {getExampleListItemsForCategory("misc")}
                 </MenuList>
                 <Divider/>
                 <Typography style={{ marginLeft: "5px"}} variant="caption">{"Leaves"}</Typography>
-                <MenuList dense>
+                <MenuList dense style={{ padding: "0px"}}>
                     {getExampleListItemsForCategory("leaf")}
                 </MenuList>
                 <Divider/>
                 <Typography style={{ marginLeft: "5px"}} variant="caption">{"Composites"}</Typography>
-                <MenuList dense>
+                <MenuList dense style={{ padding: "0px"}}>
                     {getExampleListItemsForCategory("composite")}
                 </MenuList>
                 <Divider/>
                 <Typography style={{ marginLeft: "5px"}} variant="caption">{"Decorators"}</Typography>
-                <MenuList dense>
+                <MenuList dense style={{ padding: "0px"}}>
                     {getExampleListItemsForCategory("decorator")}
                 </MenuList>
                 <Divider/>
                 <Typography style={{ marginLeft: "5px"}} variant="caption">{"Guards and Callbacks"}</Typography>
-                <MenuList dense>
+                <MenuList dense style={{ padding: "0px"}}>
                     {getExampleListItemsForCategory("guard-callback")}
+                </MenuList>
+                <Typography style={{ marginLeft: "5px"}} variant="caption">{"Globals"}</Typography>
+                <MenuList dense style={{ padding: "0px"}}>
+                    {getExampleListItemsForCategory("global")}
                 </MenuList>
             </Menu>
         </div>

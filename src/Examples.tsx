@@ -1,7 +1,7 @@
 /**
  * An example definition and board commbination.
  */
- export type ExampleCategory = "misc" | "leaf" | "composite" | "decorator" | "guard-callback";
+ export type ExampleCategory = "misc" | "leaf" | "composite" | "decorator" | "guard-callback" | "global";
 
 /**
  * An example definition and board commbination.
@@ -463,4 +463,39 @@ export const Examples: Example[] = [
     }
 }`
     },
+
+    {
+        name: "global-subtrees",
+        caption: "Global Subtrees",
+        category: "global",
+        definition: `root {
+    sequence {
+        action [AttemptDifficultTask]
+        branch [Celebrate]
+    }
+}`,
+        board: `class Agent {
+    constructor() {
+        // Register the global subtree for some celebratory behaviour.
+        // It's rather hacky to be doing this in the agent constructor
+        // but it's being done here just for the sake of this example.
+        BehaviourTree.register("Celebrate", \`root {
+            sequence {
+                action [Jump]
+                action [Say, "We did it!"]
+            }
+        }\`);
+    }
+    AttemptDifficultTask() {
+        return State.SUCCEEDED;
+    }
+    Jump() {
+        return State.SUCCEEDED;
+    }
+    Say(text) {
+        showInfoToast(text);
+        return State.SUCCEEDED;
+    }
+}`
+    }
 ];

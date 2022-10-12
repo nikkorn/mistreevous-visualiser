@@ -267,7 +267,7 @@ export class App extends React.Component<{}, AppState> {
 	 * @returns An instance of a board based on the class definition provided.
 	 */
 	private _createBoardInstance(boardClassDefinition: string): any {
-		const boardClassCreator = new Function("State", "getStringValue", "getNumberValue", "getBooleanValue", "showErrorToast", "showInfoToast", `return ${boardClassDefinition};`);
+		const boardClassCreator = new Function("BehaviourTree", "State", "getStringValue", "getNumberValue", "getBooleanValue", "showErrorToast", "showInfoToast", `return ${boardClassDefinition};`);
 
 		const getStringValue = (message: string) => window.prompt(message);
 		const getNumberValue = (message: string) => parseFloat(window.prompt(message) as string);
@@ -275,7 +275,7 @@ export class App extends React.Component<{}, AppState> {
 		const showErrorToast = (message: string) => toast.error(message);
 		const showInfoToast = (message: string) => toast.info(message);
 
-		const boardClass = boardClassCreator(State ,getStringValue, getNumberValue, getBooleanValue, showErrorToast, showInfoToast);
+		const boardClass = boardClassCreator(BehaviourTree, State, getStringValue, getNumberValue, getBooleanValue, showErrorToast, showInfoToast);
 
 		const boardInstance = new boardClass();
 
