@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { State, BehaviourTree } from "mistreevous";
+import { State, BehaviourTree, FlattenedTreeNode } from "mistreevous";
 import { toast, ToastContainer } from 'react-toastify';
 
 import './App.css';
@@ -22,35 +22,6 @@ import { BoardTab } from './BoardTab';
 import { DefinitionTab } from './DefinitionTab';
 import { ExamplesMenu } from './ExamplesMenu';
 import { Example, Examples } from './Examples';
-
-export type FlattenedNode = {
-	id: string;
-	caption: string;
-	parentId: string | null;
-	type: string;
-	state: State;
-	arguments: FlattenedNodeFunctionArgument[];
-	decorators: (FlattenedNodeGuard | FlattenedNodeCallback)[];
-}
-
-export type FlattenedNodeGuard = {
-	isGuard: true;
-	condition: { value: string };
-	arguments: FlattenedNodeFunctionArgument[];
-	type: "while" | "until";
-}
-
-export type FlattenedNodeCallback = {
-	isGuard: false;
-	functionName: { value: string };
-	arguments: FlattenedNodeFunctionArgument[];
-	type: "entry" | "exit" | "step";
-}
-
-export type FlattenedNodeFunctionArgument = {
-	value: string;
-	type: "string" | "number" | "boolean" | "null";
-}
 
 export enum SidebarTab { Definition = 0, Board = 1 };
 
@@ -93,7 +64,7 @@ export class App extends React.Component<{}, AppState> {
 			canvasElements: { nodes: [], edges: [] }
 		};
 
-		const pressedKeyCodes = {} as any;
+		const pressedKeyCodes: any = {} as any;
 
 		window.onkeyup = (event) => {
 			pressedKeyCodes[event.key] = false;
@@ -102,7 +73,7 @@ export class App extends React.Component<{}, AppState> {
 			pressedKeyCodes[event.key] = true;
 		}
 
-		BehaviourTree.register("IsKeyDown", (agent: any, key: string) => !!pressedKeyCodes[key]);
+		// BehaviourTree.register("IsKeyDown", (agent: any, keyy: string) => !!pressedKeyCodes[keyy]);
 
 		this._onDefinitionChange = this._onDefinitionChange.bind(this);
 		this._onBoardChange = this._onBoardChange.bind(this);
@@ -253,7 +224,12 @@ export class App extends React.Component<{}, AppState> {
 			// Create the board object.
 			const board = this._createBoardInstance(boardClassDefinition);
 
-			const behaviourTree = new BehaviourTree(definition, board);
+			const options = {
+				// We are calling step() every 100ms in this class so a delta of 0.1 should match what we expect.
+				getDeltaTime: () => 0.1
+			};
+
+			const behaviourTree = new BehaviourTree(definition, board, options);
 
 			return behaviourTree;
 		} catch (error) {
@@ -287,7 +263,7 @@ export class App extends React.Component<{}, AppState> {
 	 * @param flattenedNodeDetails 
 	 * @returns The parsed nodes and connectors.
 	 */
-	private _parseNodesAndConnectors(flattenedNodeDetails: FlattenedNode[]): CanvasElements {
+	private _parseNodesAndConnectors(flattenedNodeDetails: FlattenedTreeNode[]): CanvasElements {
 		let result: CanvasElements = { nodes: [], edges: [] };
 
 		flattenedNodeDetails.forEach((flattenedNode) => {
@@ -297,20 +273,8 @@ export class App extends React.Component<{}, AppState> {
 				state: flattenedNode.state,
 				type: flattenedNode.type,
 				args: flattenedNode.arguments,
-				callbacks: (flattenedNode.decorators || []).filter((decorator) => !decorator.isGuard).map((decorator) => {
-					return {
-						type: decorator.type,
-						functionName: (decorator as FlattenedNodeCallback).functionName.value,
-						args: decorator.arguments
-					}
-				}),
-				guards: (flattenedNode.decorators || []).filter((decorator) => decorator.isGuard).map((decorator) => {
-					return {
-						type: decorator.type,
-						functionName: (decorator as FlattenedNodeGuard).condition.value,
-						args: decorator.arguments
-					}
-				}),
+				callbacks: [],
+				guards: [],
 				variant: "default"
 			} as any);
 
@@ -386,7 +350,9 @@ export class App extends React.Component<{}, AppState> {
 				this.setState({ behaviourTreePlayInterval: null });
 			}
 
-			this.setState({ canvasElements: this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails()) });
+			var x: FlattenedTreeNode[] = behaviourTree.getFlattenedNodeDetails();
+
+			this.setState({ canvasElements: this._parseNodesAndConnectors(behaviourTree.getFlattenedNodeDetails()) });
 		}, 100);
 
 		this.setState({ behaviourTreePlayInterval: playInterval });
