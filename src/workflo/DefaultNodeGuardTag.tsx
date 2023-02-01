@@ -9,14 +9,14 @@ export type Guard = "while" | "until";
  */
 export type DefaultNodeGuardTagProps = {
 	type: "while" | "until";
-  functionName: string;
+  condition: string;
 	args: DefaultNodeArgument[];
 };
 
 /**
  * The DefaultNodeGuardTag component.
  */
-export const DefaultNodeGuardTag: React.FunctionComponent<DefaultNodeGuardTagProps> = ({ type, functionName, args }) => {
+export const DefaultNodeGuardTag: React.FunctionComponent<DefaultNodeGuardTagProps> = ({ type, condition, args }) => {
   
   const getArgument = (arg: DefaultNodeArgument) => {
     switch (arg.type) {
@@ -43,7 +43,7 @@ export const DefaultNodeGuardTag: React.FunctionComponent<DefaultNodeGuardTagPro
         <p>{type}</p>
       </div>
       <div className="guard-tag-signature">
-        <p>{functionName}</p>
+        <p>{condition}</p>
         {args.map((arg) => getArgument(arg))}
       </div>
     </div>

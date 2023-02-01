@@ -272,9 +272,9 @@ export class App extends React.Component<{}, AppState> {
 				caption: flattenedNode.caption,
 				state: flattenedNode.state,
 				type: flattenedNode.type,
-				args: flattenedNode.arguments,
-				callbacks: [],
-				guards: [],
+				args: flattenedNode.args,
+				callbacks: flattenedNode.callbacks,
+				guards: flattenedNode.guards,
 				variant: "default"
 			} as any);
 

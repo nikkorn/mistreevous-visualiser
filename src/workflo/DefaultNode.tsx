@@ -25,7 +25,7 @@ export type DefaultNodeArgument = {
 };
 
 export type Guard = {
-  functionName: string;
+  condition: string;
 	args: DefaultNodeArgument[];
 	type: "while" | "until";
 };
@@ -150,7 +150,7 @@ export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, cap
               {args.map((arg, index) => getArgument(arg, index))}
             </div>
             <div className="default-node-guard-callback-container">
-              {guards.map((guard, index) => <DefaultNodeGuardTag key={index} type={guard.type} functionName={guard.functionName} args={guard.args} />)}
+              {guards.map((guard, index) => <DefaultNodeGuardTag key={index} type={guard.type} condition={guard.condition} args={guard.args} />)}
               {callbacks.map((callback, index) => <DefaultNodeCallbackTag key={index} type={callback.type} functionName={callback.functionName} args={callback.args} />)}
             </div>
           </div>
