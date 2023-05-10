@@ -156,17 +156,11 @@ export const Examples: Example[] = [
         caption: "Wait",
         category: "leaf",
         definition: `root {
-    wait [2000]
-}`,
-        board: `class Agent {}`
-    },
-
-    {
-        name: "wait-one-to-five-seconds",
-        caption: "Wait for one-five seconds",
-        category: "leaf",
-        definition: `root {
-    wait [1000, 5000]
+    sequence {
+        wait [2000]
+        wait [1000, 5000]
+        wait
+    }
 }`,
         board: `class Agent {}`
     },
