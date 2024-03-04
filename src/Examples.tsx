@@ -311,15 +311,55 @@ export const Examples: Example[] = [
         caption: "Repeat",
         category: "decorator",
         definition: `root {
-    repeat {
-        sequence {
-            wait [1000]
-            wait [1000]
-            wait [1000]
+    sequence {
+        repeat [2] {
+            action [Say, "We will do this twice"]
+        }
+        repeat [2, 6] {
+            action [Say, "We will do this between two and six times"]
+        }
+        repeat {
+            sequence {
+                action [Say, "We will do this indefinitely"]
+                wait [1000]
+            }
         }
     }
 }`,
-        board: `class Agent {}`
+        board: `class Agent {
+    Say(text) {
+        showInfoToast(text);
+        return State.SUCCEEDED;
+    }
+}`
+    },
+
+    {
+        name: "retry",
+        caption: "Retry",
+        category: "decorator",
+        definition: `root {
+    selector {
+        retry [2] {
+            action [Say, "We will attempt this twice"]
+        }
+        retry [2, 6] {
+            action [Say, "We will attempt this between two and six times"]
+        }
+        retry {
+            sequence {
+                wait [1000]
+                action [Say, "We will attempt this indefinitely"]
+            }
+        }
+    }
+}`,
+        board: `class Agent {
+    Say(text) {
+        showInfoToast(text);
+        return State.FAILED;
+    }
+}`
     },
 
     {

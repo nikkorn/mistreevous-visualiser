@@ -73,7 +73,7 @@ export class App extends React.Component<{}, AppState> {
 			pressedKeyCodes[event.key] = true;
 		}
 
-		// BehaviourTree.register("IsKeyDown", (agent: any, keyy: string) => !!pressedKeyCodes[keyy]);
+		BehaviourTree.register("IsKeyDown", (agent: any, key: string) => !!pressedKeyCodes[key]);
 
 		this._onDefinitionChange = this._onDefinitionChange.bind(this);
 		this._onBoardChange = this._onBoardChange.bind(this);
@@ -162,8 +162,12 @@ export class App extends React.Component<{}, AppState> {
 		} catch (error) {
 			behaviourTreeExceptionMessage = `${(error as any).message}`;
 		}
-		
-		const behaviourTree = this._createTreeInstance(definition, this.state.board);
+
+		let behaviourTree = null;
+
+		try {
+			behaviourTree = this._createTreeInstance(this.state.definiton, this.state.board);
+		} catch {}
 
 		this.setState({ 
 			definiton: definition,
@@ -187,7 +191,11 @@ export class App extends React.Component<{}, AppState> {
 			boardExceptionMessage = `${(error as any).message}`;
 		}
 
-		const behaviourTree = this._createTreeInstance(this.state.definiton, boardClassDefinition);
+		let behaviourTree = null;
+
+		try {
+			behaviourTree = this._createTreeInstance(this.state.definiton, boardClassDefinition);
+		} catch {}
 
 		this.setState({ 
 			board: boardClassDefinition,
@@ -202,6 +210,7 @@ export class App extends React.Component<{}, AppState> {
 	 */
 	private _onExampleSelected(example: Example): void {
 		const behaviourTree = this._createTreeInstance(example.definition, example.board);
+
 		const canvasElements = this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails());
 
 		this.setState({
@@ -220,21 +229,17 @@ export class App extends React.Component<{}, AppState> {
 	 * @returns The behaviour tree instance.
 	 */
 	private _createTreeInstance(definition: string, boardClassDefinition: string): BehaviourTree | null {
-		try {
-			// Create the board object.
-			const board = this._createBoardInstance(boardClassDefinition);
+		// Create the board object.
+		const board = this._createBoardInstance(boardClassDefinition);
 
-			const options = {
-				// We are calling step() every 100ms in this class so a delta of 0.1 should match what we expect.
-				getDeltaTime: () => 0.1
-			};
+		const options = {
+			// We are calling step() every 100ms in this class so a delta of 0.1 should match what we expect.
+			getDeltaTime: () => 0.1
+		};
 
-			const behaviourTree = new BehaviourTree(definition, board, options);
+		const behaviourTree = new BehaviourTree(definition, board, options);
 
-			return behaviourTree;
-		} catch (error) {
-			return null;
-		}
+		return behaviourTree;
 	}
 
 	/**

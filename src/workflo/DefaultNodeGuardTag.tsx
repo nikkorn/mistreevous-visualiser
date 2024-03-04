@@ -18,22 +18,17 @@ export type DefaultNodeGuardTagProps = {
  */
 export const DefaultNodeGuardTag: React.FunctionComponent<DefaultNodeGuardTagProps> = ({ type, condition, args }) => {
   
-  const getArgument = (arg: DefaultNodeArgument) => {
-    switch (arg.type) {
-      case "string":
-        return <p className="default-node-argument string">{`"${arg.value}"`}</p>;
-
-      case "number":
-        return <p className="default-node-argument number">{arg.value}</p>;
-        
-      case "boolean":
-        return <p className="default-node-argument boolean">{arg.value ? "true" : "false"}</p>;
-
-      case "null":
-        return <p className="default-node-argument null">{"null"}</p>;
-
-      default:
-        throw new Error(`unknown argument type: ${arg.type}`);
+  const getArgument = (arg: DefaultNodeArgument, index: number) => {
+    if (typeof arg === "string") {
+      return <p key={index} className="default-node-argument string">{`"${arg}"`}</p>;
+    } else if (typeof arg === "number") {
+      return <p key={index} className="default-node-argument number">{arg}</p>;
+    } else if (typeof arg === "boolean") {
+      return <p key={index} className="default-node-argument boolean">{arg ? "true" : "false"}</p>;
+    } else if (arg === null || arg === undefined) {
+      return <p key={index} className="default-node-argument null">{arg === null ? "null" : "undefined"}</p>;
+    } else {
+      throw new Error(`unknown argument type: ${arg}`);
     }
   };
   
@@ -44,7 +39,7 @@ export const DefaultNodeGuardTag: React.FunctionComponent<DefaultNodeGuardTagPro
       </div>
       <div className="guard-tag-signature">
         <p>{condition}</p>
-        {args.map((arg) => getArgument(arg))}
+        {args.map((arg, index) => getArgument(arg, index))}
       </div>
     </div>
   );

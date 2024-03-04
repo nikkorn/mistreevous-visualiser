@@ -19,10 +19,7 @@ import { DefaultNodeCallbackTag } from './DefaultNodeCallbackTag';
 
 import './DefaultNode.css';
 
-export type DefaultNodeArgument = {
-  value: string;
-  type: "string" | "number" | "boolean" | "null";
-};
+export type DefaultNodeArgument = "string" | "number" | "boolean" | "null";
 
 export type Guard = {
   condition: string;
@@ -120,21 +117,16 @@ export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, cap
   };
 
   const getArgument = (arg: DefaultNodeArgument, index: number) => {
-    switch (arg.type) {
-      case "string":
-        return <p key={index} className="default-node-argument string">{`"${arg.value}"`}</p>;
-
-      case "number":
-        return <p key={index} className="default-node-argument number">{arg.value}</p>;
-        
-      case "boolean":
-        return <p key={index} className="default-node-argument boolean">{arg.value ? "true" : "false"}</p>;
-
-      case "null":
-        return <p key={index} className="default-node-argument null">{"null"}</p>;
-
-      default:
-        throw new Error(`unknown argument type: ${arg.type}`);
+    if (typeof arg === "string") {
+      return <p key={index} className="default-node-argument string">{`"${arg}"`}</p>;
+    } else if (typeof arg === "number") {
+      return <p key={index} className="default-node-argument number">{arg}</p>;
+    } else if (typeof arg === "boolean") {
+      return <p key={index} className="default-node-argument boolean">{arg ? "true" : "false"}</p>;
+    } else if (arg === null || arg === undefined) {
+      return <p key={index} className="default-node-argument null">{arg === null ? "null" : "undefined"}</p>;
+    } else {
+      throw new Error(`unknown argument type: ${arg}`);
     }
   };
 
