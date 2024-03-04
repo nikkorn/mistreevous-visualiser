@@ -6,12 +6,14 @@ import "./mode-mdsl";
 
 import Alert from "@mui/material/Alert/Alert";
 import Typography from "@mui/material/Typography/Typography";
-
-import './DefinitionTab.css';
+import { Divider } from "@mui/material";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ToggleButton from "@mui/material/ToggleButton";
+
 import { ExamplesMenu } from "./ExamplesMenu";
 import { Example } from "./Examples";
+
+import './DefinitionTab.css';
 
 export type DefinitionTabProps = {
     /** The definition value. */
@@ -50,6 +52,7 @@ export type DefinitionTabProps = {
                     </ToggleButton>
                 </ToggleButtonGroup>
             </div>
+            <Divider/>
             <AceEditor
                 className="definition-tab-ace-editor"
                 value={value}

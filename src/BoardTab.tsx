@@ -5,6 +5,7 @@ import "ace-builds/src-noconflict/theme-sqlserver";
 
 import Alert from "@mui/material/Alert/Alert";
 import Typography from "@mui/material/Typography/Typography";
+import Divider from "@mui/material/Divider";
 
 import './BoardTab.css';
 
@@ -27,6 +28,7 @@ export type BoardTabProps = {
     return (
         <div className="sidebar-tab board-tab">
             <Typography className="sidebar-tab-title" variant="overline">Agent</Typography>
+            <Divider/>
             <AceEditor
                 className="board-tab-ace-editor"
                 value={value}
