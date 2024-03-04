@@ -31,13 +31,13 @@ export const ExamplesMenu: React.FunctionComponent<ExamplesMenuProps> = ({ onExa
         .map((example, index) => <MenuItem key={index} dense style={{ padding: "0px 16px"}} onClick={() => onExampleClick(example)}>{example.caption}</MenuItem>)
 
     return (
-        <div>
+        <div className="examples-menu">
             <IconButton 
-                size="large"
+                size="small"
                 edge="start"
                 color="inherit"
                 onClick={handleClick}>
-                <MenuIcon />
+                <MenuIcon fontSize='small'/>
             </IconButton>
             <Menu
                 anchorEl={anchorEl}

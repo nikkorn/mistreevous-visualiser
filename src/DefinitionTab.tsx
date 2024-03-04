@@ -8,6 +8,10 @@ import Alert from "@mui/material/Alert/Alert";
 import Typography from "@mui/material/Typography/Typography";
 
 import './DefinitionTab.css';
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ToggleButton from "@mui/material/ToggleButton";
+import { ExamplesMenu } from "./ExamplesMenu";
+import { Example } from "./Examples";
 
 export type DefinitionTabProps = {
     /** The definition value. */
@@ -20,15 +24,32 @@ export type DefinitionTabProps = {
     errorMessage?: string;
 
     readOnly: boolean;
+
+    onExampleSelected(example: Example): void;
 }
 
 /**
  * The DefinitionTab component.
  */
- export const DefinitionTab: React.FunctionComponent<DefinitionTabProps> = ({ value, onChange, errorMessage, readOnly }) => {
+ export const DefinitionTab: React.FunctionComponent<DefinitionTabProps> = ({ value, onChange, errorMessage, readOnly, onExampleSelected }) => {
     return (
         <div className="sidebar-tab definition-tab">
-            <Typography className="sidebar-tab-title" variant="overline">Definition</Typography>
+            <div className="definition-tab-header">
+                <Typography className="sidebar-tab-title" variant="overline">Definition</Typography>
+                <ExamplesMenu onExampleSelected={onExampleSelected} />
+                <ToggleButtonGroup
+                    className="definition-type-toggle"
+                    value={"mdsl"}
+                    size="small"
+                    exclusive>
+                    <ToggleButton value="mdsl">
+                        <Typography fontSize={12}>MDSL</Typography>
+                    </ToggleButton>
+                    <ToggleButton value="json">
+                        <Typography fontSize={12}>JSON</Typography>
+                    </ToggleButton>
+                </ToggleButtonGroup>
+            </div>
             <AceEditor
                 className="definition-tab-ace-editor"
                 value={value}
@@ -40,7 +61,7 @@ export type DefinitionTabProps = {
                 theme="sqlserver"
                 setOptions={{ useWorker: false }}
 			/>
-            {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+            {errorMessage && <Alert className="sidebar-tab-alert" severity="error">{errorMessage}</Alert>}
         </div>
     );
   }

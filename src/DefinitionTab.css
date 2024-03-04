@@ -3,6 +3,27 @@
     flex-direction: column;
 }
 
+.definition-tab-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.definition-type-toggle {
+    height: 20px;
+    justify-self: flex-end;
+    margin-left: auto;
+    margin-right: 6px;
+}
+
 .definition-tab-ace-editor {
     flex-grow: 1;
+}
+
+.sidebar-tab-alert {
+    border-radius: 0px !important;
+}
+
+.examples-menu {
+    margin-left: 5px;
 }

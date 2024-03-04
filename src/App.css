@@ -15,13 +15,23 @@
   border-right: rgb(200, 200, 200) solid 1px
 }
 
+.sidebar {
+  background-color: white;
+}
+
 .sidebar.read-only {
   opacity: 0.5;
 }
 
+.sidebar-header {
+  background-color: white;
+  justify-content: space-between;
+}
+
 .sidebar-tab {
   flex-grow: 1;
-  border-bottom: rgb(200, 200, 200) solid 1px
+  border-bottom: rgb(200, 200, 200) solid 1px;
+  height: 100%
 }
 
 .sidebar-tab-title {
@@ -30,7 +40,11 @@
 
 .mistreevous-icon {
   display: block;
-  width: 36px;
-  height: 36px;
-  margin-right: 20px;
+  width: 32px;
+  height: 32px;
+  margin: 8px;
+}
+
+.github-icon {
+  margin-right: 5px !important;
 }

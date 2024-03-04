@@ -8,7 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import GithubIcon from "mdi-material-ui/Github";
 import MenuIcon from "mdi-material-ui/Menu";
 
-import mistreevousIcon from './icons/mistreevous_icon_white.png'; 
+import mistreevousIconWhite from './icons/mistreevous_icon_white.png';
+import mistreevousIcon from './icons/icon-large.png';  
 
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -16,9 +17,10 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
+import Card from '@mui/material/Card';
 
 import { CanvasElements, MainPanel } from './MainPanel';
-import { BoardTab } from './BoardTab';
+import { AgentTab } from './BoardTab';
 import { DefinitionTab } from './DefinitionTab';
 import { ExamplesMenu } from './ExamplesMenu';
 import { Example, Examples } from './Examples';
@@ -88,30 +90,31 @@ export class App extends React.Component<{}, AppState> {
 
 		return (
 			<Box className="app-box">
-				<AppBar position="static">
-					<Toolbar variant="dense">
-						<img className="mistreevous-icon" src={mistreevousIcon} />
-						<ExamplesMenu onExampleSelected={this._onExampleSelected} />
-						<Typography variant="h6" component="div" sx={{ flexGrow: 1 }} />
-						<IconButton size="large" edge="end" color="inherit" href="https://github.com/nikkorn/mistreevous">
-							<GithubIcon />
-						</IconButton>
-					</Toolbar>
-				</AppBar>
 				<Grid container sx={{ flexGrow: 1 }}>
 					<Grid container item className={`sidebar ${isSidebarReadOnly ? "read-only" : ""}`} xs={4} direction="column">
-						<DefinitionTab 
-							value={this.state.definiton} 
-							onChange={this._onDefinitionChange} 
-							errorMessage={this.state.behaviourTreeExceptionMessage}
-							readOnly={!!this.state.behaviourTreePlayInterval}
-						/>
-						<BoardTab 
-							value={this.state.board} 
-							onChange={this._onBoardChange}
-							errorMessage={this.state.boardExceptionMessage}
-							readOnly={!!this.state.behaviourTreePlayInterval}
-						/>
+						<Grid item container className="sidebar-header" alignContent={"flex-end"}>
+							<img className="mistreevous-icon" src={mistreevousIcon} />
+							<IconButton className="github-icon" size="large" edge="end" color="inherit" href="https://github.com/nikkorn/mistreevous">
+								<GithubIcon />
+							</IconButton>
+						</Grid>
+						<Card style={{ margin: "6px", flexGrow: 1 }} elevation={3}>
+							<DefinitionTab 
+								value={this.state.definiton} 
+								onChange={this._onDefinitionChange} 
+								errorMessage={this.state.behaviourTreeExceptionMessage}
+								readOnly={!!this.state.behaviourTreePlayInterval}
+								onExampleSelected={this._onExampleSelected}
+							/>
+						</Card>
+						<Card style={{ margin: "6px", flexGrow: 1 }} elevation={3}>
+							<AgentTab 
+								value={this.state.board} 
+								onChange={this._onBoardChange}
+								errorMessage={this.state.boardExceptionMessage}
+								readOnly={!!this.state.behaviourTreePlayInterval}
+							/>
+						</Card>
 					</Grid>
 					<Grid item xs={8}>
 						<MainPanel

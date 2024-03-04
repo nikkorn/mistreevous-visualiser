@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography/Typography";
 import './BoardTab.css';
 
 export type BoardTabProps = {
-    /** The board value. */
+    /** The agent class value. */
     value: string;
 
     onChange(value: string): void
@@ -21,9 +21,9 @@ export type BoardTabProps = {
 }
 
 /**
- * The BoardTab component.
+ * The AgentTab component.
  */
- export const BoardTab: React.FunctionComponent<BoardTabProps> = ({ value, onChange, errorMessage, readOnly }) => {
+ export const AgentTab: React.FunctionComponent<BoardTabProps> = ({ value, onChange, errorMessage, readOnly }) => {
     return (
         <div className="sidebar-tab board-tab">
             <Typography className="sidebar-tab-title" variant="overline">Agent</Typography>
