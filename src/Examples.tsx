@@ -166,6 +166,31 @@ export const Examples: Example[] = [
     },
 
     {
+        name: "branch",
+        caption: "Branch",
+        category: "leaf",
+        definition: `root {
+    branch [AttemptDance]
+}
+
+root [AttemptDance] {
+    sequence {
+        condition [CanDance]
+        action [Dance]
+    }
+}`,
+        board: `class Agent {
+    CanDance() {
+        return true;
+    }
+    Dance() {
+        showInfoToast("Dancing!");
+        return State.SUCCEEDED;
+    }
+}`
+    },
+
+    {
         name: "sequence",
         caption: "Sequence",
         category: "composite",

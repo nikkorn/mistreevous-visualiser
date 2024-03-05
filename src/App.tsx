@@ -228,8 +228,10 @@ export class App extends React.Component<{}, AppState> {
 	 * @param example The selected example.
 	 */
 	private _convertDefinitonToJson(): void {
+		// Convert the current definition, which we are assuming is valid MDSL, to JSON.
 		const result = convertMDSLToJSON(this.state.definition);
-		this._onDefinitionChange(JSON.stringify(result, null, 4));
+
+		this._onDefinitionChange(JSON.stringify(result.length === 1 ? result[0] : result, null, 4));
 	}
 
 	/**
