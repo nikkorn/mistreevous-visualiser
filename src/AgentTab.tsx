@@ -7,9 +7,9 @@ import Alert from "@mui/material/Alert/Alert";
 import Typography from "@mui/material/Typography/Typography";
 import Divider from "@mui/material/Divider";
 
-import './BoardTab.css';
+import './AgentTab.css';
 
-export type BoardTabProps = {
+export type AgentTabProps = {
     /** The agent class value. */
     value: string;
 
@@ -24,13 +24,13 @@ export type BoardTabProps = {
 /**
  * The AgentTab component.
  */
- export const AgentTab: React.FunctionComponent<BoardTabProps> = ({ value, onChange, errorMessage, readOnly }) => {
+ export const AgentTab: React.FunctionComponent<AgentTabProps> = ({ value, onChange, errorMessage, readOnly }) => {
     return (
-        <div className="sidebar-tab board-tab">
+        <div className="sidebar-tab agent-tab">
             <Typography className="sidebar-tab-title" variant="overline">Agent</Typography>
             <Divider/>
             <AceEditor
-                className="board-tab-ace-editor"
+                className="agent-tab-ace-editor"
                 value={value}
                 onChange={onChange}
                 readOnly={readOnly}

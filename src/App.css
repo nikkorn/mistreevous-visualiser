@@ -1,3 +1,8 @@
+@font-face {
+  font-family: montserrat;
+  src: url(font/Montserrat-Regular.otf);
+}
+
 .app-box {
   display: flex;
   flex-direction: column;

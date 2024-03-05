@@ -1,31 +1,26 @@
 import * as React from 'react';
-import { State, BehaviourTree, FlattenedTreeNode } from "mistreevous";
+import { State, BehaviourTree, FlattenedTreeNode, convertMDSLToJSON, validateDefinition } from "mistreevous";
 import { toast, ToastContainer } from 'react-toastify';
 
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 import GithubIcon from "mdi-material-ui/Github";
-import MenuIcon from "mdi-material-ui/Menu";
-
-import mistreevousIconWhite from './icons/mistreevous_icon_white.png';
 import mistreevousIcon from './icons/icon-large.png';  
 
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 
 import { CanvasElements, MainPanel } from './MainPanel';
-import { AgentTab } from './BoardTab';
+import { AgentTab } from './AgentTab';
 import { DefinitionTab } from './DefinitionTab';
-import { ExamplesMenu } from './ExamplesMenu';
 import { Example, Examples } from './Examples';
 
 export enum SidebarTab { Definition = 0, Board = 1 };
+
+export enum DefinitionType { None = 0, MDSL = 1, JSON = 2 };
 
 /**
  * The App component state.
@@ -33,9 +28,10 @@ export enum SidebarTab { Definition = 0, Board = 1 };
 export type AppState = {
 	layoutId: string | null;
 	activeSidebarTab: SidebarTab;
-	definiton: string;
-	board: string;
-	boardExceptionMessage: string;
+	definition: string;
+	definitionType: DefinitionType;
+	agent: string;
+	agentExceptionMessage: string;
 	behaviourTree: BehaviourTree | null;
 	behaviourTreeExceptionMessage: string;
 	behaviourTreePlayInterval: NodeJS.Timer | null;
@@ -57,9 +53,10 @@ export class App extends React.Component<{}, AppState> {
 		this.state = {
 			layoutId: null,
 			activeSidebarTab: SidebarTab.Definition,
-			definiton: "",
-			board: "class Agent {}",
-			boardExceptionMessage: "",
+			definition: "",
+			definitionType: DefinitionType.None,
+			agent: "class Agent {}",
+			agentExceptionMessage: "",
 			behaviourTree: null,
 			behaviourTreeExceptionMessage: "",
 			behaviourTreePlayInterval: null,
@@ -78,8 +75,9 @@ export class App extends React.Component<{}, AppState> {
 		BehaviourTree.register("IsKeyDown", (agent: any, key: string) => !!pressedKeyCodes[key]);
 
 		this._onDefinitionChange = this._onDefinitionChange.bind(this);
-		this._onBoardChange = this._onBoardChange.bind(this);
+		this._onAgentChange = this._onAgentChange.bind(this);
 		this._onExampleSelected = this._onExampleSelected.bind(this);
+		this._convertDefinitonToJson = this._convertDefinitonToJson.bind(this);
 	}
 
 	/**
@@ -100,18 +98,20 @@ export class App extends React.Component<{}, AppState> {
 						</Grid>
 						<Card style={{ margin: "6px", flexGrow: 1 }} elevation={3}>
 							<DefinitionTab 
-								value={this.state.definiton} 
+								definition={this.state.definition} 
+								definitionType={this.state.definitionType}
 								onChange={this._onDefinitionChange} 
 								errorMessage={this.state.behaviourTreeExceptionMessage}
 								readOnly={!!this.state.behaviourTreePlayInterval}
 								onExampleSelected={this._onExampleSelected}
+								onConvertButtonPress={this._convertDefinitonToJson}
 							/>
 						</Card>
 						<Card style={{ margin: "6px", flexGrow: 1 }} elevation={3}>
 							<AgentTab 
-								value={this.state.board} 
-								onChange={this._onBoardChange}
-								errorMessage={this.state.boardExceptionMessage}
+								value={this.state.agent} 
+								onChange={this._onAgentChange}
+								errorMessage={this.state.agentExceptionMessage}
 								readOnly={!!this.state.behaviourTreePlayInterval}
 							/>
 						</Card>
@@ -151,45 +151,52 @@ export class App extends React.Component<{}, AppState> {
 
 	/**
 	 * Handles a change of definition.
-	 * @param definition 
+	 * @param definition The changed definition.
 	 */
-	private _onDefinitionChange(definition: string): void {
+	private _onDefinitionChange(definition: string, agent?: string): void {
+		let behaviourTree = null;
 		let behaviourTreeExceptionMessage = "";
 		let canvasElements: CanvasElements = { nodes: [], edges: [] };
-		
-		try {
-			// Try to create the behaviour tree.
-			const behaviourTreeVal = new BehaviourTree(definition, {} /** We don't need aboard here as we are only validating the definition. */);
 
-			canvasElements = this._parseNodesAndConnectors((behaviourTreeVal as any).getFlattenedNodeDetails());
-		} catch (error) {
-			behaviourTreeExceptionMessage = `${(error as any).message}`;
+		// Get the type of the definition.
+		const definitionType = this._getDefinitionType(definition);
+
+		// Let's try to validate our definition.
+		const validationResult = validateDefinition(definitionType === DefinitionType.JSON ? JSON.parse(definition) : definition);
+
+		if (validationResult.succeeded) {
+			// Create the behaviour tree!
+			behaviourTree = this._createTreeInstance(
+				definitionType === DefinitionType.JSON ? JSON.parse(definition) : definition,
+				agent ?? this.state.agent
+			);
+
+			// Create the canvas elements based on the built tree.
+			canvasElements = this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails());
+		} else {
+			// The definition was not valid.
+			behaviourTreeExceptionMessage = validationResult.errorMessage!;
 		}
 
-		let behaviourTree = null;
-
-		try {
-			behaviourTree = this._createTreeInstance(this.state.definiton, this.state.board);
-		} catch {}
-
 		this.setState({ 
-			definiton: definition,
-			behaviourTreeExceptionMessage: behaviourTreeExceptionMessage,
+			definition,
+			definitionType,
+			behaviourTreeExceptionMessage,
 			canvasElements: canvasElements,
 			behaviourTree: behaviourTree
 		 });
 	}
 
 	/**
-	 * Handles a change of board class definition.
-	 * @param board 
+	 * Handles a change of agent class definition.
+	 * @param agentClassDefinition The agent class definition.
 	 */
-	private _onBoardChange(boardClassDefinition: string): void {
+	private _onAgentChange(agentClassDefinition: string): void {
 		let boardExceptionMessage = "";
 
 		try {
 			// Attempt to create a board instance, we just want to know if we can.
-			this._createBoardInstance(boardClassDefinition);
+			this._createBoardInstance(agentClassDefinition);
 		} catch (error) {
 			boardExceptionMessage = `${(error as any).message}`;
 		}
@@ -197,12 +204,12 @@ export class App extends React.Component<{}, AppState> {
 		let behaviourTree = null;
 
 		try {
-			behaviourTree = this._createTreeInstance(this.state.definiton, boardClassDefinition);
+			behaviourTree = this._createTreeInstance(this.state.definition, agentClassDefinition);
 		} catch {}
 
 		this.setState({ 
-			board: boardClassDefinition,
-			boardExceptionMessage: boardExceptionMessage,
+			agent: agentClassDefinition,
+			agentExceptionMessage: boardExceptionMessage,
 			behaviourTree: behaviourTree
 		});
 	}
@@ -212,17 +219,17 @@ export class App extends React.Component<{}, AppState> {
 	 * @param example The selected example.
 	 */
 	private _onExampleSelected(example: Example): void {
-		const behaviourTree = this._createTreeInstance(example.definition, example.board);
+		this._onAgentChange(example.board);
+		this._onDefinitionChange(example.definition, example.board);
+	}
 
-		const canvasElements = this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails());
-
-		this.setState({
-			layoutId: example.caption,
-			definiton: example.definition,
-			board: example.board,
-			behaviourTree,
-			canvasElements
-		});
+	/**
+	 * Handles an example being selected.
+	 * @param example The selected example.
+	 */
+	private _convertDefinitonToJson(): void {
+		const result = convertMDSLToJSON(this.state.definition);
+		this._onDefinitionChange(JSON.stringify(result, null, 4));
 	}
 
 	/**
@@ -379,5 +386,35 @@ export class App extends React.Component<{}, AppState> {
 			behaviourTreePlayInterval: null,
 			canvasElements: behaviourTree ? this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails()) : { nodes: [], edges: [] }
 		});
+	}
+
+	private _getDefinitionType(definition: string): DefinitionType {
+		if (!definition) {
+			return DefinitionType.None;
+		}
+
+		// Lets see if its valid MDSL.
+		try {
+			// Try to convert our definition to JSON, assuming that it is MDSL.
+			convertMDSLToJSON(definition);
+
+			// It worked! We can assume that this definition is valid MDSL!
+			return DefinitionType.MDSL;
+		} catch {
+			// It wasn't MDSL.
+		}
+
+		// Lets see if it's valid JSON.
+		try {
+			// Try to convert our definition to JSON.
+			JSON.parse(definition);
+
+			// It worked! We can assume that this definition is valid JSON!
+			return DefinitionType.JSON;
+		} catch {
+			// It wasn't JSON.
+		}
+
+		return DefinitionType.None;
 	}
 }

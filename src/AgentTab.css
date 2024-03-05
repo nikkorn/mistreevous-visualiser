@@ -1,8 +1,8 @@
-.board-tab {
+.agent-tab {
     display: flex;
     flex-direction: column;
 }
 
-.board-tab-ace-editor {
+.agent-tab-ace-editor {
     flex-grow: 1;
 }

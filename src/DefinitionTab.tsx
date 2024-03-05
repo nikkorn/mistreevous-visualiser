@@ -6,10 +6,9 @@ import "./mode-mdsl";
 
 import Alert from "@mui/material/Alert/Alert";
 import Typography from "@mui/material/Typography/Typography";
-import { Divider } from "@mui/material";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import ToggleButton from "@mui/material/ToggleButton";
+import { Chip, Divider } from "@mui/material";
 
+import { DefinitionType } from "./App";
 import { ExamplesMenu } from "./ExamplesMenu";
 import { Example } from "./Examples";
 
@@ -17,7 +16,10 @@ import './DefinitionTab.css';
 
 export type DefinitionTabProps = {
     /** The definition value. */
-    value: string;
+    definition: string;
+
+    /** The definition value. */
+    definitionType: DefinitionType;
 
     /** The callback for definition value changes. */
     onChange(value: string): void
@@ -28,39 +30,34 @@ export type DefinitionTabProps = {
     readOnly: boolean;
 
     onExampleSelected(example: Example): void;
+
+    onConvertButtonPress(): void;
 }
 
 /**
  * The DefinitionTab component.
  */
- export const DefinitionTab: React.FunctionComponent<DefinitionTabProps> = ({ value, onChange, errorMessage, readOnly, onExampleSelected }) => {
+ export const DefinitionTab: React.FunctionComponent<DefinitionTabProps> = ({ definition, definitionType, onChange, errorMessage, readOnly, onExampleSelected, onConvertButtonPress }) => {
     return (
         <div className="sidebar-tab definition-tab">
             <div className="definition-tab-header">
                 <Typography className="sidebar-tab-title" variant="overline">Definition</Typography>
                 <ExamplesMenu onExampleSelected={onExampleSelected} />
-                <ToggleButtonGroup
-                    className="definition-type-toggle"
-                    value={"mdsl"}
-                    size="small"
-                    exclusive>
-                    <ToggleButton value="mdsl">
-                        <Typography fontSize={12}>MDSL</Typography>
-                    </ToggleButton>
-                    <ToggleButton value="json">
-                        <Typography fontSize={12}>JSON</Typography>
-                    </ToggleButton>
-                </ToggleButtonGroup>
+                <div className="definition-tab-header-chip-container">
+                    {definitionType === DefinitionType.MDSL && <Chip className="definition-tab-header-chip" label="MDSL" size="small"/>}
+                    {definitionType === DefinitionType.JSON && <Chip className="definition-tab-header-chip" label="JSON" size="small"/>}
+                    {definitionType === DefinitionType.MDSL && !readOnly && <Chip className="definition-tab-header-chip" variant="outlined" label="To JSON" size="small" onClick={() => onConvertButtonPress()}/>}
+                </div>
             </div>
             <Divider/>
             <AceEditor
                 className="definition-tab-ace-editor"
-                value={value}
-                onChange={onChange}
+                value={definition}
+                onChange={(value) => onChange(value)}
                 readOnly={readOnly}
 				width="100%"
                 height="inherit"
-				mode="mdsl"
+				mode={definitionType === DefinitionType.JSON ? "json" : "mdsl"}
                 theme="sqlserver"
                 setOptions={{ useWorker: false }}
 			/>
