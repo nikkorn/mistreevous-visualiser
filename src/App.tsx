@@ -221,6 +221,7 @@ export class App extends React.Component<{}, AppState> {
 	private _onExampleSelected(example: Example): void {
 		this._onAgentChange(example.board);
 		this._onDefinitionChange(example.definition, example.board);
+		this.setState({ layoutId: example.name });
 	}
 
 	/**
