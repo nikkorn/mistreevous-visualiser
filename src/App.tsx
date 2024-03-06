@@ -63,17 +63,6 @@ export class App extends React.Component<{}, AppState> {
 			canvasElements: { nodes: [], edges: [] }
 		};
 
-		const pressedKeyCodes: any = {} as any;
-
-		window.onkeyup = (event) => {
-			pressedKeyCodes[event.key] = false;
-		}
-		window.onkeydown = (event) => {
-			pressedKeyCodes[event.key] = true;
-		}
-
-		BehaviourTree.register("IsKeyDown", (agent: any, key: string) => !!pressedKeyCodes[key]);
-
 		this._onDefinitionChange = this._onDefinitionChange.bind(this);
 		this._onAgentChange = this._onAgentChange.bind(this);
 		this._onExampleSelected = this._onExampleSelected.bind(this);
@@ -165,14 +154,19 @@ export class App extends React.Component<{}, AppState> {
 		const validationResult = validateDefinition(definitionType === DefinitionType.JSON ? JSON.parse(definition) : definition);
 
 		if (validationResult.succeeded) {
-			// Create the behaviour tree!
-			behaviourTree = this._createTreeInstance(
-				definitionType === DefinitionType.JSON ? JSON.parse(definition) : definition,
-				agent ?? this.state.agent
-			);
+			try {
+				// Create the behaviour tree!
+				behaviourTree = this._createTreeInstance(
+					definitionType === DefinitionType.JSON ? JSON.parse(definition) : definition,
+					agent ?? this.state.agent
+				);
 
-			// Create the canvas elements based on the built tree.
-			canvasElements = this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails());
+				// Create the canvas elements based on the built tree.
+				canvasElements = this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails());
+			} catch (error) {
+				// We failed to build the tree instance.
+				behaviourTreeExceptionMessage = `${error}`;
+			}
 		} else {
 			// The definition was not valid.
 			behaviourTreeExceptionMessage = validationResult.errorMessage!;
@@ -367,8 +361,6 @@ export class App extends React.Component<{}, AppState> {
 				clearInterval(playInterval);
 				this.setState({ behaviourTreePlayInterval: null });
 			}
-
-			var x: FlattenedTreeNode[] = behaviourTree.getFlattenedNodeDetails();
 
 			this.setState({ canvasElements: this._parseNodesAndConnectors(behaviourTree.getFlattenedNodeDetails()) });
 		}, 100);

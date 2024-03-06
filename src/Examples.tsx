@@ -472,6 +472,25 @@ root [AttemptDance] {
     }
 }`,
         board: `class Agent {
+    constructor() {
+        // We should keep track of which keys are currently down.
+        // It's rather hacky to be doing this in the agent constructor
+        // but it's being done here just for the sake of this example.
+        const pressedKeyCodes = {};
+        window.onkeyup = (event) => {
+            pressedKeyCodes[event.key] = false;
+        }
+        window.onkeydown = (event) => {
+            pressedKeyCodes[event.key] = true;
+        }
+        
+        // Register the global "IsKeyDown" function. It's
+        // rather hacky to be doing this in the agent constructor but
+        // it's being done here just for the sake of this example.
+        BehaviourTree.register("IsKeyDown", (agent, key) => {
+            return !!pressedKeyCodes[key];
+        });
+    }
     IndefiniteAction() { /** Do something indefinitely */ }
 }`
     },
@@ -566,13 +585,6 @@ root [AttemptDance] {
 }`,
         board: `class Agent {
     constructor() {
-        // We should keep tabs on whether any key is currently down.
-        // It's rather hacky to be doing this in the agent constructor
-        // but it's being done here just for the sake of this example.
-        let isKeyDown = false;
-        window.onkeyup = (event) => { isKeyDown = false; }
-        window.onkeydown = (event) => { isKeyDown = true; }
-        
         // Register the global "Say" function. It's rather hacky 
         // to be doing this in the agent constructor but it's being
         // done here just for the sake of this example.
@@ -580,6 +592,13 @@ root [AttemptDance] {
             showInfoToast(\`\${agent.GetName()}: \${text}\`);
             return State.SUCCEEDED;
         });
+
+        // We should keep track of whether any key is currently down.
+        // It's rather hacky to be doing this in the agent constructor
+        // but it's being done here just for the sake of this example.
+        let isKeyDown = false;
+        window.onkeyup = (event) => { isKeyDown = false; }
+        window.onkeydown = (event) => { isKeyDown = true; }
         
         // Register the global "IsSimulationRunning" function. It's
         // rather hacky to be doing this in the agent constructor but
