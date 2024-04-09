@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { State, BehaviourTree, FlattenedTreeNode, convertMDSLToJSON, validateDefinition } from "mistreevous";
+import { State, BehaviourTree, convertMDSLToJSON, validateDefinition, BehaviourTreeOptions, NodeDetails } from "mistreevous";
 import { toast, ToastContainer } from 'react-toastify';
 
 import './App.css';
@@ -162,7 +162,7 @@ export class App extends React.Component<{}, AppState> {
 				);
 
 				// Create the canvas elements based on the built tree.
-				canvasElements = this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails());
+				canvasElements = this._createCanvasElements(behaviourTree!.getTreeNodeDetails());
 			} catch (error) {
 				// We failed to build the tree instance.
 				behaviourTreeExceptionMessage = `${error}`;
@@ -239,7 +239,7 @@ export class App extends React.Component<{}, AppState> {
 		// Create the board object.
 		const board = this._createBoardInstance(boardClassDefinition);
 
-		const options = {
+		const options: BehaviourTreeOptions = {
 			// We are calling step() every 100ms in this class so a delta of 0.1 should match what we expect.
 			getDeltaTime: () => 0.1
 		};
@@ -275,25 +275,28 @@ export class App extends React.Component<{}, AppState> {
 	 * @param flattenedNodeDetails 
 	 * @returns The parsed nodes and connectors.
 	 */
-	private _parseNodesAndConnectors(flattenedNodeDetails: FlattenedTreeNode[]): CanvasElements {
+	private _createCanvasElements(rootNodeDetails: NodeDetails): CanvasElements {
 		let result: CanvasElements = { nodes: [], edges: [] };
 
-		flattenedNodeDetails.forEach((flattenedNode) => {
+		const processNodeDetails = (node: NodeDetails, parentId?: string) => {
 			result.nodes.push({
-				id: flattenedNode.id,
-				caption: flattenedNode.caption,
-				state: flattenedNode.state,
-				type: flattenedNode.type,
-				args: flattenedNode.args,
-				callbacks: flattenedNode.callbacks,
-				guards: flattenedNode.guards,
+				id: node.id,
+				caption: node.name,
+				state: node.state,
+				type: node.type,
+				args: node.args ?? [],
+				whileGuard: node.while,
+				untilGuard: node.until,
+				entryCallback: node.entry,
+				stepCallback: node.step,
+				exitCallback: node.exit,
 				variant: "default"
 			} as any);
 
-			if (flattenedNode.parentId) {
+			if (parentId) {
 				let variant;
 				
-				switch (flattenedNode.state) {
+				switch (node.state) {
 					case State.RUNNING:
 						variant = "active";
 						break;
@@ -311,13 +314,17 @@ export class App extends React.Component<{}, AppState> {
 				}
 
 				result.edges.push({
-					id: `${flattenedNode.parentId}_${flattenedNode.id}`,
-					from: flattenedNode.parentId,
-					to: flattenedNode.id,
+					id: `${parentId}_${node.id}`,
+					from: parentId,
+					to: node.id,
 					variant
 				});
 			}
-		});
+
+			(node.children ?? []).forEach((child) => processNodeDetails(child, node.id));
+		};
+
+		processNodeDetails(rootNodeDetails);
 
 		return result;
 	}
@@ -362,7 +369,7 @@ export class App extends React.Component<{}, AppState> {
 				this.setState({ behaviourTreePlayInterval: null });
 			}
 
-			this.setState({ canvasElements: this._parseNodesAndConnectors(behaviourTree.getFlattenedNodeDetails()) });
+			this.setState({ canvasElements: this._createCanvasElements(behaviourTree.getTreeNodeDetails()) });
 		}, 100);
 
 		this.setState({ behaviourTreePlayInterval: playInterval });
@@ -379,7 +386,7 @@ export class App extends React.Component<{}, AppState> {
 
 		this.setState({ 
 			behaviourTreePlayInterval: null,
-			canvasElements: behaviourTree ? this._parseNodesAndConnectors((behaviourTree as any).getFlattenedNodeDetails()) : { nodes: [], edges: [] }
+			canvasElements: behaviourTree ? this._createCanvasElements(behaviourTree.getTreeNodeDetails()) : { nodes: [], edges: [] }
 		});
 	}
 

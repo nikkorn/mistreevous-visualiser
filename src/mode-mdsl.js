@@ -21,11 +21,11 @@ ace.define('ace/mode/mdsl_highlight_rules', function (require, exports, module) 
     var oop = require("ace/lib/oop");
     var TextHighlightRules = require("ace/mode/text_highlight_rules").TextHighlightRules;
 
-    var ExampleHighlightRules = function () {    
+    var exampleHighlightRules = function () {    
         var keywordMapper = this.createKeywordMapper({
             "support.function": "entry|exit|step|while|until|null",
             "keyword": "action|condition|wait|branch",
-            "variable.language": "root|selector|sequence|parallel|lotto|repeat|retry|flip|succeed|fail",
+            "variable.language": "root|selector|sequence|parallel|race|all|lotto|repeat|retry|flip|succeed|fail",
             "constant.language": "true|false"
         }, "identifier", true);
     
@@ -64,7 +64,7 @@ ace.define('ace/mode/mdsl_highlight_rules', function (require, exports, module) 
         this.normalizeRules();
     }
 
-    oop.inherits(ExampleHighlightRules, TextHighlightRules);
+    oop.inherits(exampleHighlightRules, TextHighlightRules);
 
-    exports.ExampleHighlightRules = ExampleHighlightRules;
+    exports.ExampleHighlightRules = exampleHighlightRules;
 });

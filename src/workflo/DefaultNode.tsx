@@ -1,4 +1,4 @@
-import { State } from 'mistreevous';
+import { NodeDetails, State } from 'mistreevous';
 
 import actionIcon from './icons/action.png';
 import conditionIcon from './icons/condition.png'; 
@@ -42,14 +42,17 @@ export type DefaultNodeProps = {
   type: string;
   state: State;
   args: DefaultNodeArgument[];
-  callbacks: Callback[];
-  guards: Guard[];
+  whileGuard?: NodeDetails["while"];
+  untilGuard?: NodeDetails["until"];
+  entryCallback?: NodeDetails["entry"];
+  stepCallback?: NodeDetails["step"];
+  exitCallback?: NodeDetails["exit"];
 };
 
 /**
  * The DefaultNode component.
  */
-export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, caption, type, state, args, callbacks, guards }) => {
+export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, caption, type, state, args, whileGuard, untilGuard, entryCallback, stepCallback, exitCallback }) => {
   let className = "workflow-canvas-default-node";
 
   switch (state) {
@@ -88,6 +91,8 @@ export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, cap
         return lottoIcon;
 
       case "parallel":
+      case "race":
+      case "all":
         return parallelIcon;
 
       case "repeat":
@@ -142,8 +147,11 @@ export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, cap
               {args.map((arg, index) => getArgument(arg, index))}
             </div>
             <div className="default-node-guard-callback-container">
-              {guards.map((guard, index) => <DefaultNodeGuardTag key={index} type={guard.type} condition={guard.condition} args={guard.args} />)}
-              {callbacks.map((callback, index) => <DefaultNodeCallbackTag key={index} type={callback.type} functionName={callback.functionName} args={callback.args} />)}
+              {!!whileGuard && <DefaultNodeGuardTag key={"while"} type={"while"} condition={whileGuard.calls} args={whileGuard.args} />}
+              {!!untilGuard && <DefaultNodeGuardTag key={"until"} type={"until"} condition={untilGuard.calls} args={untilGuard.args} />}
+              {!!entryCallback && <DefaultNodeCallbackTag key={"entry"} type={"entry"} functionName={entryCallback.calls} args={entryCallback.args} />}
+              {!!stepCallback && <DefaultNodeCallbackTag key={"step"} type={"step"} functionName={stepCallback.calls} args={stepCallback.args} />}
+              {!!exitCallback && <DefaultNodeCallbackTag key={"exit"} type={"exit"} functionName={exitCallback.calls} args={exitCallback.args} />}
             </div>
           </div>
         </div>
