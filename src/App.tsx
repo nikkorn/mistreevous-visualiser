@@ -78,7 +78,7 @@ export class App extends React.Component<{}, AppState> {
 		return (
 			<Box className="app-box">
 				<Grid container sx={{ flexGrow: 1 }}>
-					<Grid container item className={`sidebar ${isSidebarReadOnly ? "read-only" : ""}`} xs={4} direction="column">
+					<Grid container item className={`sidebar ${isSidebarReadOnly ? "read-only" : ""}`} xs={12} sm={4} xl={3} direction="column">
 						<Grid item container className="sidebar-header" alignContent={"flex-end"}>
 							<img className="mistreevous-icon" src={mistreevousIcon} />
 							<IconButton className="github-icon" size="large" edge="end" color="inherit" href="https://github.com/nikkorn/mistreevous">
@@ -105,7 +105,7 @@ export class App extends React.Component<{}, AppState> {
 							/>
 						</Card>
 					</Grid>
-					<Grid item xs={8}>
+					<Grid item xs={12} sm={8} xl={9} >
 						<MainPanel
 							layoutId={this.state.layoutId}
 							elements={this.state.canvasElements}
