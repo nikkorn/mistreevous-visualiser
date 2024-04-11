@@ -60,6 +60,14 @@
     background-color: rgb(66, 165, 211);
 }
 
+.default-node-icon.race {
+    background-color: rgb(66, 165, 211);
+}
+
+.default-node-icon.all {
+    background-color: rgb(66, 165, 211);
+}
+
 .default-node-icon.repeat {
     background-color: rgb(80, 209, 181);
 }

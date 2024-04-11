@@ -308,16 +308,96 @@ root [AttemptDance] {
         definition: `root {
     parallel {
         sequence {
-            wait[500, 2500]
-            wait[500, 2500]
-            wait[500, 2500]
-            action [Succeed]
+            wait[500, 4000]
+            lotto {
+                action [Succeed]
+                action [Fail]
+            }
         }
         sequence {
-            wait[500, 2500]
-            wait[500, 2500]
-            wait[500, 2500]
-            action [Fail]
+            wait[500, 4000]
+            lotto {
+                action [Succeed]
+                action [Fail]
+            }
+        }
+    }
+}`,
+        board: `class Agent {
+    Succeed() {
+        return State.SUCCEEDED;
+    }
+    Fail() {
+        return State.FAILED;
+    }
+}`
+    },
+
+    {
+        name: "race",
+        caption: "Race",
+        category: "composite",
+        definition: `root {
+    race {
+        sequence {
+            wait[500, 4000]
+            lotto {
+                action [Succeed]
+                action [Fail]
+            }
+        }
+        sequence {
+            wait[500, 4000]
+            lotto {
+                action [Succeed]
+                action [Fail]
+            }
+        }
+        sequence {
+            wait[500, 4000]
+            lotto {
+                action [Succeed]
+                action [Fail]
+            }
+        }
+    }
+}`,
+        board: `class Agent {
+    Succeed() {
+        return State.SUCCEEDED;
+    }
+    Fail() {
+        return State.FAILED;
+    }
+}`
+    },
+
+    {
+        name: "all",
+        caption: "All",
+        category: "composite",
+        definition: `root {
+    all {
+        sequence {
+            wait[500, 4000]
+            lotto {
+                action [Succeed]
+                action [Fail]
+            }
+        }
+        sequence {
+            wait[500, 4000]
+            lotto {
+                action [Succeed]
+                action [Fail]
+            }
+        }
+        sequence {
+            wait[500, 4000]
+            lotto {
+                action [Succeed]
+                action [Fail]
+            }
         }
     }
 }`,
