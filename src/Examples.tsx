@@ -1,10 +1,10 @@
 /**
- * An example definition and board commbination.
+ * An example definition and board combination.
  */
  export type ExampleCategory = "misc" | "leaf" | "composite" | "decorator" | "guard-callback" | "global";
 
 /**
- * An example definition and board commbination.
+ * An example definition and board combination.
  */
 export type Example = {
     name: string;
@@ -15,7 +15,7 @@ export type Example = {
 };
 
 /**
- * An array of example definition and board commbinations.
+ * An array of example definition and board combinations.
  */
 export const Examples: Example[] = [    
     {
