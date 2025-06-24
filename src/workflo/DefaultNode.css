@@ -143,6 +143,14 @@
     color: #f68fff;
 }
 
+.default-node-argument.agent-property-reference {
+    color: #59dafa;
+}
+
+.default-node-argument.unknown {
+    color: #ff4b5a;
+}
+
 .default-node-guard-callback-container {
     display: flex;
     flex-direction: column;

@@ -6,7 +6,7 @@ import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 import GithubIcon from "mdi-material-ui/Github";
-import mistreevousIcon from './icons/icon-large.png';  
+import mistreevousIcon from './icons/mistreevous-logo.png';  
 
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
