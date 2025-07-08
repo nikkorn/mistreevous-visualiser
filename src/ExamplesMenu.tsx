@@ -44,7 +44,7 @@ export const ExamplesMenu: React.FunctionComponent<ExamplesMenuProps> = ({ onExa
                 open={open}
                 onClose={handleClose}>
                 <MenuList dense style={{ padding: "0px"}}>
-                    {getExampleListItemsForCategory("misc")}
+                    {getExampleListItemsForCategory("advanced")}
                 </MenuList>
                 <Divider/>
                 <Typography style={{ marginLeft: "5px"}} variant="caption">{"Leaves"}</Typography>
@@ -62,14 +62,9 @@ export const ExamplesMenu: React.FunctionComponent<ExamplesMenuProps> = ({ onExa
                     {getExampleListItemsForCategory("decorator")}
                 </MenuList>
                 <Divider/>
-                <Typography style={{ marginLeft: "5px"}} variant="caption">{"Guards and Callbacks"}</Typography>
+                <Typography style={{ marginLeft: "5px"}} variant="caption">{"Misc"}</Typography>
                 <MenuList dense style={{ padding: "0px"}}>
-                    {getExampleListItemsForCategory("guard-callback")}
-                </MenuList>
-                <Divider/>
-                <Typography style={{ marginLeft: "5px"}} variant="caption">{"Globals"}</Typography>
-                <MenuList dense style={{ padding: "0px"}}>
-                    {getExampleListItemsForCategory("global")}
+                    {getExampleListItemsForCategory("misc")}
                 </MenuList>
             </Menu>
         </div>

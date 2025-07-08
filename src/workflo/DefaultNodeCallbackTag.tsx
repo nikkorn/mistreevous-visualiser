@@ -25,8 +25,10 @@ export const DefaultNodeCallbackTag: React.FunctionComponent<DefaultNodeCallback
       return <p key={index} className="default-node-argument boolean">{arg ? "true" : "false"}</p>;
     } else if (arg === null || arg === undefined) {
       return <p key={index} className="default-node-argument null">{arg === null ? "null" : "undefined"}</p>;
+    } else if (typeof arg === "object" && Object.keys(arg).length === 1 && Object.prototype.hasOwnProperty.call(arg, "$")) {
+      return <p key={index} className="default-node-argument agent-property-reference">{arg["$"]}</p>;
     } else {
-      throw new Error(`unknown argument type: ${arg}`);
+      return <p key={index} className="default-node-argument unknown">{JSON.stringify(arg)}</p>;
     }
   };
 

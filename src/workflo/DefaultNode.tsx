@@ -149,8 +149,8 @@ export const DefaultNode: React.FunctionComponent<DefaultNodeProps> = ({ id, cap
               {args.map((arg, index) => getArgument(arg, index))}
             </div>
             <div className="default-node-guard-callback-container">
-              {!!whileGuard && <DefaultNodeGuardTag key={"while"} type={"while"} condition={whileGuard.calls} args={whileGuard.args} />}
-              {!!untilGuard && <DefaultNodeGuardTag key={"until"} type={"until"} condition={untilGuard.calls} args={untilGuard.args} />}
+              {!!whileGuard && <DefaultNodeGuardTag key={"while"} type={"while"} condition={whileGuard.calls} args={whileGuard.args} succeedOnAbort={whileGuard.succeedOnAbort} />}
+              {!!untilGuard && <DefaultNodeGuardTag key={"until"} type={"until"} condition={untilGuard.calls} args={untilGuard.args} succeedOnAbort={untilGuard.succeedOnAbort} />}
               {!!entryCallback && <DefaultNodeCallbackTag key={"entry"} type={"entry"} functionName={entryCallback.calls} args={entryCallback.args} />}
               {!!stepCallback && <DefaultNodeCallbackTag key={"step"} type={"step"} functionName={stepCallback.calls} args={stepCallback.args} />}
               {!!exitCallback && <DefaultNodeCallbackTag key={"exit"} type={"exit"} functionName={exitCallback.calls} args={exitCallback.args} />}

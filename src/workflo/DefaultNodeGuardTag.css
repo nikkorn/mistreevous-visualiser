@@ -3,7 +3,7 @@
     flex-direction: row;
     margin: 2px;
     font-size: 0.8rem;
-    border: #8a4c61 2px solid;
+    border: #8a4c61 1px solid;
     border-radius: 5px;
 }
 
@@ -17,6 +17,18 @@
     background-color: #8a4c61;
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
+}
+
+.guard-tag-resolved-state {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3px 5px;
+    margin: -1px;
+    color: white;
+    background-color: #8a4c61;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
 }
 
 .guard-tag-signature {

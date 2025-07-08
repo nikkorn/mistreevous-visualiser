@@ -1,7 +1,7 @@
 /**
  * An example definition and board combination.
  */
- export type ExampleCategory = "misc" | "leaf" | "composite" | "decorator" | "guard-callback" | "global";
+ export type ExampleCategory = "advanced" | "leaf" | "composite" | "decorator" | "misc";
 
 /**
  * An example definition and board combination.
@@ -21,7 +21,7 @@ export const Examples: Example[] = [
     {
         name: "sorting-lunch",
         caption: "Sorting Lunch",
-        category: "misc",
+        category: "advanced",
         definition: `root {
     selector while(IsHungry) {
         sequence {
@@ -542,7 +542,7 @@ root [AttemptDance] {
     {
         name: "guards",
         caption: "Guards",
-        category: "guard-callback",
+        category: "misc",
         definition: `root {
     selector {
         action [IndefiniteAction] until(IsKeyDown, "Enter")
@@ -578,7 +578,7 @@ root [AttemptDance] {
     {
         name: "callbacks",
         caption: "Callbacks",
-        category: "guard-callback",
+        category: "misc",
         definition: `root entry(OnRootStart) exit(OnRootFinish) {
     sequence entry(OnSequenceStart) exit(OnSequenceFinish) {
         action [Succeed] entry(OnActionStart) exit(OnActionFinish) step(OnActionStep)
@@ -615,7 +615,7 @@ root [AttemptDance] {
     {
         name: "global-subtrees",
         caption: "Global Subtrees",
-        category: "global",
+        category: "misc",
         definition: `root {
     sequence {
         action [AttemptDifficultTask]
@@ -651,7 +651,7 @@ root [AttemptDance] {
     {
         name: "global-functions",
         caption: "Global Functions",
-        category: "global",
+        category: "misc",
         definition: `root {
     repeat {
         selector {
@@ -693,6 +693,42 @@ root [AttemptDance] {
     }
     GetName() {
         return "Barry";
+    }
+}`
+    },
+
+
+    {
+        name: "agent-property-references",
+        caption: "Agent Property References",
+        category: "misc",
+        definition: `root {
+    sequence {
+        condition [HasTarget]
+        condition [CanSee, $target]
+        action [MoveTowards, $target]
+    }
+}`,
+        board: `class Agent {
+    get target() {
+        return {
+            name: "Enemy",
+            xPosition: 100,
+            yPosition: 100
+        };
+    }
+    HasTarget() {
+        return !!this.target;
+    }
+    CanSee(target) {
+        // ... Check whether this agent can see the specified target ...
+        showInfoToast(\`Can see \${target.name}\`);
+        return true;
+    }
+    MoveTowards(target) {
+        // ... Move towards the specified target ...
+        showInfoToast(\`Moving towards x:\${target.xPosition} y:\${target.yPosition}\`);
+        return State.SUCCEEDED;
     }
 }`
     }

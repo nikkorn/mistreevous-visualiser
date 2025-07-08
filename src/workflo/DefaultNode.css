@@ -1,24 +1,24 @@
 .workflow-canvas-default-node {
     display: inline-block;
     padding: 4px;
-    border: #4a4a4a 2px solid;
+    border: #868686 1px solid;
     border-radius: 5px;
     background-color: white;
     white-space: nowrap;
 }
 
 .workflow-canvas-default-node.running {
-    border: #0388fc 2px solid;
+    border: #0388fc 1px solid;
 }
 
 .workflow-canvas-default-node.succeeded {
-    border: #02c93e 2px solid;
+    border: #02c93e 1px solid;
     background-color: #d1ffde;
 }
 
 .workflow-canvas-default-node.failed {
-    border: #e63b02 2px solid;
-    background-color: #fddfd4;
+    border: #e63b02 1px solid;
+    background-color: #ffe5e5;
 }
 
 .workflow-canvas-default-node > p {
@@ -41,43 +41,43 @@
 }
 
 .default-node-icon.action {
-    background-color: rgb(42, 89, 218);
+    background-color: #3772ff;
 }
 
 .default-node-icon.condition {
-    background-color: rgb(196, 199, 7);
+    background-color: #eac435;
 }
 
 .default-node-icon.selector {
-    background-color: rgb(143, 62, 209);
+    background-color: #54478c;
 }
 
 .default-node-icon.sequence {
-    background-color: rgb(158, 36, 107);
+    background-color: #e40066;
 }
 
 .default-node-icon.parallel {
-    background-color: rgb(66, 165, 211);
+    background-color: #0db39e;
 }
 
 .default-node-icon.race {
-    background-color: rgb(66, 165, 211);
+    background-color: #16db93;
 }
 
 .default-node-icon.all {
-    background-color: rgb(66, 165, 211);
+    background-color: #16db93;
 }
 
 .default-node-icon.repeat {
-    background-color: rgb(80, 209, 181);
+    background-color: #6c91bf;
 }
 
 .default-node-icon.retry {
-    background-color: rgb(224, 85, 159);
+    background-color: #a14ebf;
 }
 
 .default-node-icon.while {
-    background-color: rgb(224, 85, 115);
+    background-color: #f1c453;
 }
 
 .default-node-icon.root {
@@ -85,7 +85,7 @@
 }
 
 .default-node-icon.flip {
-    background-color: rgb(207, 144, 7);
+    background-color: #f29e4c;
 }
 
 .default-node-icon.succeed {
@@ -97,11 +97,11 @@
 }
 
 .default-node-icon.lotto {
-    background-color: rgb(9, 156, 112);
+    background-color: #83e377;
 }
 
 .default-node-icon.wait {
-    background-color: rgb(224, 125, 248);
+    background-color: #826aed;
 }
 
 .default-node-caption {
