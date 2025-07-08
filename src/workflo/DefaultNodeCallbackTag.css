@@ -3,7 +3,7 @@
     flex-direction: row;
     margin: 2px;
     font-size: 0.8rem;
-    border: #45476f 1px solid;
+    border: #3137ac 1px solid;
     border-radius: 5px;
 }
 
@@ -11,10 +11,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 3px 5px;
+    padding: 4px 6px;
     margin: -1px;
     color: white;
-    background-color: #45476f;
+    background-color: #3137ac;
     border-top-left-radius: 3px;
     border-bottom-left-radius: 3px;
 }
@@ -23,7 +23,7 @@
     display: flex;
     flex-direction: row;
     align-items: baseline;
-    padding: 3px 5px;
+    padding: 4px 6px;
 }
 
 .callback-tag p {
