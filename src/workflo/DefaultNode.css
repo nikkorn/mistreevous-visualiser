@@ -122,29 +122,30 @@
     margin: 0px 2px 0px 2px;
     padding: 0px 6px;
     line-height: 26px;
-    background-color: #4a4a4a;
+    background-color: #eeeeee;
     border-radius: 4px;
     font-size: 0.8rem;
+    font-weight: 600;
 }
 
 .default-node-argument.string {
-    color: #f8eb79;
+    color: #d80085;
 }
 
 .default-node-argument.number {
-    color: #7affa2;
+    color: #29c29c;
 }
 
 .default-node-argument.boolean {
-    color: #b8cfff;
+    color: #902fff;
 }
 
 .default-node-argument.null {
-    color: #f68fff;
+    color: #517075;
 }
 
 .default-node-argument.agent-property-reference {
-    color: #59dafa;
+    color: #009fc7;
 }
 
 .default-node-argument.unknown {
