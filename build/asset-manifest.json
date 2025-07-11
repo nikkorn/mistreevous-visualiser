@@ -1,16 +1,17 @@
 {
   "files": {
-    "main.css": "./static/css/main.ec9b8752.css",
-    "main.js": "./static/js/main.3a088ef0.js",
+    "main.css": "./static/css/main.477b0616.css",
+    "main.js": "./static/js/main.d503d26b.js",
     "static/js/787.19ba8926.chunk.js": "./static/js/787.19ba8926.chunk.js",
+    "static/media/mistreevous-logo.png": "./static/media/mistreevous-logo.796d5b1b77a403fcdf3e.png",
     "static/media/Montserrat-Regular.otf": "./static/media/Montserrat-Regular.65bc44fbf8204991497c.otf",
     "index.html": "./index.html",
-    "main.ec9b8752.css.map": "./static/css/main.ec9b8752.css.map",
-    "main.3a088ef0.js.map": "./static/js/main.3a088ef0.js.map",
+    "main.477b0616.css.map": "./static/css/main.477b0616.css.map",
+    "main.d503d26b.js.map": "./static/js/main.d503d26b.js.map",
     "787.19ba8926.chunk.js.map": "./static/js/787.19ba8926.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.ec9b8752.css",
-    "static/js/main.3a088ef0.js"
+    "static/css/main.477b0616.css",
+    "static/js/main.d503d26b.js"
   ]
 }
